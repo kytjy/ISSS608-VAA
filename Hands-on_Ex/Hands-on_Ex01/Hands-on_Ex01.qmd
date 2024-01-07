@@ -15,6 +15,7 @@ format:
     code-overflow: scroll
     code-summary: "Show the code"
     code-line-numbers: true
+    code-block-bg: "#ECEBEB"
 ---
 
 # 1 Learning Outcome
@@ -218,9 +219,7 @@ Note that the default bin is 30.
 In the code chunk below,
 
 -   *bins* argument is used to change the number of bins to 20,
-
 -   *fill* argument is used to shade the histogram with color, and
-
 -   *color* argument is used to change the outline colour of the bars
 
 ```{r}
@@ -356,10 +355,9 @@ ggplot(data=exam_data,
 ggplot(data=exam_data, 
        aes(y = MATHS, 
            x= GENDER)) +
-  geom_boxplot() +
-  geom_point(position = 'jitter',
-             size=0.5)
-
+  geom_boxplot() +                    
+  geom_point(position="jitter", 
+             size = 0.5)        
 ```
 
 :::
