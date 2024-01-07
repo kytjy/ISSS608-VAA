@@ -2,8 +2,7 @@
 title: "About"
 ---
 
-About this site
+::: {layout-ncol="1"}
+![](Images/about.PNG)
+:::
 
-```{r}
-1 + 1
-```

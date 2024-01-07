@@ -2,18 +2,93 @@ project:
   type: website
 
 website:
-  title: "ISSS608-VAA"
+  title: "Visual Analytics and Application"
+  image: "Images/Logo.png"
+  favicon: "Images/Icon.png"
+  page-navigation: true
   navbar:
-    left:
+    logo: "Images/Logo.png"
+    title: false
+    collapse-below: lg
+    search: true
+    left: 
+      - text: "{{< fa pencil >}} Hands-on Exercises"
+        menu: 
+          - text: Hands-on Exercise 1
+            href: Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html
+          - text: Hands-on Exercise 2
+            href: Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html
+          - text: Hands-on Exercise 3
+            href: Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html
+          - text: Hands-on Exercise 4
+            href: Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html
+          - text: Hands-on Exercise 5
+            href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html
+          - text: Hands-on Exercise 6
+            href: Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html
+          - text: Hands-on Exercise 7
+            href: Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html   
+          - text: Hands-on Exercise 8
+            href: Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html  
+          - text: Hands-on Exercise 9
+            href: Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html  
+          - text: Hands-on Exercise 10
+            href: Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html              
+            
+      - text: "{{< fa landmark >}} In-class Exercises"
+        menu: 
+          - text: In-Class Exercise 1
+            href: In-class_Ex/In-class_Ex01/In-class_Ex01.html
+          - text: In-Class Exercise 2
+            href: In-class_Ex/In-class_Ex02/In-class_Ex02.html
+          - text: In-Class Exercise 3
+            href: In-class_Ex/In-class_Ex03/In-class_Ex03.html
+          - text: In-Class Exercise 4
+            href: In-class_Ex/In-class_Ex04/In-class_Ex04.html
+          - text: In-Class Exercise 5
+            href: In-class_Ex/In-class_Ex05/In-class_Ex05.html   
+          - text: In-Class Exercise 6
+            href: In-class_Ex/In-class_Ex05/In-class_Ex06.html  
+          - text: In-Class Exercise 7
+            href: In-class_Ex/In-class_Ex05/In-class_Ex07.html  
+          - text: In-Class Exercise 8
+            href: In-class_Ex/In-class_Ex05/In-class_Ex08.html  
+          - text: In-Class Exercise 9
+            href: In-class_Ex/In-class_Ex05/In-class_Ex09.html  
+          - text: In-Class Exercise 10
+            href: In-class_Ex/In-class_Ex05/In-class_Ex10.html  
+      - text: "{{< fa book-bookmark >}} Take-home Exercises"
+        menu: 
+          - text: Take-home Exercise 1
+            href: Take-Home_Ex/Take-Home_Ex1/Take-Home_Ex1.html    
+          - text: Take-home Exercise 2
+            href: Take-Home_Ex/Take-Home_Ex2/Take-Home_Ex2.html  
+          - text: Take-home Exercise 3
+            href: Take-Home_Ex/Take-Home_Ex3/Take-Home_Ex3.html  
+          - text: Take-home Exercise 4
+            href: Take-Home_Ex/Take-Home_Ex4/Take-Home_Ex4.html              
+    right:
       - href: index.qmd
-        text: Home
-      - about.qmd
+        text: "{{< fa house >}}"
+      - href: about.qmd
+        text: "{{< fa regular face-smile >}}"
+  
+  page-footer: 
+    right: "Blog made with 💜 and [Quarto](https://quarto.org/)"
+
+      
 
 format:
   html:
-    theme: cosmo
-    css: styles.css
+    grid:
+      margin-width: 250px
     toc: true
+    toc_float: true
+    theme: 
+      - theme.scss
+    highlight-style: tango
+    code-copy: hover
+    code-overflow: wrap
+    css: styles.css
 
 editor: visual
-

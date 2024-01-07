@@ -1,11 +1,10 @@
 ---
-title: "ISSS608-VAA"
+title: ""
+format: 
+  html: 
+    toc: false
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
+::: {layout-ncol="1"}
+![](Images/index.PNG)
+:::
