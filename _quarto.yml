@@ -14,25 +14,25 @@ website:
     left: 
       - text: "{{< fa pencil >}} Hands-on Exercises"
         menu: 
-          - text: Hands-on Exercise 1
+          - text: 1. A Layered Grammar of Graphics - ggplot2 methods
             href: Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html
-          - text: Hands-on Exercise 2
+          - text: 2. TBC
             href: Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html
-          - text: Hands-on Exercise 3
+          - text: 3. TBC
             href: Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html
-          - text: Hands-on Exercise 4
+          - text: 4. TBC
             href: Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html
-          - text: Hands-on Exercise 5
+          - text: 5. TBC
             href: Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html
-          - text: Hands-on Exercise 6
+          - text: 6. TBC
             href: Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html
-          - text: Hands-on Exercise 7
+          - text: 7. TBC
             href: Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html   
-          - text: Hands-on Exercise 8
+          - text: 8. TBC
             href: Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html  
-          - text: Hands-on Exercise 9
+          - text: 9. TBC
             href: Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html  
-          - text: Hands-on Exercise 10
+          - text: 10. TBC
             href: Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html              
             
       - text: "{{< fa landmark >}} In-class Exercises"

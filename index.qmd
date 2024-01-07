@@ -5,6 +5,4 @@ format:
     toc: false
 ---
 
-::: {layout-ncol="1"}
-![](Images/index.PNG)
-:::
+![](Images/index.PNG){width=65%}
