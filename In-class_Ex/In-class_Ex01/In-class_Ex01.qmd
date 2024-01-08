@@ -1,0 +1,53 @@
+---
+title: "In-class Exercise 1: "
+date: "13 Jan 2024"
+date-modified: "last-modified"
+editor: visual
+toc-depth: 4
+execute:
+  freeze: auto
+  echo: true #if false, displays charts without codes
+  eval: true #if false, displays codes without charts
+  warning: false #dont display if there are any warnings
+format: 
+  html:
+    code-fold: false
+    code-overflow: scroll
+    code-summary: "Show the code"
+    code-line-numbers: true
+    code-block-bg: "#ECEBEB"
+---
+
+![](Images/placeholder.PNG){fig-align="center"}
+
+# 1 Getting Started
+
+::: panel-tabset
+## Installing and loading libraries
+
+The code chunk below uses `p_load()` of [pacman](https://rpubs.com/akshaypatankar/594834) package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.
+
+```{r}
+pacman::p_load(tidyverse)
+```
+
+## Importing Data
+
+-   The code chunk below imports **exam_data.csv** into R environment by using [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.
+-   **readr** is one of the tidyverse package.
+
+```{r}
+exam_data <- read_csv("data/Exam_data.csv")
+```
+
+## Understanding the Data
+
+```{r}
+summary(exam_data)
+```
+
+-   Year end examination grades of a cohort of primary 3 students from a local school.
+-   There are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.
+    -   Categorical attributes are: ID, CLASS, GENDER and RACE.
+    -   Continuous attributes are: MATHS, ENGLISH and SCIENCE.
+:::

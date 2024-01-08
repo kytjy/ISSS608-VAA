@@ -1,8 +1,17 @@
 ---
 title: ""
-format: 
-  html: 
-    toc: false
+listing:
+  type: grid
+  max-items: 3
+  contents:
+    - "Hands-on_Ex/*/*.qmd"
+    - "Take-home_Ex/*/*.qmd"
+    - "In-class_Ex/*/*.qmd"
+  sort: "date desc"
+toc: false
+max-description-length: 30
 ---
 
-![](Images/index.PNG){width=65%}
+![](Images/index.PNG){fig-align="center" width="50%"}
+
+## Latest Posts:

@@ -18,9 +18,13 @@ format:
     code-block-bg: "#ECEBEB"
 ---
 
-# 1 Learning Outcome
+![](Images/HOE1.PNG){fig-align="center"}
 
-In this chapter, you will learn the basic principles and essential components of ggplot2. At the same time, you will gain hands-on experience on using these components to plot statistical graphics based on the principle of Layered Grammar of Graphics. By then end of this chapter you will be able to apply the essential graphical elements provided by ggplot2 to create elegant and yet functional statistical graphics. 
+# 1 Overview
+
+In this chapter, we will learn the basic principles and essential components of ggplot2, and gain hands-on experience on using these components to plot statistical graphics based on the principle of Layered Grammar of Graphics
+
+By then end of this chapter, we will be able to apply the essential graphical elements provided by ggplot2 to create elegant and yet functional statistical graphics.
 
 # 2 Getting Started
 
@@ -30,7 +34,8 @@ In this chapter, you will learn the basic principles and essential components of
 The code chunk below uses `p_load()` of [pacman](https://rpubs.com/akshaypatankar/594834) package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(tidyverse,
+               patchwork)
 ```
 
 ## Importing Data
@@ -54,9 +59,7 @@ summary(exam_data)
     -   Continuous attributes are: MATHS, ENGLISH and SCIENCE.
 :::
 
-# 3 Introducing ggplot
-
-## 3.1 R Graphics vs ggplot
+# 3 R Graphics vs ggplot
 
 ::: panel-tabset
 ## R Graphics
@@ -102,7 +105,7 @@ ggplot2 is preferred over the built-in plot function due to the following reason
 
 Grammar of Graphics, introduced by Leland Wilkinson (1999), is a general scheme for data visualization which breaks up graphs into semantic components such as scales and layers. It defines the rules of structuring mathematical and aesthetic elements into a meaningful graph.
 
-## 4.1 A Layered Grammar of Graphics
+**Layered Grammar of Graphics:**
 
 ![](layeredgrammarofgraphics.png){fig-align="center"}
 
@@ -157,9 +160,8 @@ A plot must have at least one geom; there is no upper limit. You can add a geom 
 
 For complete list, please refer to [here](https://ggplot2.tidyverse.org/reference/#section-layer-geoms).
 
-:::panel-tabset
 
-## geom_bar
+## 7.1 geom_bar
 
 The code chunk below plots a bar chart by using [`geom_bar()`](https://ggplot2.tidyverse.org/reference/geom_bar.html).
 
@@ -173,15 +175,16 @@ ggplot(data = exam_data,
       round(after_stat(count)/sum(after_stat(count))*100, 1), "%")),
       vjust=-1) +
     labs(x = "Race",
-         y = "No. of\nStudents") + 
+         y = "No. of\nStudents",
+         title = "Number of Students by Race") + 
     theme_grey() +
     theme(
       axis.title.y = element_text(hjust=1, angle=0),
       plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5")
-    )
+    ) 
 ```
 
-## geom_dotplot
+## 7.2 geom_dotplot
 
 In a dot plot, the width of a dot corresponds to the bin width (or maximum width, depending on the binning algorithm), and dots are stacked, with each dot representing one observation.
 
@@ -195,8 +198,6 @@ ggplot(data=exam_data,
 ```
 
 The y scale is not very useful, in fact it is very misleading.
-
-
 
 The code chunk below performs the following two steps:
 
@@ -213,7 +214,7 @@ ggplot(data=exam_data,
   theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-## geom_histogram
+## 7.3 geom_histogram
 
 In the code chunk below, [*geom_histogram()*](https://ggplot2.tidyverse.org/reference/geom_histogram.html) is used to create a simple histogram by using values in *MATHS* field of *exam_data*.
 
@@ -224,10 +225,7 @@ ggplot(data=exam_data,
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-Note that the default bin is 30.
-
-
-## Modifying a geometric object by changing *geom()*
+## 7.4 Modifying a geometric object by changing *geom()*
 
 In the code chunk below,
 
@@ -271,7 +269,140 @@ ggplot(data=exam_data,
     theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-## Modifying a geometric object by changing *aes()*
+:::panel-tabset
+
+## Changed no. of bins
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
+# Original
+b_p1 <- ggplot(data=exam_data, 
+       aes(x=MATHS)) +
+  geom_histogram(bins=20, 
+                 boundary = 100,
+                 #binwidth=5, 
+                 color= 'white',
+                 fill='grey') +
+  theme_gray() +
+  theme(panel.background=element_rect(fill='grey96')) +
+  labs(x = "Math Score",
+       y = "No. of Pupils",
+       title = "20 bins") +
+  theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+
+# Changed
+b_p2 <- ggplot(data=exam_data, 
+       aes(x=MATHS)) +
+  geom_histogram(bins=30, 
+                 boundary = 100,
+                 #binwidth=5, 
+                 color= 'white',
+                 fill='grey') +
+  theme_gray() +
+  theme(panel.background=element_rect(fill='grey96')) +
+  labs(x = "Math Score",
+       y = "No. of Pupils",
+       title = "30 bins") +
+  theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+
+
+# format plot layout
+b_p1 + b_p2
+  
+```
+## Using binwidth
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Original
+bw_p1 <- ggplot(data=exam_data, 
+       aes(x=MATHS)) +
+  geom_histogram(bins=20, 
+                 boundary = 100,
+                 #binwidth=5, 
+                 color= 'white',
+                 fill='grey') +
+  theme_gray() +
+  theme(panel.background=element_rect(fill='grey96')) +
+  labs(x = "Math Score",
+       y = "No. of Pupils",
+       title = "20 bins") +
+  theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))  
+
+# Changed
+bw_p2 <- ggplot(data=exam_data, 
+       aes(x=MATHS)) +
+  geom_histogram(#bins=20, 
+                 boundary = 100,
+                 binwidth=5, 
+                 color= 'white',
+                 fill='grey') +
+  theme_gray() +
+  theme(panel.background=element_rect(fill='grey96')) +
+  labs(x = "Math Score",
+       y = "No. of Pupils",
+       title = "Binwidth 5 = 19 bins") +
+  theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+
+# format plot layout
+bw_p1 + bw_p2
+```
+
+## Bin alignment using boundary & center
+
+Be mindful of the boundaries of the bins and whether a point will fall into the left or right bin if it is on a boundary.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# Original
+bb_p1 <- ggplot(data=exam_data, 
+       aes(x=MATHS)) +
+  geom_histogram(bins=20, 
+                 boundary = 100,
+                 #binwidth=5, 
+                 color= 'white',
+                 fill='grey') +
+  theme_gray() +
+  theme(panel.background=element_rect(fill='grey96')) +
+  labs(x = "Math Score",
+       y = "No. of Pupils",
+       title = "Bin alignment using boundary") +
+  theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+  
+# Changed
+bb_p2 <- ggplot(data=exam_data, 
+       aes(x=MATHS)) +
+  geom_histogram(bins=20, 
+                 center = 50,
+                 #binwidth=5, 
+                 color= 'white',
+                 fill='grey') +
+  theme_gray() +
+  theme(panel.background=element_rect(fill='grey96')) +
+  labs(x = "Math Score",
+       y = "No. of Pupils",
+       title = "Bin alignment using center") +
+  theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+
+# format plot layout
+bb_p1 + bb_p2
+```
+**Note**: Don’t use both boundary and center for bin alignment. Just pick one.
+
+:::
+
+-   bins: default bin number is 30 in ggplot2
+-   boundary: bin position specifier
+-   binwidth: bin breaks automatically based on a specific binwidth; can be used to specify the endpoint of any bin or center to specify the center of any bin
+
+## 7.5 Modifying a geometric object by changing *aes()*
 
 The code chunk below changes the interior colour of the histogram (i.e. `fill`) by using sub-group of `*`aesthetic()`*`.
 
@@ -289,14 +420,13 @@ ggplot(data=exam_data,
 
 This approach can be used to colour, fill and alpha of the geometric.
 
-
-## geom_density
+## 7.6 geom_density
 
 [`geom-density()`](https://ggplot2.tidyverse.org/reference/geom_density.html) computes and plots [kernel density estimate](https://en.wikipedia.org/wiki/Kernel_density_estimation), which is a smoothed version of the histogram.
 
 It is a useful alternative to the histogram for continuous data that comes from an underlying smooth distribution.
 
-The code below plots the distribution of Maths scores in a kernel density estimate plot.
+The code below plots the distribution of Maths scores in a kernel density estimate plot, where y = relative frequency / binwidth.
 
 ```{r}
 ggplot(data=exam_data,
@@ -307,11 +437,7 @@ ggplot(data=exam_data,
 
 The code chunk below plots two kernel density lines by using *colour* or *fill* arguments of `aes()`.
 
-Changes:
--   *color* within geom_density needs to be removed.
--   added *fill* and *color* within `aes()`
--   `scale_color_manual()` for changing line color
--   `scale_fill_manual()` for changing area fill colors.
+Changes: - *color* within geom_density needs to be removed. - added *fill* and *color* within `aes()` - `scale_color_manual()` for changing line color - `scale_fill_manual()` for changing area fill colors.
 
 ```{r}
 ggplot(data=exam_data,
@@ -322,10 +448,13 @@ ggplot(data=exam_data,
                alpha=0.6)+
   scale_color_manual(values = c("#E1C8C4","#7F948F"))+
   scale_fill_manual(values = c("#E1C8C4","#7F948F"))+
+    labs(x = "Maths Score",
+       y = "Density",
+       title = "Density of Maths Score by Gender") +
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-## geom_boxplot
+## 7.7 geom_boxplot
 
 [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all "outlying" points individually.
 
@@ -362,8 +491,7 @@ ggplot(data = exam_data,
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-
-## geom_violin
+## 7.8 geom_violin
 
 [`geom_violin`](https://ggplot2.tidyverse.org/reference/geom_violin.html) is designed for creating violin plot. Violin plots are a way of comparing multiple data distributions. With ordinary density curves, it is difficult to compare more than just a few distributions because the lines visually interfere with each other. With a violin plot, it's easier to compare several distributions since they're placed side by side.
 
@@ -377,7 +505,7 @@ ggplot(data=exam_data,
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-## geom_point
+## 7.9 geom_point
 
 [`geom_point()`](https://ggplot2.tidyverse.org/reference/geom_point.html) is especially useful for creating scatterplot.
 
@@ -397,8 +525,8 @@ To add reference lines and x/y axis limits:
 
 ```{r}
 ggplot(data=exam_data, 
-       aes(y = MATHS, 
-           x= ENGLISH,
+       aes(x= ENGLISH, 
+           y = MATHS, 
            color = GENDER)) +
   geom_point() +
   coord_cartesian(xlim=c(0,100),
@@ -412,21 +540,19 @@ ggplot(data=exam_data,
              col = 'grey',
              size = 0.8,
              linetype = "dashed") +  
-      theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+  labs(x = "English Score",
+       y = "Maths Score",
+       title = "Maths against English Score by Gender") +
+  theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-
-
-## Combination of geom objects
+## 7.10 Combination of geom objects
 
 The code chunk below plots the data points on the boxplots by using both `geom_boxplot()` and `geom_point()`.
 
-:::{.callout-important}
-## Important
+**Important**: 
 
 Order of geom layer matters! In the code below, boxplot is plotted afer/above the scatter and thus covers parts of the scatterplot.
-
-:::
 
 ```{r}
 #| code-fold: true
@@ -440,7 +566,6 @@ ggplot(data=exam_data,
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-
 ```{r}
 ggplot(data=exam_data, 
        aes(y = MATHS, 
@@ -451,7 +576,6 @@ ggplot(data=exam_data,
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-:::
 
 # 8 Essential Grammatical Elements in ggplot2: Stat
 
@@ -489,7 +613,6 @@ ggplot(data=exam_data,
                size=4) +
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
-
 
 ## 8.3 Working with stat - the `geom()` method
 
@@ -531,11 +654,13 @@ ggplot(data=exam_data,
   geom_smooth(size=1, method = lm) +
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
+
 To add equation and R\^2 to the plot, we can use the library ggpmisc.
 
 ```{r}
 pacman::p_load(ggpmisc)
 ```
+
 `stat_poly_line()` is used to add lm line and `stat_poly_eq()` displays the equation and R-square value.
 
 ```{r}
@@ -568,18 +693,17 @@ ggplot(data=exam_data,
   theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-**Tilde Operator**: 
+**Tilde Operator**:
 
-The operator ~ is used to define the relationship between dependent variable and independent variables in a formula; it separates the lefthand side and righthand side. 
+The operator \~ is used to define the relationship between dependent variable and independent variables in a formula; it separates the lefthand side and righthand side.
 
-The basic syntax for the lm() function is: model <- lm(y ~ x1 + x2, data=df)
+The basic syntax for the lm() function is: model \<- lm(y \~ x1 + x2, data=df)
 
 The variable name on the left side of the tilde operator (y) represents the response variable. The variable names on the right side of the tilde operator (x1, x2) represent the predictor variables.
 
-For multiple predictor variables: model <- lm(y ~ x1 + x2 + x3, data=df)
+For multiple predictor variables: model \<- lm(y \~ x1 + x2 + x3, data=df)
 
-For unknown number of predictor variables: model <- lm(y ~ ., data=df)
-
+For unknown number of predictor variables: model \<- lm(y \~ ., data=df)
 
 ### 9.1.1 Subsetting Data
 
@@ -615,9 +739,9 @@ References: [StatisticsGlobe](https://statisticsglobe.com/draw-overlaying-histog
 
 ### 9.1.3 Grouped Data
 
-:::panel-tabset
-
+::: panel-tabset
 ## By Column
+
 ```{r}
 ggplot(data = exam_data, 
        aes(y = MATHS, 
@@ -626,6 +750,7 @@ ggplot(data = exam_data,
   facet_wrap(~ GENDER) +
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
+
 ## By Row
 
 ```{r}
@@ -663,7 +788,6 @@ The *Coordinates* functions map the position of objects onto the plane of the pl
 -   [`coord_flip()`](https://ggplot2.tidyverse.org/reference/coord_flip.html): a cartesian system with the x and y flipped.
 -   [`coord_fixed()`](https://ggplot2.tidyverse.org/reference/coord_fixed.html): a cartesian system with a "fixed" aspect ratio (e.g. 1.78 for a "widescreen" plot).
 -   [`coord_quickmap()`](https://ggplot2.tidyverse.org/reference/coord_map.html): a coordinate system that approximates a good aspect ratio for maps.
-
 
 ## 10.1 Working with Coordinate
 
@@ -732,10 +856,7 @@ Built-in themes include `theme_gray()` (default), `theme_bw()`, `theme_classic()
 
 A list of theme can be found at this [link](https://ggplot2.tidyverse.org/reference/ggtheme.html). Each theme element can be conceived of as either a line (e.g. x-axis), a rectangle (e.g. graph background), or text (e.g. axis title).
 
-## 11.1 Working with theme
-
-:::panel-tabset
-
+::: panel-tabset
 ## Gray
 
 The code chunk below plots a horizontal bar chart using `theme_gray()`.
@@ -748,6 +869,7 @@ ggplot(data=exam_data,
   theme_gray() + 
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
+
 ## Classic
 
 A horizontal bar chart plotted using `theme_classic()`.
@@ -761,7 +883,7 @@ ggplot(data=exam_data,
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-## Minimal 
+## Minimal
 
 A horizontal bar chart plotted using `theme_minimal()`.
 
@@ -774,7 +896,7 @@ ggplot(data=exam_data,
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-## Light 
+## Light
 
 A horizontal bar chart plotted using `theme_light()`.
 
@@ -786,21 +908,19 @@ ggplot(data=exam_data,
   theme_light() +
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
-
-
 :::
 
 To modify components of a theme , refer to this ggplot2 [webpage](https://ggplot2.tidyverse.org/reference/theme.html).
 
-# 12 Reference
+# 12 References
 
--   Kam, T.S. (2023). [*A Layered Grammar of Graphics: ggplot2 methods*](https://r4va.netlify.app/chap01#essential-grammatical-elements-in-ggplot2-stat).
+-   Kam, T.S. (2023). [A Layered Grammar of Graphics: ggplot2 methods](https://r4va.netlify.app/chap01#essential-grammatical-elements-in-ggplot2-stat).
 
--   Hadley Wickham (2023) [*ggplot2: Elegant Graphics for Data Analysis*](https://ggplot2-book.org/). Online 3rd edition.
+-   Hadley Wickham (2023) [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/). Online 3rd edition.
 
--   Winston Chang (2013) [*R Graphics Cookbook 2nd edition*](https://r-graphics.org/). Online version.
+-   Winston Chang (2013) [R Graphics Cookbook 2nd edition](https://r-graphics.org/). Online version.
 
--   Healy, Kieran (2019) [*Data Visualization: A practical introduction*](https://socviz.co/). Online version
+-   Healy, Kieran (2019) [Data Visualization: A practical introduction](https://socviz.co/). Online version.
 
 -   [Learning ggplot2 on Paper -- Components](https://henrywang.nl/learning-ggplot2-on-paper-components/)
 
