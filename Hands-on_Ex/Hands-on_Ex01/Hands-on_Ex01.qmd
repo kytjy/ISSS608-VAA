@@ -910,7 +910,7 @@ ggplot(data=exam_data,
 ```
 :::
 
-To modify components of a theme , refer to this ggplot2 [webpage](https://ggplot2.tidyverse.org/reference/theme.html).
+To modify components of a theme, refer to this ggplot2 [webpage](https://ggplot2.tidyverse.org/reference/theme.html).
 
 # 12 References
 

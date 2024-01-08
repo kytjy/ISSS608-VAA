@@ -12,6 +12,6 @@ toc: false
 max-description-length: 30
 ---
 
-![](Images/index.PNG){fig-align="center" width="50%"}
+![](Images/index.PNG){fig-align="center" width="100%"}
 
 ## Latest Posts:
