@@ -69,8 +69,6 @@ website:
         text: "{{< fa house >}}"
       - href: about.qmd
         text: "{{< fa regular face-smile >}}"
-      - href: "https://isss624-kytjy.netlify.app/"
-        text: "{{< fa map-location-dot >}}"        
   
   page-footer: 
     right: "Blog made with 💜 and [Quarto](https://quarto.org/)"

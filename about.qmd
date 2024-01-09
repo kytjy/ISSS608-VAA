@@ -3,3 +3,5 @@ title: "About"
 ---
 
 ![](Images/about.PNG){fig-align="center" width="60%"}
+
+[![](Images/ga.png)](https://isss624-kytjy.netlify.app/){fig-align="center"}
