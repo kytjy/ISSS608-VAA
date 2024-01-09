@@ -9,7 +9,7 @@ listing:
     - "In-class_Ex/*/*.qmd"
   sort: "date desc"
 toc: false
-max-description-length: 30
+max-description-length: 40
 ---
 
 ![](Images/index.PNG){fig-align="center" width="100%"}

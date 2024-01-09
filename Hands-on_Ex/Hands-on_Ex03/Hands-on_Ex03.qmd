@@ -1,0 +1,22 @@
+---
+title: "Hands-on Exercise 3: Programming Interactive Data Visualisation and Animated Statistical Graphics with R"
+date: "09 Jan 2024"
+date-modified: "last-modified"
+editor: visual
+toc-depth: 4
+execute:
+  freeze: auto
+  echo: true #if false, displays charts without codes
+  eval: true #if false, displays codes without charts
+  warning: false #dont display if there are any warnings
+format: 
+  html:
+    code-fold: false
+    code-overflow: scroll
+    code-summary: "Show the code"
+    code-line-numbers: true
+    code-block-bg: "#ECEBEB"
+    code-block-border-left: "#919C9D"
+---
+
+![](Images/placeholder.PNG){fig-align="center"}

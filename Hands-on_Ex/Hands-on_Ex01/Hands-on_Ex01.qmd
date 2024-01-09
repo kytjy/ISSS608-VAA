@@ -16,6 +16,7 @@ format:
     code-summary: "Show the code"
     code-line-numbers: true
     code-block-bg: "#ECEBEB"
+    code-block-border-left: "#919C9D"
 ---
 
 ![](Images/HOE1.PNG){fig-align="center"}
@@ -160,7 +161,6 @@ A plot must have at least one geom; there is no upper limit. You can add a geom 
 
 For complete list, please refer to [here](https://ggplot2.tidyverse.org/reference/#section-layer-geoms).
 
-
 ## 7.1 geom_bar
 
 The code chunk below plots a bar chart by using [`geom_bar()`](https://ggplot2.tidyverse.org/reference/geom_bar.html).
@@ -269,8 +269,7 @@ ggplot(data=exam_data,
     theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
 
-:::panel-tabset
-
+::: panel-tabset
 ## Changed no. of bins
 
 ```{r}
@@ -313,6 +312,7 @@ b_p2 <- ggplot(data=exam_data,
 b_p1 + b_p2
   
 ```
+
 ## Using binwidth
 
 ```{r}
@@ -394,8 +394,8 @@ bb_p2 <- ggplot(data=exam_data,
 # format plot layout
 bb_p1 + bb_p2
 ```
-**Note**: Don’t use both boundary and center for bin alignment. Just pick one.
 
+**Note**: Don't use both boundary and center for bin alignment. Just pick one.
 :::
 
 -   bins: default bin number is 30 in ggplot2
@@ -550,7 +550,7 @@ ggplot(data=exam_data,
 
 The code chunk below plots the data points on the boxplots by using both `geom_boxplot()` and `geom_point()`.
 
-**Important**: 
+**Important**:
 
 Order of geom layer matters! In the code below, boxplot is plotted afer/above the scatter and thus covers parts of the scatterplot.
 
@@ -575,7 +575,6 @@ ggplot(data=exam_data,
              size = 0.5) +
       theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
 ```
-
 
 # 8 Essential Grammatical Elements in ggplot2: Stat
 
@@ -914,7 +913,7 @@ To modify components of a theme, refer to this ggplot2 [webpage](https://ggplot2
 
 # 12 References
 
--   Kam, T.S. (2023). [A Layered Grammar of Graphics: ggplot2 methods](https://r4va.netlify.app/chap01#essential-grammatical-elements-in-ggplot2-stat).
+-   Kam, T.S. (2023). [A Layered Grammar of Graphics: ggplot2 methods](https://r4va.netlify.app/chap01).
 
 -   Hadley Wickham (2023) [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/). Online 3rd edition.
 
