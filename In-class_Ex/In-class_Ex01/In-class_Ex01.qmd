@@ -22,7 +22,9 @@ format:
 
 ![](Images/placeholder.PNG){fig-align="center"}
 
-# 1 Getting Started
+# 1 Overview
+
+# 2 Getting Started
 
 ::: panel-tabset
 ## Installing and loading libraries
@@ -52,4 +54,5 @@ summary(exam_data)
 -   There are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.
     -   Categorical attributes are: ID, CLASS, GENDER and RACE.
     -   Continuous attributes are: MATHS, ENGLISH and SCIENCE.
+
 :::

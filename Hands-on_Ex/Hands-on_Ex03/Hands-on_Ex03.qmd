@@ -495,7 +495,6 @@ plot_ly(data=exam_data,
 
 ```
 
-
 ## 4.2 Working with visual variable: plot_ly() method
 
 In the code chunk below, *color* argument is mapped to a qualitative visual variable (i.e. RACE). Click on the colour symbol at the legend to only show the RACE selected.
@@ -517,9 +516,9 @@ The code chunk below plots an interactive scatter plot by using [ggplotly()](htt
 
 Notice that the only extra line you need to include in the code chunk is `ggplotly()`.
 
-:::panel-tabset
-
+::: panel-tabset
 ## Basic
+
 ```{r}
 p <- ggplot(data = exam_data,
             aes(x= MATHS,
@@ -561,8 +560,6 @@ p_c <- ggplot(data = exam_data,
 
 ggplotly(p_c, tooltip=c("label1", "label2", "label3"))
 ```
-
-
 :::
 
 ## 4.4 Coordinated Linked Plots with **plotly**
@@ -668,6 +665,8 @@ So, `highlight(ggplotly(p), "plotly_selected")` is taking the ggplotly(p) object
 `crosstalk::bscols()`: particularly useful when working with interactive data visualizations, as it allows for easy linking of different components of the dashboard, such as brushing and highlighting on the plot and filtering on the data table.
 
 # 6 Reference
+
+-   Kam, T.S. (2023). [Programming Interactive Data Visualisation with R](https://r4va.netlify.app/chap03).
 
 ## 6.1 ggiraph
 
