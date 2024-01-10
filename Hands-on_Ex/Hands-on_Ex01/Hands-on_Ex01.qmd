@@ -17,6 +17,7 @@ format:
     code-line-numbers: true
     code-block-bg: "#ECEBEB"
     code-block-border-left: "#919C9D"
+    code-block-border-left-size: 1px
 ---
 
 ![](Images/HOE1.PNG){fig-align="center"}

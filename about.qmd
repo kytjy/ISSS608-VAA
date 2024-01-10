@@ -2,6 +2,6 @@
 title: "About"
 ---
 
-![](Images/about.PNG){fig-align="center" width="60%"}
+![](Images/about.PNG){fig-align="center" width="80%"}
 
-[![](Images/ga.png)](https://isss624-kytjy.netlify.app/){fig-align="center"}
+[![](Images/ga.png)](https://isss624-kytjy.netlify.app/)
