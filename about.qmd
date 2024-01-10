@@ -4,4 +4,4 @@ title: "About"
 
 ![](Images/about.PNG){fig-align="center" width="80%"}
 
-[![](Images/ga.png)](https://isss624-kytjy.netlify.app/)
+[![](Images/ga.png){fig-align="center" width="119"}](https://isss624-kytjy.netlify.app/)

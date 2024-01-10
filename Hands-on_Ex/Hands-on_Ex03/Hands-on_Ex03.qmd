@@ -82,8 +82,8 @@ Notice that two steps are involved. First, an interactive version of ggplot2 geo
 
 **Steps in creating an interactive graphic:**
 
-1.   Instead of geom_point (i.e.), use geom_point_interactive - provide at least one of the aesthetics tools (tooltip, data_id or onclick)
-2.   Call function girafe with the ggplot object to translate graphic into a web interactive graphic.
+1.  Instead of geom_point (i.e.), use geom_point_interactive - provide at least one of the aesthetics tools (tooltip, data_id or onclick)
+2.  Call function girafe with the ggplot object to translate graphic into a web interactive graphic.
 
 ```{r}
 #| code-fold: true
@@ -102,7 +102,6 @@ girafe(ggobj=p,
        width_svg = 6,
        height_svg = 6*0.618)
 ```
-
 
 By hovering the mouse pointer on an data point of interest, the student's ID will be displayed. To set index as the tooltip, replace with `row.names(exam_data)`. To set numeric values as tooltip, replace with `factor(MATHS)`.
 
@@ -263,7 +262,6 @@ girafe(ggobj=gg_point,
 
 ```
 
-
 **Explanation of the codes above:**
 
 1.  Tooltip self-defined function:
@@ -321,7 +319,6 @@ girafe(ggobj=p,
        height_svg = 6 *0.618)
 ```
 
-
 Note that the default value of the hover css is *hover_css = "fill:orange;"*.
 
 ### 3.1.5 Styling hover effect
@@ -352,7 +349,6 @@ girafe(ggobj=p,
          )
        )
 ```
-
 
 **Note**: Different from previous example (`tooltip_css` is pre-defined as input to a parameter in girafe(options=list(opts_tooltip(css=`tooltip_css`)))), in this example the ccs customisation request are encoded directly as `girafe(options=list(opts_hover(css='tooltip_css'fill:#202020;')))`
 
@@ -499,11 +495,9 @@ plot_ly(data=exam_data,
 
 ```
 
-
 ## 4.2 Working with visual variable: plot_ly() method
 
 In the code chunk below, *color* argument is mapped to a qualitative visual variable (i.e. RACE). Click on the colour symbol at the legend to only show the RACE selected.
-
 
 ```{r}
 #| code-fold: true
@@ -515,7 +509,6 @@ plot_ly(data=exam_data,
         color=~RACE)
 
 ```
-
 
 ## 4.3 Creating an interactive scatter plot: ggplotly() method
 
@@ -540,7 +533,6 @@ p <- ggplot(data = exam_data,
 ggplotly(p)
 
 ```
-
 
 ## 4.4 Coordinated Multiple Views with **plotly**
 
@@ -580,7 +572,6 @@ subplot(ggplotly(p1),
          yaxis = list(title = "English"))
 
 ```
-
 
 Thing to learn from the code chunk:
 
@@ -634,7 +625,6 @@ crosstalk::bscols(gg,
                   DT::datatable(d, options = list(pageLength = 3)),
                   widths=5)
 ```
-
 
 `highlight_key()`: used to create a unique identifier for each row in a data frame, based on its values. The resulting identifier is used to keep track of the rows that have been selected or highlighted on a plot, particularly when using the highlight() function.
 
