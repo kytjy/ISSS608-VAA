@@ -1,6 +1,6 @@
 ---
-title: "Hands-on Exercise 3: Programming Interactive Data Visualisation & Animated Statistical Graphics with R"
-date: "09 Jan 2024"
+title: "Hands-on Exercise 3a: Programming Interactive Data Visualisation with R"
+date: "01 Jan 2024"
 date-modified: "last-modified"
 editor: visual
 toc-depth: 4
@@ -414,7 +414,7 @@ girafe(
 
 Note that click actions must be a string column in the dataset containing valid javascript instructions.
 
-### 3.1.8 Coordinated Multiple Views with **ggiraph**
+### 3.1.8 Coordinated Linked Plots with **ggiraph**
 
 *Coordinated* multiple views methods has been implemented in the data visualisation below.
 
@@ -482,7 +482,7 @@ There are two ways to create interactive graph by using plotly, they are:
 
 ## 4.1 Creating an interactive scatter plot: plot_ly() method
 
-The tabset below shows an example a basic interactive plot created by using [plot_ly()](https://plotly.com/r/)
+The tabset below shows an example an interactive plot created by using [plot_ly()](https://plotly.com/r/)
 
 ```{r}
 #| code-fold: true
@@ -494,6 +494,7 @@ plot_ly(data=exam_data,
         y=~ENGLISH)
 
 ```
+
 
 ## 4.2 Working with visual variable: plot_ly() method
 
@@ -516,8 +517,10 @@ The code chunk below plots an interactive scatter plot by using [ggplotly()](htt
 
 Notice that the only extra line you need to include in the code chunk is `ggplotly()`.
 
+:::panel-tabset
+
+## Basic
 ```{r}
-#| eval: false
 p <- ggplot(data = exam_data,
             aes(x= MATHS,
                 y= ENGLISH)) +
@@ -534,7 +537,35 @@ ggplotly(p)
 
 ```
 
-## 4.4 Coordinated Multiple Views with **plotly**
+## Customised Tooltip
+
+```{r}
+p_c <- ggplot(data = exam_data,
+            aes(x= MATHS,
+                y= ENGLISH,
+                color=CLASS,
+                label1=ID,
+                label1=GENDER,
+                label2=RACE
+                )) +
+  geom_point (size =1) +
+  geom_smooth(method=lm)+
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100)) +
+  labs(x='Math', 
+       y= 'English',
+       color="Class") +                                    
+  theme(axis.title.y=element_text(angle = 0,
+                                  vjust=0.9)) +   #<<< does not work in ggplotly
+  ggtitle('English and Math scores')
+
+ggplotly(p_c, tooltip=c("label1", "label2", "label3"))
+```
+
+
+:::
+
+## 4.4 Coordinated Linked Plots with **plotly**
 
 The creation of a coordinated linked plot by using plotly involves three steps:
 
