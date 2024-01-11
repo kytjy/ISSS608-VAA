@@ -16,7 +16,6 @@ format:
     code-summary: "Show the code"
     code-line-numbers: true
     code-block-bg: "#ECEBEB"
-    code-block-border-left: "#919C9D"
 ---
 
 ![](Images/placeholder.PNG){fig-align="center"}
@@ -319,7 +318,7 @@ girafe(ggobj=p,
        height_svg = 6 *0.618)
 ```
 
-Note that the default value of the hover css is *hover_css = "fill:orange;"*.
+**Note**: the default value of the hover css is *hover_css = "fill:orange;"*.
 
 ### 3.1.5 Styling hover effect
 
@@ -601,7 +600,7 @@ subplot(ggplotly(p1),
 
 ```
 
-Thing to learn from the code chunk:
+Things to learn from the code chunk:
 
 -   `highlight_key()` simply creates an object of class [crosstalk::SharedData](https://rdrr.io/cran/crosstalk/man/SharedData.html).
 

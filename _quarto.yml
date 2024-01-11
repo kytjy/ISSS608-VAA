@@ -12,7 +12,7 @@ website:
     collapse-below: lg
     search: true
     left: 
-      - text: "{{< fa pencil size=lg >}} Hands-on Exercises"
+      - text: "Hands-on Exercises"
         menu: 
           - text: 1. A Layered Grammar of Graphics - ggplot2 methods
             href: Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html
@@ -37,7 +37,7 @@ website:
           - text: 10. Information Dashboard Design - R methods
             href: Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex10.html 
             
-      - text: "{{< fa landmark size=lg >}} In-class Exercises"
+      - text: "In-class Exercises"
         menu: 
           - text: In-Class Exercise 1
             href: In-class_Ex/In-class_Ex01/In-class_Ex01.html
@@ -56,7 +56,7 @@ website:
           - text: In-Class Exercise 8
             href: In-class_Ex/In-class_Ex05/In-class_Ex08.html  
  
-      - text: "{{< fa book-bookmark size=lg >}} Take-home Exercises"
+      - text: "Take-home Exercises"
         menu: 
           - text: Take-home Exercise 1
             href: Take-Home_Ex/Take-Home_Ex1/Take-Home_Ex1.html    
@@ -66,7 +66,7 @@ website:
             href: Take-Home_Ex/Take-Home_Ex3/Take-Home_Ex3.html  
           - text: Take-home Exercise 4
             href: Take-Home_Ex/Take-Home_Ex4/Take-Home_Ex4.html              
-      - text: "{{< fa user-group size=lg >}} Projects"
+      - text: "Projects"
         menu: 
           - text: Coming soon!
             href: "" 
