@@ -1,6 +1,10 @@
+/* custom css style */
+
 /*-- scss:functions --*/
 
 /*-- scss:defaults --*/
+
+/* colours, fonts, size ---------------------------------------------------------------------- */
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&family=Roboto&display=swap');
 
@@ -19,6 +23,8 @@ $violet: #B0B6D9;
 $pretty: #ecc9d0;
 $choc: #50342b;
 $teal-gray: #3E5058;
+$clay: #ECEBEB;
+$ballet: #FFF0F5;
 
 // Base document colors
 $navbar-bg: $pretty; // navbar
@@ -29,11 +35,13 @@ $body-color: $navy; // page text
 $footer-bg: $whitesmoke; // footer 
 $link-color: $pink; // hyperlinks 
 
-// fonts
+// Code blocks
+$code-block-bg: white;
 
+// fonts
 $font-family: 'Roboto', sans-serif;
 
-//toc 
+// toc 
 $toc-font-size: 12px;
 $toc-active-border: $pink;
 
@@ -42,6 +50,8 @@ $callout-color-note: $green;
 $callout-color-tip: $blue;
 $callout-color-caution: $pink;
 $callout-color-important: $yellow;
+
+
 
 /*-- scss:rules --*/
 
@@ -58,16 +68,7 @@ body {
   font-family: $font-family;
 }
 
-.left {
-  text-align: left;
-  padding-left: 1em;
-}
-.right {
-  text-align: right;
-  padding-right: 1em;
-}
-
-
+// Headers
 /* Heading 1 */
 h1 {
   font-size: 24px;
@@ -103,6 +104,34 @@ h4 {
   font-weight: 500; 
   color: $teal-gray;  
 }
+
+/* Content width */
+.left {
+  text-align: left;
+  padding-left: 1em;
+}
+.right {
+  text-align: right;
+  padding-right: 1em;
+}
+
+
+.navbar {
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: $pretty;
+}  
+
+.dropdown-menu .dropdown-item {
+  background-color: $ballet;
+  font-size: 14px;
+}
+
+.dropdown-menu a {
+  color: $links;
+  background-color: $ballet;
+}
+
 
 .callout.callout-style-default .callout-body {
   font-size: 0.75rem;

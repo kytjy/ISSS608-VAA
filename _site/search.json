@@ -259,32 +259,74 @@
     "text": "1.2 Terminology\nBefore we dive into the steps for creating an animated statistical graph, it’s important to understand some of the key concepts and terminology related to this type of visualization.\n\nFrame: In an animated line graph, each frame represents a different point in time or a different category. When the frame changes, the data points on the graph are updated to reflect the new data.\nAnimation Attributes: The animation attributes are the settings that control how the animation behaves. For example, you can specify the duration of each frame, the easing function used to transition between frames, and whether to start the animation from the current frame or from the beginning."
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#building-a-static-population-bubble-plot",
-    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#building-a-static-population-bubble-plot",
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#static-population-bubble-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#static-population-bubble-plot",
     "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
-    "section": "3.1 Building a static population bubble plot",
-    "text": "3.1 Building a static population bubble plot\nIn the code chunk below, the basic ggplot2 functions are used to create a static bubble plot. A bubble plot is created when a third numeric variable is assigned to size argument inside a ggplot with geom_point.\n\nThe scale_size(range= c(2,12)) sets the range of point sizes to be used in the plot to between 2 and 12.\nPopulation is mapped to size aes in ggplot, thus this range parameter controls the min nad max size of the points."
+    "section": "3.1 Static population bubble plot",
+    "text": "3.1 Static population bubble plot\nIn the code chunk below, the basic ggplot2 functions are used to create a static bubble plot. A bubble plot is created when a third numeric variable is assigned to size argument inside a ggplot with geom_point.\n\n\nShow the code\np &lt;- ggplot(data= globalPop,\n       aes(x= Old,\n           y=Young,\n           size= Population,\n           color=Country)) +\n  geom_point(alpha = 0.7,\n             show.legend = FALSE) +\n  scale_color_manual(values=country_colors) +  #&lt;&lt;&lt; 'country_colors' from Gapminder lib\n  scale_size(range= c(2,12)) +\n  labs(title='Year:{frame_time}',\n       x = '% Aged',\n       y= '% Young')\n\np\n\n\n\n\n\n\nThe scale_size(range= c(2,12)) sets the range of point sizes to be used in the plot to between 2 and 12.\nPopulation is mapped to size aes in ggplot, thus this range parameter controls the min and max size of the points.\n\nUsing scale_color_viridis_d() The code below uses scale_color_viridis_d() colour scale instead, and does not require Gapminder package to be loaded.\n\n\nShow the code\nggplot(data= globalPop,\n       aes(x= Old,\n           y=Young,\n           size= Population,\n           color=Country)) +\n  geom_point(alpha = 0.7,\n             show.legend = FALSE) +\n  scale_color_viridis_d()+\n  #scale_color_manual(values=country_colors) +  #&lt;&lt;&lt; 'country_colors' from Gapminder lib\n  scale_size(range= c(2,12)) +\n  labs(title='Year:{frame_time}',\n       x = '% Aged',\n       y= '% Young')"
   },
   {
-    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#building-the-animated-bubble-plot",
-    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#building-the-animated-bubble-plot",
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#animated-bubble-plot",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#animated-bubble-plot",
     "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
-    "section": "3.2 Building the animated bubble plot",
-    "text": "3.2 Building the animated bubble plot\nIn the code chunk below,\n\ntransition_time() of gganimate is used to create transition through distinct states in time (i.e. Year).\nease_aes() is used to control easing of aesthetics. The default is linear. Other methods are: quadratic, cubic, quartic, quintic, sine, circular, exponential, elastic, back, and bounce."
+    "section": "3.2 Animated bubble plot",
+    "text": "3.2 Animated bubble plot"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#basic",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#basic",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "Basic",
+    "text": "Basic\nIn the code chunk below,\n\ntransition_time() of gganimate is used to create transition through distinct states in time (i.e. Year).\nease_aes() is used to control easing of aesthetics. The default is linear. Other methods are: quadratic, cubic, quartic, quintic, sine, circular, exponential, elastic, back, and bounce.\n\nTransition through distinct countries in time\n\np +\n  transition_time(Year) +\n  ease_aes(\"linear\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#create-facets-by-continent",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#create-facets-by-continent",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "Create facets by continent",
+    "text": "Create facets by continent\n\np + facet_wrap(~Continent) +\n  transition_time(Year)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#let-the-view-follow-the-data-in-each-frame",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#let-the-view-follow-the-data-in-each-frame",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "Let the view follow the data in each frame",
+    "text": "Let the view follow the data in each frame\n\np + transition_time(Year) +\n  view_follow(fixed_y = TRUE)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#show-preceding-frames-with-gradual-falloff",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#show-preceding-frames-with-gradual-falloff",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "Show preceding frames with gradual falloff",
+    "text": "Show preceding frames with gradual falloff\n\np + transition_time(Year) +\n  shadow_wake(wake_length = 0.1, alpha = FALSE)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#show-the-original-data-as-background-marks",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#show-the-original-data-as-background-marks",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "Show the original data as background marks",
+    "text": "Show the original data as background marks\n\np + transition_time(Year) +\n  shadow_mark(alpha = 0.3, size = 0.5)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#animated-line-graph",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#animated-line-graph",
+    "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
+    "section": "3.2 Animated Line Graph",
+    "text": "3.2 Animated Line Graph\n\nStatic plotReveal data along a given dimension\n\n\n\nl &lt;- ggplot(\n  globalPop,\n  aes(Year, Old, group = Continent, color = Continent)\n  ) +\n  geom_line() +\n  scale_color_viridis_d() +\n  labs(x = \"Year\", y = \"% Aged\")+\n  theme(legend.position = \"top\")\n  \nl\n\n\n\n\n\n\nReveal by day (x-axis):\n\nl + \n  geom_point() +\n  transition_reveal(Year)\n\n\n\n\nPoints can be kept by giving them a unique group:\n\nl + \n  geom_point(aes(group = seq_along(Year))) +\n  transition_reveal(Year)\n\n\n\n\nPlot looks weird because a lot of countries for each continent."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#building-an-animated-bubble-plot-ggplotly-method",
     "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#building-an-animated-bubble-plot-ggplotly-method",
     "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
     "section": "4.1 Building an animated bubble plot: ggplotly() method",
-    "text": "4.1 Building an animated bubble plot: ggplotly() method\n\nAppropriate ggplot2 functions are used to create a static bubble plot. The output is then saved as an R object called gg.\nggplotly() is then used to convert the R graphic object into an animated svg object."
+    "text": "4.1 Building an animated bubble plot: ggplotly() method\nThe animated bubble plot below includes a play/pause button and a slider component for controlling the animation.\nNote: - Appropriate ggplot2 functions are used to create a static bubble plot. The output is then saved as an R object called gg.\n\nggplotly() is then used to convert the R graphic object into an animated svg object.\n\n\n\nShow the code\ngg &lt;- ggplot(globalPop, \n       aes(x = Old, \n           y = Young, \n           size = Population, \n           colour = Country)) +\n  geom_point(aes(size = Population,    #&lt;&lt;&lt; perform aes mapping for each frame\n                 frame = Year),\n             alpha = 0.7, \n             show.legend = FALSE) +\n  scale_colour_manual(values = country_colors) +\n  scale_size(range = c(2, 12)) +\n  labs(x = '% Aged', \n       y = '% Young')+\n  theme(legend.position='none')\n\nggplotly(gg)\n\n\n\n\n\n\nNotice that although show.legend = FALSE argument was used, the legend still appears on the plot. To overcome this problem, theme(legend.position='none') should be used as shown in the plot and code chunk below."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#building-an-animated-bubble-plot-plot_ly-method",
     "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03b.html#building-an-animated-bubble-plot-plot_ly-method",
     "title": "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R",
     "section": "4.2 Building an animated bubble plot: plot_ly() method",
-    "text": "4.2 Building an animated bubble plot: plot_ly() method"
+    "text": "4.2 Building an animated bubble plot: plot_ly() method\n\n\nShow the code\nbp &lt;- globalPop %&gt;% \n  plot_ly( x = ~Old,\n           y= ~Young,\n           color = ~Continent,#&lt;&lt; 6 unique\n           frame= ~Year,\n           text= ~Country,\n           hoverinfo='text',\n           type = 'scatter',\n           mode= 'markers')\n\n\nbp"
   },
   {
     "objectID": "In-class_Ex/In-class_Ex01/In-class_Ex01.html",

@@ -15,7 +15,6 @@ format:
     code-overflow: scroll
     code-summary: "Show the code"
     code-line-numbers: true
-    code-block-bg: "#ECEBEB"
 ---
 
 ![](Images/placeholder.PNG){fig-align="center"}
