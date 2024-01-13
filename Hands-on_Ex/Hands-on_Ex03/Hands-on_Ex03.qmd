@@ -1,6 +1,6 @@
 ---
 title: "Hands-on Exercise 3a: Programming Interactive Data Visualisation with R"
-date: "01 Jan 2024"
+date: "12 Jan 2024"
 date-modified: "last-modified"
 editor: visual
 toc-depth: 4

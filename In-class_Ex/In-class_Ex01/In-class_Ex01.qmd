@@ -17,7 +17,8 @@ format:
     code-line-numbers: true
 ---
 
-![](Images/placeholder.PNG){fig-align="center"}
+
+![](Images/placeholder.PNG){fig-align="center" width="287"}
 
 # 1 Getting Started
 
@@ -26,9 +27,9 @@ format:
 
 In this hands-on exercise, two R packages will be used. They are:
 
-| **Package**                                 | **Description**                                        |
-|-----------|----------------------------------------------------|
-| [tidyverse](https://www.tidyverse.org/) | For data wragling                                  |
+| **Package**                             | **Description**                                                             |
+|----------------|--------------------------------------------------------|
+| [tidyverse](https://www.tidyverse.org/) | For data wragling                                                           |
 | [haven](https://haven.tidyverse.org/)   | To enable R to read and write various data formats such as 'SAS' and 'SPSS' |
 
 The code chunk below uses `p_load()` of [pacman](https://rpubs.com/akshaypatankar/594834) package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.
@@ -75,5 +76,3 @@ stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 #summary(stu_qqq_SG)
 ```
 :::
-
-
