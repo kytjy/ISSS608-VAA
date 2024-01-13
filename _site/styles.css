@@ -1,1 +1,53 @@
 /* css styles */
+
+/* Navbar Logo */
+.navbar-brand > img {
+  max-height: 30px;
+}
+
+/* Custom callout boxes */
+
+.thunderbox {
+  padding: 1.5em 2.5em 1.5em 4em;
+  margin-bottom: 10px;
+  border: 1.5px dotted #c2a873;
+  border-radius: 10px;
+  font-size: 13px;
+  background: #f0e9cc 5px center/3em no-repeat;
+}
+
+.thunder {
+  background-image: url("Images/caution.png");
+  background-position: left center;
+  background-position-x: 1rem;  
+}
+
+.brainbox {
+  padding: 1.5em 2.5em 1.5em 4em;
+  margin-bottom: 10px;
+  border: 1.5px dotted #a8b298;
+  border-radius: 10px;
+  background: #dfedd9 5px center/3em no-repeat;
+}
+
+.brain {
+  background-image: url("Images/insights.png");
+  background-position: left center;
+  background-position-x: 1rem;  
+}
+
+
+.chatterbox {
+  padding: 1.5em 2.5em 1.5em 5.5em;
+  margin-bottom: 10px;
+  border: 1.5px dotted #9ab8c4;
+  border-radius: 10px;
+  background:  #dee8ef  5px center/3em no-repeat;
+}
+
+.chatter {
+  background-image: url("Images/chatter.png");
+  background-position: left center;
+  background-position-x: 1rem;
+  background-size: auto 70px;
+}

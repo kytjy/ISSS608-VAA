@@ -1,11 +1,11 @@
 ---
-title: "In-class Exercise 1: "
+title: "In-class Exercise 1: Now You See It!"
 date: "13 Jan 2024"
-date-modified: "last-modified"
+date-modified: "last-modified" #wrapper of system.date
 editor: visual
 toc-depth: 4
 execute:
-  freeze: auto
+  freeze: auto 
   echo: true #if false, displays charts without codes
   eval: true #if false, displays codes without charts
   warning: false #dont display if there are any warnings
@@ -19,36 +19,61 @@ format:
 
 ![](Images/placeholder.PNG){fig-align="center"}
 
-# 1 Overview
-
-# 2 Getting Started
+# 1 Getting Started
 
 ::: panel-tabset
 ## Installing and loading libraries
 
+In this hands-on exercise, two R packages will be used. They are:
+
+| **Package**                                 | **Description**                                        |
+|-----------|----------------------------------------------------|
+| [tidyverse](https://www.tidyverse.org/) | For data wragling                                  |
+| [haven](https://haven.tidyverse.org/)   | To enable R to read and write various data formats such as 'SAS' and 'SPSS' |
+
 The code chunk below uses `p_load()` of [pacman](https://rpubs.com/akshaypatankar/594834) package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(tidyverse, haven)
 ```
 
-## Importing Data
+## Importing PISA Data
 
--   The code chunk below imports **exam_data.csv** into R environment by using [`read_csv()`](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.
--   **readr** is one of the tidyverse package.
+The code chunk below imports PISA data into R environment by using [`read_sas()`](https://haven.tidyverse.org/reference/read_sas.html) function of [**haven**](https://haven.tidyverse.org/) package.
+
+**Output**: Tibble dataframe
 
 ```{r}
-exam_data <- read_csv("data/Exam_data.csv")
+#| eval: false
+stu_qqq <- read_sas(data_file = "data/cy08msp_stu_qqq.sas7bdat")
+```
+
+[`filter()`](https://dplyr.tidyverse.org/reference/filter.html) of the [**dplyr**](https://dplyr.tidyverse.org/) package allows us to filter where participating country (*CNT*) is Singapore (*SGP*).
+
+```{r}
+#| eval: false
+stu_qqq_SG <- stu_qqq %>%
+  filter(CNT == "SGP")
+```
+
+The *.rds* file format is usually smaller than its SAS file counterpart and will therefore take up less storage space. The *.rds* file will also preserve data types and classes such as factors and dates eliminating the need to redefine data types after loading the file.
+
+Files can be exported as RDS and imported into R using [`write_rds()`](https://readr.tidyverse.org/reference/read_rds.html) and [`read_rds()`](https://readr.tidyverse.org/reference/read_rds.html) for fast and space efficient data storage.
+
+```{r}
+#| eval: false
+write_rds(stu_qqq_SG, "data/stu_qqq_SG.rds")
+```
+
+```{r}
+stu_qqq_SG <- read_rds("data/stu_qqq_SG.rds")
 ```
 
 ## Understanding the Data
 
 ```{r}
-summary(exam_data)
+#summary(stu_qqq_SG)
 ```
-
--   Year end examination grades of a cohort of primary 3 students from a local school.
--   There are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.
-    -   Categorical attributes are: ID, CLASS, GENDER and RACE.
-    -   Continuous attributes are: MATHS, ENGLISH and SCIENCE.
 :::
+
+

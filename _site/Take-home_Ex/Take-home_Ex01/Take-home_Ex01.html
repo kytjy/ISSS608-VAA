@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-01-13">
+<meta name="dcterms.date" content="2024-01-01">
 
-<title>Visual Analytics and Application - In-class Exercise 1: Now You See It!</title>
+<title>Visual Analytics and Application - Take-home Exercise 1:</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -265,7 +231,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">1 Getting Started</a></li>
+  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">1 Background</a></li>
+  <li><a href="#task" id="toc-task" class="nav-link" data-scroll-target="#task">2 Task</a></li>
   </ul>
 </nav>
     </div>
@@ -274,7 +241,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">In-class Exercise 1: Now You See It!</h1>
+<h1 class="title">Take-home Exercise 1:</h1>
 </div>
 
 
@@ -285,7 +252,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 13, 2024</p>
+      <p class="date">January 1, 2024</p>
     </div>
   </div>
   
@@ -303,65 +270,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Images/placeholder.PNG" class="img-fluid figure-img"></p>
+<p><img src="images/placeholder.PNG" class="img-fluid figure-img"></p>
 </figure>
 </div>
-<section id="getting-started" class="level1">
-<h1>1 Getting Started</h1>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Installing and loading libraries</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Importing PISA Data</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Understanding the Data</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<p>In this hands-on exercise, two R packages will be used. They are:</p>
-<table class="table">
-<thead>
-<tr class="header">
-<th><strong>Package</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="https://www.tidyverse.org/">tidyverse</a></td>
-<td>For data wragling</td>
-</tr>
-<tr class="even">
-<td><a href="https://haven.tidyverse.org/">haven</a></td>
-<td>To enable R to read and write various data formats such as ‘SAS’ and ‘SPSS’</td>
-</tr>
-</tbody>
-</table>
-<p>The code chunk below uses <code>p_load()</code> of <a href="https://rpubs.com/akshaypatankar/594834">pacman</a> package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, haven)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="background" class="level1">
+<h1>1 Background</h1>
+</section>
+<section id="task" class="level1">
+<h1>2 Task</h1>
+<p>The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA global education survey every three years to assess the education systems worldwide through testing 15 year old students in the subjects of mathematics, reading, and science.</p>
+<p>In this take-home exercise, you are required to use appropriate Exploratory Data Analysis (EDA) methods and ggplot2 functions to reveal:</p>
+<ul>
+<li>the distribution of Singapore students’ performance in mathematics, reading, and science, and</li>
+<li>the relationship between these performances with schools, gender and socioeconomic status of the students.</li>
+</ul>
+<div class="chatterbox chatter">
+<p><strong>Visual Considerations</strong></p>
+<ul>
+<li>Raincloud plots are used to capture the density and range of values by expense, with dotplots beneath the half-density plots revealing patterns in consistency<br>
+</li>
+<li>Separate plots were coded for -ve and +ve transactions, with Education, Food &amp; Recreation and Shelter separated as well. This is due to the wide scale of y-axis values, which made the narrower density plots too condensed for the distribution to be viewed in full.<br>
+</li>
+<li><code>patchwork</code> package was used to group the plots together in a single figure, using <code>plot_layout(heights)</code> to configure height ratio of the overall patched plots</li>
+</ul>
 </div>
+<div class="brainbox brain">
+<p><strong>Initial Insights from Line Chart and Table</strong></p>
+<ul>
+<li>Expenditure on education is the lowest, and has remained constant &gt; probably refers to school fees, which is normally a fixed monthly amount</li>
+<li>Expenditure on recreation and food shows monthly variation, and have decreased from Apr 2022 to Feb 2023</li>
+<li>Expenditure on Shelter is significantly higher that other categories, and also remains constant &gt; probably refers to rent</li>
+</ul>
 </div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p>The code chunk below imports PISA data into R environment by using <a href="https://haven.tidyverse.org/reference/read_sas.html"><code>read_sas()</code></a> function of <a href="https://haven.tidyverse.org/"><strong>haven</strong></a> package.</p>
-<p><strong>Output</strong>: Tibble dataframe</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>stu_qqq <span class="ot">&lt;-</span> <span class="fu">read_sas</span>(<span class="at">data_file =</span> <span class="st">"data/cy08msp_stu_qqq.sas7bdat"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><a href="https://dplyr.tidyverse.org/reference/filter.html"><code>filter()</code></a> of the <a href="https://dplyr.tidyverse.org/"><strong>dplyr</strong></a> package allows us to filter where participating country (<em>CNT</em>) is Singapore (<em>SGP</em>).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>stu_qqq_SG <span class="ot">&lt;-</span> stu_qqq <span class="sc">%&gt;%</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">filter</span>(CNT <span class="sc">==</span> <span class="st">"SGP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The <em>.rds</em> file format is usually smaller than its SAS file counterpart and will therefore take up less storage space. The <em>.rds</em> file will also preserve data types and classes such as factors and dates eliminating the need to redefine data types after loading the file.</p>
-<p>Files can be exported as RDS and imported into R using <a href="https://readr.tidyverse.org/reference/read_rds.html"><code>write_rds()</code></a> and <a href="https://readr.tidyverse.org/reference/read_rds.html"><code>read_rds()</code></a> for fast and space efficient data storage.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">write_rds</span>(stu_qqq_SG, <span class="st">"data/stu_qqq_SG.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>stu_qqq_SG <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"data/stu_qqq_SG.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#summary(stu_qqq_SG)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
+<div class="thunderbox thunder">
+<p>These may be grouped together by percentile, and analysed as age groups instead to give a better overview of different demographics. Each band represents sequential 20th percentiles:</p>
+<ul>
+<li><strong>Lowest 20th Percentile: 18-26</strong></li>
+<li><strong>20-40th Percentile: 27-35</strong></li>
+<li><strong>40-60th Percentile: 36-44</strong></li>
+<li><strong>60-80th Percentile: 45-52</strong></li>
+<li><strong>Top 20th Percentile: 53-60</strong></li>
+</ul>
 </div>
 
 
