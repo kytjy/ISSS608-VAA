@@ -1,6 +1,6 @@
 ---
 title: "Hands-on Exercise 3b: Programming Animated Statistical Graphics with R"
-date: "01 Jan 2024"
+date: "12 Jan 2024"
 date-modified: "last-modified"
 editor: visual
 toc-depth: 4
@@ -17,7 +17,7 @@ format:
     code-line-numbers: true
 ---
 
-![](Images/placeholder.PNG){fig-align="center"}
+![](Images/placeholder-simmer.PNG){fig-align="center"}
 
 # 1 Overview
 
@@ -48,7 +48,7 @@ Before we dive into the steps for creating an animated statistical graph, it's i
 
 We will use p_load from pacman package to check, install and load the following R packages:
 
-| **Package**                                                             | **Description**                                                                                                                                                                                          |
+| **Package**                                                         | **Description**                                                                                                                                                                                      |
 |---------------------------------|---------------------------------------|
 | [**plotly**](https://plotly.com/r/)                                 | R library for plotting interactive statistical graphs.                                                                                                                                               |
 | [**gganimate**](https://gganimate.com/)                             | An ggplot extension for creating animated statistical graphs                                                                                                                                         |
@@ -67,9 +67,9 @@ In this hands-on exercise, the *Data* worksheet from *GlobalPopulation* Excel wo
 
 Write a code chunk to import Data worksheet from GlobalPopulation Excel workbook by using appropriate R package from tidyverse family.
 
-:::panel-tabset
-
+::: panel-tabset
 ## mutate_each()
+
 ```{r}
 col <- c("Country", "Continent")
 
@@ -91,7 +91,6 @@ globalPop_2 <- read_xls("data/GlobalPopulation.xls",
   mutate(across(col, as.factor)) %>%
   mutate(Year = as.integer(Year))
 ```
-
 :::
 
 -   [`read_xls()`](https://readxl.tidyverse.org/reference/read_excel.html) of **readxl** package is used to import the Excel worksheet.
@@ -111,12 +110,12 @@ globalPop_2 <- read_xls("data/GlobalPopulation.xls",
 ```{r}
 glimpse(globalPop)
 ```
+
 There are 222 unique countries in the dataset.
 
 ```{r}
 n_distinct(globalPop$Country)
 ```
-
 :::
 
 # 3 Animated Data Visualisation: gganimate methods
@@ -132,7 +131,6 @@ n_distinct(globalPop$Country)
 -   `enter_*()/exit_*()`: defines how new data should appear and how old data should disappear during the course of the animation.
 
 -   `ease_aes()`: defines how different aesthetics should be eased during transitions.
-
 
 ## 3.1 Static population bubble plot
 
@@ -163,9 +161,7 @@ p
 
 -   `Population` is mapped to `size` aes in `ggplot`, thus this range parameter controls the min and max size of the points.
 
-
-**Using `scale_color_viridis_d()`**
-The code below uses `scale_color_viridis_d()` colour scale instead, and does not require Gapminder package to be loaded.
+**Using `scale_color_viridis_d()`** The code below uses `scale_color_viridis_d()` colour scale instead, and does not require Gapminder package to be loaded.
 
 ```{r}
 #| code-fold: true
@@ -189,12 +185,12 @@ ggplot(data= globalPop,
 
 ## 3.2 Animated bubble plot
 
-:::panel-tabset:
-
+::: panel-tabset:
 ## Basic
+
 In the code chunk below,
 
--   [`transition_time()`](https://gganimate.com/reference/transition_time.html) of **gganimate** is used to create transition through distinct states in time (i.e. *Year*). 
+-   [`transition_time()`](https://gganimate.com/reference/transition_time.html) of **gganimate** is used to create transition through distinct states in time (i.e. *Year*).
 
 -   [ease_aes()](https://gganimate.com/reference/ease_aes.html) is used to control easing of aesthetics. The default is `linear`. Other methods are: quadratic, cubic, quartic, quintic, sine, circular, exponential, elastic, back, and bounce.
 
@@ -205,6 +201,7 @@ p +
   transition_time(Year) +
   ease_aes("linear")
 ```
+
 ## Create facets by continent
 
 ```{r}
@@ -225,20 +222,20 @@ p + transition_time(Year) +
 p + transition_time(Year) +
   shadow_wake(wake_length = 0.1, alpha = FALSE)
 ```
+
 ## Show the original data as background marks
 
 ```{r}
 p + transition_time(Year) +
   shadow_mark(alpha = 0.3, size = 0.5)
 ```
-
 :::
 
 ## 3.2 Animated Line Graph
 
-:::panel-tabset
-
+::: panel-tabset
 ## Static plot
+
 ```{r}
 l <- ggplot(
   globalPop,
@@ -251,15 +248,17 @@ l <- ggplot(
   
 l
 ```
+
 ## Reveal data along a given dimension
 
-Reveal by day (x-axis): 
+Reveal by day (x-axis):
 
 ```{r}
 l + 
   geom_point() +
   transition_reveal(Year)
 ```
+
 Points can be kept by giving them a unique group:
 
 ```{r}
@@ -269,7 +268,6 @@ l +
 ```
 
 Plot looks weird because a lot of countries for each continent.
-
 :::
 
 # 4 Animated Data Visualisation: plotly
@@ -280,8 +278,7 @@ In **Plotly R** package, both [ggplotly()](https://plotly.com/ggplot2/animations
 
 The animated bubble plot below includes a play/pause button and a slider component for controlling the animation.
 
-**Note:**
--   Appropriate ggplot2 functions are used to create a static bubble plot. The output is then saved as an R object called *gg*.
+**Note:** - Appropriate ggplot2 functions are used to create a static bubble plot. The output is then saved as an R object called *gg*.
 
 -   `ggplotly()` is then used to convert the R graphic object into an animated svg object.
 
@@ -329,7 +326,6 @@ bp <- globalPop %>%
 
 bp
 ```
-
 
 # 5 References
 

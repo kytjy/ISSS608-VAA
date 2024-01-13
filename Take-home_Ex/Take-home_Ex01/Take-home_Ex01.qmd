@@ -34,7 +34,16 @@ In this take-home exercise, you are required to use appropriate Exploratory Data
 **Visual Considerations**
 
 -   Raincloud plots are used to capture the density and range of values by expense, with dotplots beneath the half-density plots revealing patterns in consistency\
--   Separate plots were coded for -ve and +ve transactions, with Education, Food & Recreation and Shelter separated as well. This is due to the wide scale of y-axis values, which made the narrower density plots too condensed for the distribution to be viewed in full.\
+-   Separate plots were coded for -ve and +ve transactions, with Education, Food & Recreation and Shelter separated as well. This is due to the wide scale of y-axis values, which made the narrower denIt extends ggplot2 with:
+    -   interactive `geom` functions: `geom_point_interactive()`, `geom_col_interactive`, etc.
+
+    -   interactive `scale` functions: `scale_color_continuous_interactive()`, `scale_fill_manual_interactive()`, etc.
+
+    -   interactive `facet` functions: `facet_wrap_interactive()` and `facet_grid_interactive()` that both work with `labeller_interactive()`.
+
+    -   interactive `guide` functions: `guide_colorbar_interactive()`, `guide_colourbar_interactive()`, `guide_legend_interactive()`.
+
+    -   interactive `theme` elements: `element_line_interactive()`, `element_rect_interactive()`, `element_text_interactive()`, `label_interactive`.sity plots too condensed for the distribution to be viewed in full.\
 -   `patchwork` package was used to group the plots together in a single figure, using `plot_layout(heights)` to configure height ratio of the overall patched plots
 :::
 
@@ -54,4 +63,18 @@ These may be grouped together by percentile, and analysed as age groups instead 
 -   **40-60th Percentile: 36-44**
 -   **60-80th Percentile: 45-52**
 -   **Top 20th Percentile: 53-60**
+:::
+
+::: {.nursebox .nurse data-latex="nurse"}
+It extends ggplot2 with:
+
+-   interactive `geom` functions: `geom_point_interactive()`, `geom_col_interactive`, etc.
+
+-   interactive `scale` functions: `scale_color_continuous_interactive()`, `scale_fill_manual_interactive()`, etc.
+
+-   interactive `facet` functions: `facet_wrap_interactive()` and `facet_grid_interactive()` that both work with `labeller_interactive()`.
+
+-   interactive `guide` functions: `guide_colorbar_interactive()`, `guide_colourbar_interactive()`, `guide_legend_interactive()`.
+
+-   interactive `theme` elements: `element_line_interactive()`, `element_rect_interactive()`, `element_text_interactive()`, `label_interactive`.
 :::

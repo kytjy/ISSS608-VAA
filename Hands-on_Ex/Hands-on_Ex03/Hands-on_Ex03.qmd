@@ -53,6 +53,13 @@ exam_data <- read_csv("data/Exam_data.csv")
 
 ## Understanding the Data
 
+We will also use `datatable()` function of the **DT** package to print the data. The table is interactive and can perform basic sorting.
+
+```{r}
+#| echo: false
+datatable(exam_data, class = 'cell-border stripe', options = list(pageLength = 5))
+```
+
 ```{r}
 glimpse(exam_data)
 summary(exam_data)
@@ -62,15 +69,25 @@ summary(exam_data)
 
 # 3 Interactive Data Visualisation - ggiraph methods
 
-[ggiraph](https://davidgohel.github.io/ggiraph/) is an htmlwidget and a ggplot2 extension. It allows ggplot graphics to be interactive.
+[ggiraph](https://davidgohel.github.io/ggiraph/) is a htmlwidget and a **ggplot2** extension. It allows ggplot graphics to be dynamic and interactive.
 
-Interactive is made with [**ggplot geometries**](https://davidgohel.github.io/ggiraph/reference/#section-interactive-geometries) that can understand three arguments:
+Interactive is made with [**ggplot geometries**](https://davidgohel.github.io/ggiraph/reference/#section-interactive-geometries) that can understand three main aesthetics:
 
--   **Tooltip**: a column of data-sets that contain tooltips to be displayed when the mouse is over elements.
--   **Onclick**: a column of data-sets that contain a JavaScript function to be executed when elements are clicked.
--   **Data_id**: a column of data-sets that contain an id to be associated with elements.
+-   `Tooltip`: a column of data-sets that contain tooltips to be displayed when the mouse is over elements.
+-   `Onclick`: a column of data-sets that contain a JavaScript function to be executed when elements are clicked.
+-   `Data_id`: a column of data-sets that contain an id to be associated with elements.
 
-If it used within a Shiny application, elements associated with an id (data_id) can be selected and manipulated on client and server sides. Refer to this [article](https://davidgohel.github.io/ggiraph/articles/offcran/shiny.html) for more detailed explanation.
+::: {.nursebox .nurse data-latex="nurse"}
+**How does it work?**
+
+It extends **ggplot2** with:
+
+-   interactive `geom` functions: `geom_point_interactive()`, `geom_col_interactive`, etc.
+-   interactive `scale` functions: `scale_color_continuous_interactive()`, `scale_fill_manual_interactive()`, etc.
+-   interactive `facet` functions: `facet_wrap_interactive()` and `facet_grid_interactive()` that both work with `labeller_interactive()`.
+-   interactive `guide` functions: `guide_colorbar_interactive()`, `guide_colourbar_interactive()`, `guide_legend_interactive()`.
+-   interactive `theme` elements: `element_line_interactive()`, `element_rect_interactive()`, `element_text_interactive()`, `label_interactive`.
+:::
 
 ## 3.1 Tooltip effect with *tooltip* aesthetic
 
@@ -80,8 +97,13 @@ Notice that two steps are involved. First, an interactive version of ggplot2 geo
 
 **Steps in creating an interactive graphic:**
 
-1.  Instead of geom_point (i.e.), use geom_point_interactive - provide at least one of the aesthetics tools (tooltip, data_id or onclick)
+1.  Instead of `geom_point` (i.e.), use `geom_point_interactive` - provide at least one of the aesthetics tools (tooltip, data_id or onclick)
 2.  Call function girafe with the ggplot object to translate graphic into a web interactive graphic.
+
+By hovering the mouse pointer on an data point of interest, the student's ID (character) will be displayed. To set index as the tooltip, replace with `row.names(exam_data)`. To set numeric values as tooltip, replace with `factor(MATHS)` (number).
+
+::: panel-tabset
+## Character format (ID)
 
 ```{r}
 #| code-fold: true
@@ -94,14 +116,62 @@ p <- ggplot(data=exam_data,
                            binwidth = 1,
                            method = "histodot") +
   scale_y_continuous(NULL,
-                     breaks= NULL)  #null to suppress axis labels
+                     breaks= NULL) +  #<<< null to suppress axis labels
+  labs(x ="Distribution of Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
 
 girafe(ggobj=p,
        width_svg = 6,
        height_svg = 6*0.618)
 ```
 
-By hovering the mouse pointer on an data point of interest, the student's ID will be displayed. To set index as the tooltip, replace with `row.names(exam_data)`. To set numeric values as tooltip, replace with `factor(MATHS)`.
+## Row Index
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p <- ggplot(data=exam_data,
+            aes(x=MATHS)) +
+  geom_dotplot_interactive(aes(tooltip=row.names(exam_data)),
+                           stackgroups = TRUE,
+                           binwidth = 1,
+                           method = "histodot") +
+  scale_y_continuous(NULL,
+                     breaks= NULL)+  #<<< null to suppress axis labels
+  labs(x ="Distribution of Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
+
+girafe(ggobj=p,
+       width_svg = 6,
+       height_svg = 6*0.618)
+```
+
+## Number format (Math)
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+p <- ggplot(data=exam_data,
+            aes(x=MATHS)) +
+  geom_dotplot_interactive(aes(tooltip=factor(MATHS)),
+                           stackgroups = TRUE,
+                           binwidth = 1,
+                           method = "histodot") +
+  scale_y_continuous(NULL,
+                     breaks= NULL)+  #<<< null to suppress axis labels
+  labs(x ="Distribution of Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
+
+girafe(ggobj=p,
+       width_svg = 6,
+       height_svg = 6*0.618)
+```
+:::
 
 ### 3.1.1 Displaying multiple information on tooltip
 
@@ -125,8 +195,11 @@ p <- ggplot(data=exam_data,
                            binwidth = 1,
                            method = "histodot") +
   scale_y_continuous(NULL,
-                     breaks= NULL)  #null to suppress axis labels
-
+                     breaks= NULL)+  #null to suppress axis labels
+  labs(x ="Distribution of Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
+  
 girafe(ggobj=p,
        width_svg = 8,
        height_svg = 8*0.618)
@@ -141,38 +214,14 @@ By hovering the mouse pointer on an data point of interest, the student's ID and
 Code chunk below uses [`opts_tooltip()`](https://davidgohel.github.io/ggiraph/reference/opts_tooltip.html) of **ggiraph** to customize tooltip rendering by adding css declarations.
 
 ::: panel-tabset
-## Code
-
-```{r}
-#| eval: false
-tooltip_css <- 'background-color:#dfdfeb; font-style:bold; color:black;'  #<<<
-
-p <- ggplot(data=exam_data,
-            aes(x=MATHS)) +
-  geom_dotplot_interactive(aes(tooltip=tooltip),
-                           stackgroups = TRUE,
-                           binwidth = 1,
-                           method = "histodot") +
-  scale_y_continuous(NULL,
-                     breaks= NULL)  #null to suppress axis labels
-
-girafe(ggobj=p,
-       width_svg = 8,
-       height_svg = 8*0.618,
-       options = list(          #<<<
-         opts_tooltip(          #<<<
-           css=tooltip_css
-         )
-       ))
-
-```
-
-## Interactive Plot 1
+## Black and bold font
 
 Notice that the background colour of the tooltip is gray and the font colour is black and bold.
 
 ```{r}
-#| echo: false
+#| code-fold: true
+#| code-summary: "Show the code"
+
 tooltip_css <- 'background-color:#dfdfeb; font-style:bold; color:black;'  #<<<
 
 p <- ggplot(data=exam_data,
@@ -182,8 +231,11 @@ p <- ggplot(data=exam_data,
                            binwidth = 1,
                            method = "histodot") +
   scale_y_continuous(NULL,
-                     breaks= NULL)  #null to suppress axis labels
-
+                     breaks= NULL) +  #null to suppress axis labels
+  labs(x ="Distribution of Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
+  
 girafe(ggobj=p,
        width_svg = 8,
        height_svg = 8*0.618,
@@ -195,12 +247,14 @@ girafe(ggobj=p,
 
 ```
 
-## Interactive Plot 2
+## Italic with increased font size
 
-For demonstration purposes, we can also make the font italic and change the font size.
+We can also make the font italic and change the font size.
 
 ```{r}
-#| echo: false
+#| code-fold: true
+#| code-summary: "Show the code"
+
 tooltip_css <- 'background-color:#dfdfeb; font-style:bold;  font-style:italic;
 color:black;font-size:18px;'  #<<<
 
@@ -211,8 +265,11 @@ p <- ggplot(data=exam_data,
                            binwidth = 1,
                            method = "histodot") +
   scale_y_continuous(NULL,
-                     breaks= NULL)  #null to suppress axis labels
-
+                     breaks= NULL)+  #null to suppress axis labels
+  labs(x ="Distribution of Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
+  
 girafe(ggobj=p,
        width_svg = 8,
        height_svg = 8*0.618,
@@ -252,7 +309,13 @@ gg_point <- ggplot(data=exam_data,
                fun.data = mean_se,
                geom= 'errorbar',
                width = 0.2,
-               size = 0.2)
+               size = 0.2)+
+  labs(title="Math Scores by Race",
+  y ="Math Scores") + 
+  theme(axis.title.x = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
 
 girafe(ggobj=gg_point,
        width_svg = 8,
@@ -310,7 +373,10 @@ p <- ggplot(data= exam_data,
                            binwidth= 1,
                            method = 'histodot') +
   scale_y_continuous( NULL,
-                      breaks = NULL)
+                      breaks = NULL) +
+  labs(x ="Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
 
 girafe(ggobj=p,
        width_svg = 6,
@@ -336,8 +402,11 @@ p <- ggplot(data=exam_data,
                            binwidth = 1,
                            method = "histodot") +
   scale_y_continuous(NULL,
-                     breaks= NULL)  #null to suppress axis labels
-
+                     breaks= NULL)+  #null to suppress axis labels
+  labs(x ="Distribution of Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
+  
 girafe(ggobj=p,
        width_svg = 6,
        height_svg = 6*0.618,
@@ -368,13 +437,16 @@ p <- ggplot(data=exam_data,
                            binwidth = 1,
                            method = "histodot") +
   scale_y_continuous(NULL,
-                     breaks= NULL)  #null to suppress axis labels
+                     breaks= NULL)+  #null to suppress axis labels
+  labs(x ="Distribution of Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
 
 girafe(ggobj=p,
        width_svg = 6,
        height_svg = 6*0.618,
        options = list(                          #<<<
-         opts_hover(css='fill: blue;'),         #<<<
+         opts_hover(css='fill: black;'),         #<<<
          opts_hover_inv(css = 'opacity: 0.2;')  #<<<
          )
        )
@@ -403,7 +475,11 @@ p <- ggplot(data=exam_data,
     binwidth = 1,                        
     method = "histodot") +               
   scale_y_continuous(NULL,               
-                     breaks = NULL)
+                     breaks = NULL)+
+  labs(x ="Distribution of Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
+
 girafe(                                  
   ggobj = p,                             
   width_svg = 6,                         
@@ -432,7 +508,10 @@ p1 <- ggplot(data=exam_data,
     method = "histodot") +  
   coord_cartesian(xlim=c(0,100)) +    #<<< p1 same as p2 x-axis
   scale_y_continuous(NULL,            # suppress y axis
-                     breaks = NULL)
+                     breaks = NULL)+
+  labs(x ="Distribution of Math Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))  
 
 p2 <- ggplot(data=exam_data, 
        aes(x = ENGLISH)) +
@@ -444,7 +523,10 @@ p2 <- ggplot(data=exam_data,
     method = "histodot") + 
   coord_cartesian(xlim=c(0,100)) +    #<<< p1 same as p2 x-axis
   scale_y_continuous(NULL,               
-                     breaks = NULL)
+                     breaks = NULL) +
+  labs(x ="Distribution of English Scores") + 
+  theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))  
 
 girafe(code = print(p1 + p2),         #<<< coordinated multiple views
        width_svg = 6,
@@ -467,11 +549,9 @@ In order to build a coordinated multiple views as shown in the example above, th
 
 The *data_id* aesthetic is critical to link observations between plots and the tooltip aesthetic is optional but nice to have when mouse over a point.
 
-# 4 Interactive Data Visualisation - plotly methods
+# 4 Interactive Data Visualisation - plot_ly methods
 
 Plotly's R graphing library create interactive web graphics from **ggplot2** graphs and/or a custom interface to the (MIT-licensed) JavaScript library [**plotly.js**](https://plotly.com/javascript/) inspired by the grammar of graphics. Different from other plotly platform, plot.R is free and open source.
-
-![](https://r4va.netlify.app/chap03/img/image2.jpg)
 
 There are two ways to create interactive graph by using plotly, they are:
 
@@ -487,9 +567,9 @@ The tabset below shows an example an interactive plot created by using [plot_ly(
 #| code-summary: "Show the code"
 
 
-plot_ly(data=exam_data,
-        x=~MATHS,
-        y=~ENGLISH)
+plot_ly(data = exam_data,
+        x = ~MATHS,
+        y = ~ENGLISH)
 
 ```
 
@@ -501,10 +581,10 @@ In the code chunk below, *color* argument is mapped to a qualitative visual vari
 #| code-fold: true
 #| code-summary: "Show the code"
 
-plot_ly(data=exam_data,
-        x= ~ENGLISH,
-        y= ~MATHS,
-        color=~RACE)
+plot_ly(data = exam_data,
+        x = ~ENGLISH,
+        y = ~MATHS,
+        color = ~RACE)
 
 ```
 
@@ -528,7 +608,14 @@ p <- ggplot(data = exam_data,
   labs(y= 'ENGLISH') +                                    
   theme(axis.title.y=element_text(angle = 0,
                                   vjust=0.9)) +   #<<< does not work in ggplotly
-  ggtitle('English and Math scores')
+  labs(title = 'English against Math scores', 
+       x = 'Math',
+       y = 'English') +
+  theme(plot.title = element_text(size = 14, face = "bold"),
+        axis.title.x = element_text(size = 10, face = "bold"),
+        axis.title.y = element_text(size = 10, face = "bold"),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5")
+        )
 
 ggplotly(p)
 
@@ -536,27 +623,36 @@ ggplotly(p)
 
 ## Customised Tooltip
 
+Tooltip includes: Class, StudentID, Gender, Race, Math, and English scores.
+
 ```{r}
 p_c <- ggplot(data = exam_data,
             aes(x= MATHS,
                 y= ENGLISH,
                 color=CLASS,
-                label1=ID,
-                label1=GENDER,
-                label2=RACE
+                label1=ID,      #<<<
+                label2=GENDER,  #<<<
+                label3=RACE,    #<<<
+                label4=MATHS,   #<<<
+                label5=ENGLISH  #<<<
                 )) +
   geom_point (size =1) +
   geom_smooth(method=lm)+
   coord_cartesian(xlim=c(0,100),
                   ylim=c(0,100)) +
-  labs(x='Math', 
-       y= 'English',
-       color="Class") +                                    
-  theme(axis.title.y=element_text(angle = 0,
-                                  vjust=0.9)) +   #<<< does not work in ggplotly
-  ggtitle('English and Math scores')
+  ggtitle('English and Math scores')+
+  labs(title = 'English against Math scores', 
+       x = 'Math',
+       y = 'English',
+       color="Class") +
+  theme(plot.title = element_text(size = 14, face = "bold"),
+        axis.title.x = element_text(size = 10, face = "bold"),
+        axis.title.y = element_text(size = 10, face = "bold"),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"),
+        legend.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5")
+        )  
 
-ggplotly(p_c, tooltip=c("label1", "label2", "label3"))
+ggplotly(p_c, tooltip=c("label1", "label2", "label3", "label4", "label5")) #<<<
 ```
 :::
 
@@ -581,21 +677,30 @@ p1 <- ggplot(data=d,
                 y = ENGLISH)) +
   geom_point(size=1) +
   coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100))
+                  ylim=c(0,100))+
+    theme(plot.title = element_text(size = 14, face = "bold"),
+        axis.title.x = element_text(size = 10, face = "bold"),
+        axis.title.y = element_text(size = 10, face = "bold"),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5")
+        ) 
 
 p2 <- ggplot(data=d, 
             aes(x = MATHS,
                 y = SCIENCE)) +
   geom_point(size=1) +
   coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100)) 
-# labs(x='Maths',
-#       y='English')
+                  ylim=c(0,100)) +
+  theme(plot.title = element_text(size = 14, face = "bold"),
+        axis.title.x = element_text(size = 10, face = "bold"),
+        axis.title.y = element_text(size = 10, face = "bold"),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5")
+        ) +
+ labs(x='Maths', 
+       y='Science')
 
 subplot(ggplotly(p1),
         ggplotly(p2)) %>% 
-  layout(xaxis = list(title = "Math"),
-         yaxis = list(title = "English"))
+  layout(title = "Side-by-Side Subplots")
 
 ```
 
@@ -610,6 +715,27 @@ Things to learn from the code chunk:
 **3.1.8**:`interactive geom functions of ggiraph` & `girafe(patchwork)` used
 
 **4.4** : `highlight_key()` , `normal ggplot + geom_obj` , `subplot(ggplot(p1), ggplot(p2))`
+
+## 4.5 Sliders with animated Gapminder data
+
+Key arguments: - `animation_opts()` function here to change properties of the plotly animation - `frame` controls the amount of time between transitions (in milliseconds) - `redraw = FALSE` option means that the base plot won't be redrawn at every transition.
+
+Here's a plot that shows life expectancy and GDP evolving over time.
+
+```{r}
+library(gapminder)
+
+p <- ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent, size = pop)) +
+  geom_point(alpha = 0.1) +
+  geom_point(aes(frame = year, ids = country)) +
+  scale_x_continuous(trans = "log10") +
+    theme(axis.line = element_blank(),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"),
+        legend.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))  
+
+ggplotly(p) %>% 
+  animation_opts(1000, redraw = FALSE)
+```
 
 # 5 Interactive Data Visualisation - crosstalk methods
 
@@ -626,6 +752,8 @@ Things to learn from the code chunk:
 #| code-summary: "Show the code"
 
 DT::datatable(exam_data, 
+              caption = htmltools::tags$caption(style = "caption-side: bottom; text-align: center;",
+                                                "Table of ", htmltools::em("Exam Data for Primary 3")),
               class='compact',
               options = list(pageLength = 3))
 ```
@@ -642,7 +770,9 @@ p <- ggplot(d,
                 MATHS)) + 
   geom_point(size=1) +
   coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100))
+                  ylim=c(0,100)) +
+    theme(plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))+
+  ggtitle("English vs Math scores")
 
 gg <- highlight(ggplotly(p),        
                 "plotly_selected")  

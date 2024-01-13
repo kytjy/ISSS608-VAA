@@ -259,7 +259,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 13, 2024</p>
+      <p class="date-modified">January 14, 2024</p>
     </div>
   </div>
     
@@ -289,8 +289,15 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li>Raincloud plots are used to capture the density and range of values by expense, with dotplots beneath the half-density plots revealing patterns in consistency<br>
 </li>
-<li>Separate plots were coded for -ve and +ve transactions, with Education, Food &amp; Recreation and Shelter separated as well. This is due to the wide scale of y-axis values, which made the narrower density plots too condensed for the distribution to be viewed in full.<br>
-</li>
+<li>Separate plots were coded for -ve and +ve transactions, with Education, Food &amp; Recreation and Shelter separated as well. This is due to the wide scale of y-axis values, which made the narrower denIt extends ggplot2 with:
+<ul>
+<li><p>interactive <code>geom</code> functions: <code>geom_point_interactive()</code>, <code>geom_col_interactive</code>, etc.</p></li>
+<li><p>interactive <code>scale</code> functions: <code>scale_color_continuous_interactive()</code>, <code>scale_fill_manual_interactive()</code>, etc.</p></li>
+<li><p>interactive <code>facet</code> functions: <code>facet_wrap_interactive()</code> and <code>facet_grid_interactive()</code> that both work with <code>labeller_interactive()</code>.</p></li>
+<li><p>interactive <code>guide</code> functions: <code>guide_colorbar_interactive()</code>, <code>guide_colourbar_interactive()</code>, <code>guide_legend_interactive()</code>.</p></li>
+<li><p>interactive <code>theme</code> elements: <code>element_line_interactive()</code>, <code>element_rect_interactive()</code>, <code>element_text_interactive()</code>, <code>label_interactive</code>.sity plots too condensed for the distribution to be viewed in full.<br>
+</p></li>
+</ul></li>
 <li><code>patchwork</code> package was used to group the plots together in a single figure, using <code>plot_layout(heights)</code> to configure height ratio of the overall patched plots</li>
 </ul>
 </div>
@@ -310,6 +317,16 @@ ul.task-list li input[type="checkbox"] {
 <li><strong>40-60th Percentile: 36-44</strong></li>
 <li><strong>60-80th Percentile: 45-52</strong></li>
 <li><strong>Top 20th Percentile: 53-60</strong></li>
+</ul>
+</div>
+<div class="nursebox nurse">
+<p>It extends ggplot2 with:</p>
+<ul>
+<li><p>interactive <code>geom</code> functions: <code>geom_point_interactive()</code>, <code>geom_col_interactive</code>, etc.</p></li>
+<li><p>interactive <code>scale</code> functions: <code>scale_color_continuous_interactive()</code>, <code>scale_fill_manual_interactive()</code>, etc.</p></li>
+<li><p>interactive <code>facet</code> functions: <code>facet_wrap_interactive()</code> and <code>facet_grid_interactive()</code> that both work with <code>labeller_interactive()</code>.</p></li>
+<li><p>interactive <code>guide</code> functions: <code>guide_colorbar_interactive()</code>, <code>guide_colourbar_interactive()</code>, <code>guide_legend_interactive()</code>.</p></li>
+<li><p>interactive <code>theme</code> elements: <code>element_line_interactive()</code>, <code>element_rect_interactive()</code>, <code>element_text_interactive()</code>, <code>label_interactive</code>.</p></li>
 </ul>
 </div>
 
