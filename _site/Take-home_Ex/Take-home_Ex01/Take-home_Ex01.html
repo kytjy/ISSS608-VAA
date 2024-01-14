@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -231,8 +265,17 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">1 Background</a></li>
-  <li><a href="#task" id="toc-task" class="nav-link" data-scroll-target="#task">2 Task</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">1 Overview</a>
+  <ul>
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">1.1 Background</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">1.2 The Data</a></li>
+  <li><a href="#the-task" id="toc-the-task" class="nav-link" data-scroll-target="#the-task">1.3 The Task</a></li>
+  </ul></li>
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages">2 Loading Packages</a></li>
+  <li><a href="#importing-pisa-data" id="toc-importing-pisa-data" class="nav-link" data-scroll-target="#importing-pisa-data">3 Importing PISA Data</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">4 Data Preparation</a></li>
+  <li><a href="#visualisation" id="toc-visualisation" class="nav-link" data-scroll-target="#visualisation">5 Visualisation</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">6 References</a></li>
   </ul>
 </nav>
     </div>
@@ -273,17 +316,105 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="images/placeholder.PNG" class="img-fluid figure-img"></p>
 </figure>
 </div>
-<section id="background" class="level1">
-<h1>1 Background</h1>
+<section id="overview" class="level1">
+<h1>1 Overview</h1>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">1.1 Background</h2>
+<p>The OECD Programme for International Student Assessment (PISA) surveys collected data on students’ performances in reading, mathematics and science, as well as contextual information on students’ background, home characteristics and school factors which could influence performance. This could be used to create shared points of reference, to leverage peer pressure and spur collaboration to act on the data. The goal of PISA was to help schools and policy makers shift from looking inward at each other within the same education system to looking outward: to teachers, schools and policy makers across the world.</p>
 </section>
-<section id="task" class="level1">
-<h1>2 Task</h1>
-<p>The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA global education survey every three years to assess the education systems worldwide through testing 15 year old students in the subjects of mathematics, reading, and science.</p>
-<p>In this take-home exercise, you are required to use appropriate Exploratory Data Analysis (EDA) methods and ggplot2 functions to reveal:</p>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">1.2 The Data</h2>
+<p>The data for this exercise is the <strong>Student questionnaire data file</strong> in SAS format, retrieved from <a href="https://www.oecd.org/pisa/data/2022database/">OECD’s PISA 2022 Database</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/PISA.PNG" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="the-task" class="level2">
+<h2 class="anchored" data-anchor-id="the-task">1.3 The Task</h2>
+<p>Using the <strong>2022 Student Questionnaire Dataset</strong>, this exercise aims to use appropriate Exploratory Data Analysis (EDA) methods and ggplot2 functions to reveal:</p>
 <ul>
-<li>the distribution of Singapore students’ performance in mathematics, reading, and science, and</li>
-<li>the relationship between these performances with schools, gender and socioeconomic status of the students.</li>
+<li>the distribution of <u>Singapore students’</u> performance in <strong>mathematics, reading, and science</strong>, and</li>
+<li>the relationship between these performances with <strong>schools, gender and socioeconomic status</strong> of the students.</li>
 </ul>
+</section>
+</section>
+<section id="loading-packages" class="level1">
+<h1>2 Loading Packages</h1>
+<table class="table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 80%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Library</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://www.tidyverse.org/"><strong>tidyverse</strong></a></td>
+<td>A collection of core packages designed for data science, used extensively for data preparation and wrangling.</td>
+</tr>
+<tr class="even">
+<td><a href="https://haven.tidyverse.org/"><strong>haven</strong></a></td>
+<td>To enable R to read and write various data formats such as SAS and SPSS.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://rstudio.github.io/DT/"><strong>DT</strong></a></td>
+<td>To create interactive html tables.</td>
+</tr>
+<tr class="even">
+<td><a href="https://patchwork.data-imaginist.com/"><strong>patchwork</strong></a></td>
+<td>For preparing composite figure created using ggplot2.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/"><strong>ggthemes</strong></a></td>
+<td>Extra themes, geoms, and scales for ggplot2.</td>
+</tr>
+<tr class="even">
+<td><a href="https://scales.r-lib.org/"><strong>scales</strong></a></td>
+<td>For data labels and annotations for ggplot2</td>
+</tr>
+<tr class="odd">
+<td><a href="https://docs.r4photobiology.info/ggpp/"><strong>ggpp</strong></a></td>
+<td>For data labels and annotations for ggplot2.</td>
+</tr>
+<tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html"><strong>ggridges</strong></a></td>
+<td>For plotting ridgeline plots</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The code chunk below uses <code>p_load()</code> of <a href="https://rpubs.com/akshaypatankar/594834"><strong>pacman</strong></a> package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, haven, DT,</span>
+<span id="cb1-2"><a href="#cb1-2"></a>               patchwork, ggthemes, scales,</span>
+<span id="cb1-3"><a href="#cb1-3"></a>               ggridges)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="importing-pisa-data" class="level1">
+<h1>3 Importing PISA Data</h1>
+<p>Import the <em>2022 Student Questionnaire</em> dataset downloaded from the OECD’s PISA 2022 Database by using the <a href="https://haven.tidyverse.org/reference/read_sas.html"><code>read_sas()</code></a> function of the <a href="https://haven.tidyverse.org/"><strong>haven</strong></a> package.</p>
+</section>
+<section id="data-preparation" class="level1">
+<h1>4 Data Preparation</h1>
+</section>
+<section id="visualisation" class="level1">
+<h1>5 Visualisation</h1>
+</section>
+<section id="references" class="level1">
+<h1>6 References</h1>
 <div class="chatterbox chatter">
 <p><strong>Visual Considerations</strong></p>
 <ul>

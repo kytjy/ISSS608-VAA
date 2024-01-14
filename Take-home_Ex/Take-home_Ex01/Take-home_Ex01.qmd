@@ -19,16 +19,61 @@ format:
 
 ![](images/placeholder.PNG){fig-align="center"}
 
-# 1 Background
+# 1 Overview
 
-# 2 Task
+## 1.1 Background
 
-The 2022 Programme for International Student Assessment (PISA) data was released on December 5, 2022. PISA global education survey every three years to assess the education systems worldwide through testing 15 year old students in the subjects of mathematics, reading, and science.
+The OECD Programme for International Student Assessment (PISA) surveys collected data on students' performances in reading, mathematics and science, as well as contextual information on students' background, home characteristics and school factors which could influence performance. This could be used to create shared points of reference, to leverage peer pressure and spur collaboration to act on the data. The goal of PISA was to help schools and policy makers shift from looking inward at each other within the same education system to looking outward: to teachers, schools and policy makers across the world.
 
-In this take-home exercise, you are required to use appropriate Exploratory Data Analysis (EDA) methods and ggplot2 functions to reveal:
+## 1.2 The Data
 
--   the distribution of Singapore students' performance in mathematics, reading, and science, and
--   the relationship between these performances with schools, gender and socioeconomic status of the students.
+The data for this exercise is the **Student questionnaire data file** in SAS format, retrieved from [OECD's PISA 2022 Database](https://www.oecd.org/pisa/data/2022database/).
+
+![](images/PISA.PNG){fig-align="center"}
+
+## 1.3 The Task
+
+Using the **2022 Student Questionnaire Dataset**, this exercise aims to use appropriate Exploratory Data Analysis (EDA) methods and ggplot2 functions to reveal:
+
+-   the distribution of [Singapore students']{.underline} performance in **mathematics, reading, and science**, and
+-   the relationship between these performances with **schools, gender and socioeconomic status** of the students.
+
+# 2 Loading Packages
+
+| **Library**                                                                                  | **Description**                                                                                               |
+|------------------------------|------------------------------------------|
+| [**tidyverse**](https://www.tidyverse.org/)                                                  | A collection of core packages designed for data science, used extensively for data preparation and wrangling. |
+| [**haven**](https://haven.tidyverse.org/)                                                    | To enable R to read and write various data formats such as SAS and SPSS.                                      |
+| [**DT**](https://rstudio.github.io/DT/)                                                      | To create interactive html tables.                                                                            |
+| [**patchwork**](https://patchwork.data-imaginist.com/)                                       | For preparing composite figure created using ggplot2.                                                         |
+| [**ggthemes**](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/)       | Extra themes, geoms, and scales for ggplot2.                                                                  |
+| [**scales**](https://scales.r-lib.org/)                                                      | For data labels and annotations for ggplot2                                                                   |
+| [**ggpp**](https://docs.r4photobiology.info/ggpp/)                                           | For data labels and annotations for ggplot2.                                                                  |
+| [**ggridges**](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html) | For plotting ridgeline plots                                                                                  |
+|                                                                                              |                                                                                                               |
+|                                                                                              |                                                                                                               |
+
+: {tbl-colwidths="\[20,80\]"}
+
+The code chunk below uses `p_load()` of [**pacman**](https://rpubs.com/akshaypatankar/594834) package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R.
+
+```{r}
+pacman::p_load(tidyverse, haven, DT,
+               patchwork, ggthemes, scales,
+               ggridges)
+```
+
+# 3 Importing PISA Data
+
+Import the *2022 Student Questionnaire* dataset downloaded from the OECD's PISA 2022 Database by using the [`read_sas()`](https://haven.tidyverse.org/reference/read_sas.html) function of the [**haven**](https://haven.tidyverse.org/) package.
+
+# 4 Data Preparation
+
+
+
+# 5 Visualisation
+
+# 6 References
 
 ::: {.chatterbox .chatter data-latex="chatter"}
 **Visual Considerations**
