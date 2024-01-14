@@ -171,7 +171,9 @@ p
 
 -   `Population` is mapped to `size` aes in `ggplot`, thus this range parameter controls the min and max size of the points.
 
-**Using `scale_color_viridis_d()`** The code below uses `scale_color_viridis_d()` discrete colour scale instead, and does not require Gapminder package to be loaded.
+**Using `scale_color_viridis_d()`** :
+
+The code below uses `scale_color_viridis_d()` discrete colour scale instead, and does not require Gapminder package to be loaded.
 
 ```{r}
 #| code-fold: true
@@ -208,7 +210,7 @@ In the code chunk below,
 
 -   [`transition_time()`](https://gganimate.com/reference/transition_time.html) of **gganimate** is used to create transition through a **continuous variable**, where there are distinct states in time (i.e. *Year*).
 
--   [ease_aes()](https://gganimate.com/reference/ease_aes.html) is used to control easing of aesthetics. The default is `linear`. Other methods are: quadratic, cubic, quartic, quintic, sine, circular, exponential, elastic, back, and bounce.
+-   [`ease_aes()`](https://gganimate.com/reference/ease_aes.html) is used to control easing of aesthetics. The default is `linear`. Other methods are: quadratic, cubic, quartic, quintic, sine, circular, exponential, elastic, back, and bounce.
 
 **Transition through distinct countries in time**
 
@@ -271,7 +273,7 @@ ggplot(data= globalPop,
 
 Text geoms are useful for labeling plots. They can be used by themselves as scatterplots or in combination with other geoms, for example, labeling points or for annotating the height of bars. [`geom_text()`](https://ggplot2.tidyverse.org/reference/geom_text.html) adds only text to the plot. [`geom_label()`](https://ggplot2.tidyverse.org/reference/geom_text.html) draws a rectangle behind the text, making it easier to read.
 
-I thought it would be clearer for the `geom_point` and `geom_text` to be placed side-by-side so I won't have to refer to a the legend, but the trade-off is a messier overlapped plot.
+I thought it would be clearer for the `geom_point` and `geom_text` to be placed side-by-side so I won't have to refer to a legend, but the trade-off is a messier overlapped plot.
 
 ```{r}
 #| code-fold: true
@@ -424,7 +426,7 @@ p + transition_time(Year) +
 ```
 :::
 
-## 3.2 Animated Line Graph
+## 3.3 Animated Line Graph
 
 ```{r}
 #| code-fold: true
@@ -449,7 +451,7 @@ l <- ggplot(
         legend.background = element_rect(fill="#f5f5f5"))
 ```
 
-## 3.2.1 Reveal data along a given dimension
+### 3.3.1 Reveal data along a given dimension
 
 Reveal by day (x-axis):
 
@@ -462,7 +464,7 @@ l +
   transition_reveal(Year)
 ```
 
-Animation looks weird because there are a lot of countries for each continent for every year.
+Animation looks jumpy because there are a lot of countries for each continent for every year.
 
 # 4 Animated Data Visualisation: plotly
 
