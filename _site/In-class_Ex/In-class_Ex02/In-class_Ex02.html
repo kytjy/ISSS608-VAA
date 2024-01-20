@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -96,6 +62,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit"
   }
 }</script>
+<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -292,7 +261,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 20, 2024</p>
+      <p class="date-modified">January 21, 2024</p>
     </div>
   </div>
     
@@ -362,12 +331,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
-<p>The following code chunk uses <code>p_load()</code> of <a href="https://rpubs.com/akshaypatankar/594834"><strong>pacman</strong></a> package to check if tidyverse packages are installed in the computer. If they are, the libraries will be called into R.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, haven, knitr,</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               patchwork, ggthemes, scales,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               ggridges, ggpubr, gganimate,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               ggdist)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-fig-width="8">
+<div class="cell-output-display">
+<div>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    A(Student PISA Survey) --&gt;|\nFilter| B[Singapore Students' Responses]
+
+    B--&gt; F[Schools]
+    F-.-&gt; F1[CNTSCHID]
+    
+    B--&gt; B1[Student ID]
+    B1-.-&gt; B1.1[CNTSTUID]  
+
+    B--&gt; G[Gender]
+    G-.-&gt; M[ST004D01T] 
+
+    B--&gt; H[Socioeconomic status]
+    H--&gt; H1[Immigration status] 
+    H1-.-&gt; H1A[IMMIG]        
+    H--&gt; H2[Parental occupational status] 
+    H2-.-&gt; H2A[OCOD1, OCOD2]
+    H--&gt; H3[Educational resources]
+    H3-.-&gt; H3A[ST250Q02JA, ST250Q03JA, ST250Q05JA]
+
+    H--&gt; H6[Parental educational status]
+    H6-.-&gt; H6A[MISCED, FISCED]          
+
+    B--&gt; C[Math performance]
+    C--&gt; C1[Out-of-school study time]
+    C1-.-&gt; C1A[ST296Q01JA]
+    C--&gt; C2[Curriculum time]   
+    C2-.-&gt; C2A[ST059Q01TA]
+    C--&gt; C3[Plausible Values]   
+    C3-.-&gt; C3A[PV1MATH to PV10MATH]        
+
+    B--&gt; D[Reading performance]
+    D--&gt; D1[Out-of-school study time]
+    D1-.-&gt; D1A[ST296Q02JA] 
+    D--&gt; D2[Plausible Values]
+    D2-.-&gt; D2A[PV1READ to PV10READ]     
+
+    B--&gt; E[Science performance]
+    E--&gt; E1[Out-of-school study time]
+    E1-.-&gt; E1A[ST296Q03JA]   
+    E--&gt; E2[Plausible Values]
+    E2-.-&gt; E12[PV1SCIE to PV10SCIE] 
+
+    1(Schools PISA Survey) --&gt;|\nFilter| 1.1[Singapore Schools \nResponses]
+    F1--&gt; F2[Type, Student-Teacher ratio]
+    F2-.-&gt; F2a[SCHLTYPE, STRATIO]
+    1.1-.-&gt;F1
+
+                       
+         
+
+</pre>
+</div>
+</div>
+</div>
 </div>
 
 
