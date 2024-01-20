@@ -1,5 +1,5 @@
 ---
-title: "Take-home Exercise 2: "
+title: "In-class Exercise 2: "
 date: "20 Jan 2024"
 date-modified: "last-modified"
 editor: visual
@@ -19,7 +19,7 @@ format:
 
 ![](images/placeholder.PNG){fig-align="center"}
 
-# 2 Loading Packages
+# 1 Loading Packages
 
 | **Library**                                            | **Description**                                                                                               |
 |---------------------------------|---------------------------------------|
