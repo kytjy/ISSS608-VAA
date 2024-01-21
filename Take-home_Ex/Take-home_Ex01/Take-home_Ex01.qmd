@@ -1,5 +1,5 @@
 ---
-title: "Take-home Exercise 1: Investigating Student Performance with Data Visualisations using R"
+title: "Take-home Exercise 1: Investigating Student Performance with Data Visualisations"
 date: "21 Jan 2024"
 date-modified: "last-modified"
 editor: visual
@@ -190,8 +190,6 @@ flowchart LR
     B--> C[Math performance]
     C--> C1[Out-of-school study time]
     C1-.-> C1A([ST296Q01JA])
-    C--> C2[Curriculum time]   
-    C2-.-> C2A([ST059Q01TA])
     C--> C3[Plausible Values]   
     C3-.-> C3A([PV1MATH to PV10MATH])        
 
@@ -1333,7 +1331,7 @@ hbox_sci & theme(plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5")
 
 ## 5.2 Time Spent on Homework
 
-Bar charts can be used to represent frequencies of different categories, appropriate for categorical variables that use a nominal or ordinal scale of measurement. Adding direct labels can increase accessibility of a bar grapb and reduce the "chart junk" since grid lines, axis labels, and even axis titles become obsolete. Ordering bar charts for categorical values with no internal order can help the reader focus on the largest and smallest groups. In the plot below, arranging according to increasing time frame would make sense as the variable follows the ordinal scale.
+Bar charts can be used to represent frequencies of different categories, appropriate for categorical variables that use a nominal or ordinal scale of measurement. Adding direct labels can increase accessibility of a bar graph and reduce the "chart junk" since grid lines, axis labels, and even axis titles become obsolete. Ordering bar charts for categorical values with no internal order can help the reader focus on the largest and smallest groups. In the plot below, arranging according to increasing time frame would make sense as the variable follows the ordinal scale.
 
 ```{r}
 #| code-fold: true
@@ -1565,7 +1563,7 @@ p_stuchar
 -   Most students have access to educational tools/resources such as computer, educational software, and the internet from home.
 :::
 
-## 5.3 Parents Occupational & Educational Status
+## 5.4 Parents Occupational & Educational Status
 
 ```{r}
 #| code-fold: true
@@ -1661,7 +1659,8 @@ p_eduM <- ggplot(data = stu_SG_more,
 
 p_eduF + p_osf + p_eduM + p_osm +
   plot_layout(widths=c(2,1)) +
-  plot_annotation(title="Similar Patterns in Education and Employment Among Fathers and Mothers", 
+  plot_annotation(title = "Most students have parents who are employed, with nearly half of them having tertiary education.", 
+                  subtitle="Similar patterns in education and employment among fathers and mothers", 
                   theme=theme(plot.title = element_text(hjust = 0),
                   plot.background = element_rect(fill="#f5f5f5", colour = "#f5f5f5"),
                   panel.border = element_blank()))
@@ -1678,7 +1677,7 @@ p_eduF + p_osf + p_eduM + p_osm +
 -   Unemployed father are almost twice as many as unemployed mothers.
 :::
 
-## 5.4 School Characteristics
+## 5.5 School Characteristics
 
 ```{r}
 #| code-fold: true
@@ -2689,7 +2688,7 @@ ggplot(jobstatus_long,
 
 (p_parentsjs_m + p_parentsjs_r + p_parentsjs_s) +
   plot_layout(guides = "collect") +
-  plot_annotation(title = "Higher scores when employed parents.",
+  plot_annotation(title = "Higher scores with employed parents.",
   subtitle="Students with unemployed <span style='color: #73b2c4;'>fathers</span> had better scores than those with unemployed <span style='color: #f27279;'>mothers</span>.",
                   theme=theme(plot.title = element_markdown(hjust = 0),
                               plot.subtitle = element_markdown(hjust = 0),
@@ -3450,6 +3449,7 @@ rcp_s
 -   Across all 3 subjects, students with limited home access to key study resources, such as computers, educational software, and internet, tend to have lower scores. This pattern is particularly pronounced in cases of internet inaccessibility, leading to noticeably left-skewed score distributions, especially in Reading. The lack of internet access appears to significantly hinder students' ability to access information and educational materials, which is reflected in their academic performance.
 -   Interestingly, access to educational software seems to have a relatively minor impact on overall scores compared to other resources. This observation suggests that while educational software can be a useful tool, its absence does not disadvantage students as severely as the lack of more fundamental resources like internet access. This insight could guide educational policies and resource allocation, emphasizing the critical importance of internet access for student learning and achievement.
 -   These observations highlight the crucial role of basic educational resources in student performance and the varying degrees of impact different resources can have. This understanding is vital for developing targeted strategies to bridge educational gaps and enhance learning outcomes.
+-   However, recall our sample size for students without access to educational tools are low (see Section 5.3), which might reduce the accuracy of our finding.
 :::
 
 # 7 Summary
@@ -3459,23 +3459,23 @@ Our analysis of the Singapore students' performance in mathematics, reading, and
 Key Findings:
 
 -   There is an improvement in scores with increased time spent on homework, although the benefits diminish beyond a certain point.
--   Male students tend to achieve higher scores than females across all subjects.
+-   Male students tend to achieve slightly higher scores than females.
 -   The type of school and student-teacher ratios did not show consistent trends in relation to student performance.
 -   A lower educational attainment by fathers seems to slightly inversely affect student outcomes.
 -   Father's unemployment shows a more significant positive correlation with student scores compared to mother's unemployment.
 -   Second-generation immigrants are generally outperforming their peers across all subjects.
 -   Student performance is noticeably influenced by home access to basic educational resources, with varying impacts depending on the type of resource.
 
-Recommendations for Future Research:
+Recommendations for future research:
 
 -   **Confirmatory data analysis:** Future studies should incorporate statistical tests to validate the findings from this exploratory data analysis and establish more definitive correlations and causation.
 -   **Exploring Additional Variables**: A more exhaustive analysis that includes a wider range of variables could yield deeper insights into student performance. Investigating psychological factors such as student motivation, stress levels, and mental health is crucial to understand their impact on academic outcomes. Additionally, the role of teacher qualifications, teaching methods, and classroom environments warrants further exploration to assess their influence on student achievement.
 -   **Longitudinal Studies:** Conducting longitudinal studies to track changes in student performance over time can reveal trends and causal effects that cross-sectional studies might miss.
--   **Economic Factors**: While this study utilized home access to educational resources as a proxy for students' economic backgrounds, incorporating direct measures such as household income could offer a more accurate assessment of economic influence.
+-   **Economic Factors**: While this study utilised home access to educational resources as a proxy for students' economic backgrounds, incorporating direct measures such as household income could offer a more accurate assessment of economic influence.
 
 By addressing these areas, future research can provide a more comprehensive understanding of the various factors that contribute to student performance, thereby aiding in the development of targeted educational strategies and policies.
 
-# 8 References and some of the work that inspired me
+# 8 References and inspiration
 
 Kam, Tin Seong. (2023). Visualising Distribution. *R for Visual Analytics.* <https://r4va.netlify.app/chap09>
 

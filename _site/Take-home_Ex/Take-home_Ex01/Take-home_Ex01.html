@@ -8,7 +8,7 @@
 
 <meta name="dcterms.date" content="2024-01-21">
 
-<title>Visual Analytics and Application - Take-home Exercise 1: Investigating Student Performance with Data Visualisations using R</title>
+<title>Visual Analytics and Application - Take-home Exercise 1: Investigating Student Performance with Data Visualisations</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -217,7 +217,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercises">    
         <li>
-    <a class="dropdown-item" href="../../Take-Home_Ex/Take-Home_Ex1/Take-Home_Ex1.html" rel="" target="">
+    <a class="dropdown-item" href="../../Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html" rel="" target="">
  <span class="dropdown-text">Take-home Exercise 1</span></a>
   </li>  
         <li>
@@ -298,8 +298,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#target-variables-subject-performance" id="toc-target-variables-subject-performance" class="nav-link" data-scroll-target="#target-variables-subject-performance">5.1 Target Variables: Subject Performance</a></li>
   <li><a href="#time-spent-on-homework-1" id="toc-time-spent-on-homework-1" class="nav-link" data-scroll-target="#time-spent-on-homework-1">5.2 Time Spent on Homework</a></li>
   <li><a href="#student-characteristics" id="toc-student-characteristics" class="nav-link" data-scroll-target="#student-characteristics">5.3 Student Characteristics</a></li>
-  <li><a href="#parents-occupational-educational-status" id="toc-parents-occupational-educational-status" class="nav-link" data-scroll-target="#parents-occupational-educational-status">5.3 Parents Occupational &amp; Educational Status</a></li>
-  <li><a href="#school-characteristics" id="toc-school-characteristics" class="nav-link" data-scroll-target="#school-characteristics">5.4 School Characteristics</a></li>
+  <li><a href="#parents-occupational-educational-status" id="toc-parents-occupational-educational-status" class="nav-link" data-scroll-target="#parents-occupational-educational-status">5.4 Parents Occupational &amp; Educational Status</a></li>
+  <li><a href="#school-characteristics" id="toc-school-characteristics" class="nav-link" data-scroll-target="#school-characteristics">5.5 School Characteristics</a></li>
   </ul></li>
   <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">6 Exploratory Data Analysis</a>
   <ul>
@@ -315,7 +315,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#comparing-home-access-to-educational-resources" id="toc-comparing-home-access-to-educational-resources" class="nav-link" data-scroll-target="#comparing-home-access-to-educational-resources">6.5 Comparing home access to educational resources</a></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">7 Summary</a></li>
-  <li><a href="#references-and-some-of-the-work-that-inspired-me" id="toc-references-and-some-of-the-work-that-inspired-me" class="nav-link" data-scroll-target="#references-and-some-of-the-work-that-inspired-me">8 References and some of the work that inspired me</a></li>
+  <li><a href="#references-and-inspiration" id="toc-references-and-inspiration" class="nav-link" data-scroll-target="#references-and-inspiration">8 References and inspiration</a></li>
   </ul>
 </nav>
     </div>
@@ -324,7 +324,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Take-home Exercise 1: Investigating Student Performance with Data Visualisations using R</h1>
+<h1 class="title">Take-home Exercise 1: Investigating Student Performance with Data Visualisations</h1>
 </div>
 
 
@@ -565,8 +565,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     B--&gt; C[Math performance]
     C--&gt; C1[Out-of-school study time]
     C1-.-&gt; C1A([ST296Q01JA])
-    C--&gt; C2[Curriculum time]   
-    C2-.-&gt; C2A([ST059Q01TA])
     C--&gt; C3[Plausible Values]   
     C3-.-&gt; C3A([PV1MATH to PV10MATH])        
 
@@ -2168,7 +2166,7 @@ $ PV10SCIE                 &lt;dbl&gt; 649.719, 655.670, 649.087, 362.702, 473.6
 </section>
 <section id="time-spent-on-homework-1" class="level2">
 <h2 class="anchored" data-anchor-id="time-spent-on-homework-1">5.2 Time Spent on Homework</h2>
-<p>Bar charts can be used to represent frequencies of different categories, appropriate for categorical variables that use a nominal or ordinal scale of measurement. Adding direct labels can increase accessibility of a bar grapb and reduce the “chart junk” since grid lines, axis labels, and even axis titles become obsolete. Ordering bar charts for categorical values with no internal order can help the reader focus on the largest and smallest groups. In the plot below, arranging according to increasing time frame would make sense as the variable follows the ordinal scale.</p>
+<p>Bar charts can be used to represent frequencies of different categories, appropriate for categorical variables that use a nominal or ordinal scale of measurement. Adding direct labels can increase accessibility of a bar graph and reduce the “chart junk” since grid lines, axis labels, and even axis titles become obsolete. Ordering bar charts for categorical values with no internal order can help the reader focus on the largest and smallest groups. In the plot below, arranging according to increasing time frame would make sense as the variable follows the ordinal scale.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -2405,7 +2403,7 @@ $ PV10SCIE                 &lt;dbl&gt; 649.719, 655.670, 649.087, 362.702, 473.6
 </div>
 </section>
 <section id="parents-occupational-educational-status" class="level2">
-<h2 class="anchored" data-anchor-id="parents-occupational-educational-status">5.3 Parents Occupational &amp; Educational Status</h2>
+<h2 class="anchored" data-anchor-id="parents-occupational-educational-status">5.4 Parents Occupational &amp; Educational Status</h2>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -2499,10 +2497,11 @@ $ PV10SCIE                 &lt;dbl&gt; 649.719, 655.670, 649.087, 362.702, 473.6
 <span id="cb68-88"><a href="#cb68-88" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb68-89"><a href="#cb68-89" aria-hidden="true" tabindex="-1"></a>p_eduF <span class="sc">+</span> p_osf <span class="sc">+</span> p_eduM <span class="sc">+</span> p_osm <span class="sc">+</span></span>
 <span id="cb68-90"><a href="#cb68-90" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">widths=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb68-91"><a href="#cb68-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title=</span><span class="st">"Similar Patterns in Education and Employment Among Fathers and Mothers"</span>, </span>
-<span id="cb68-92"><a href="#cb68-92" aria-hidden="true" tabindex="-1"></a>                  <span class="at">theme=</span><span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
-<span id="cb68-93"><a href="#cb68-93" aria-hidden="true" tabindex="-1"></a>                  <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>, <span class="at">colour =</span> <span class="st">"#f5f5f5"</span>),</span>
-<span id="cb68-94"><a href="#cb68-94" aria-hidden="true" tabindex="-1"></a>                  <span class="at">panel.border =</span> <span class="fu">element_blank</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb68-91"><a href="#cb68-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">"Most students have parents who are employed, with nearly half of them having tertiary education."</span>, </span>
+<span id="cb68-92"><a href="#cb68-92" aria-hidden="true" tabindex="-1"></a>                  <span class="at">subtitle=</span><span class="st">"Similar patterns in education and employment among fathers and mothers"</span>, </span>
+<span id="cb68-93"><a href="#cb68-93" aria-hidden="true" tabindex="-1"></a>                  <span class="at">theme=</span><span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb68-94"><a href="#cb68-94" aria-hidden="true" tabindex="-1"></a>                  <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>, <span class="at">colour =</span> <span class="st">"#f5f5f5"</span>),</span>
+<span id="cb68-95"><a href="#cb68-95" aria-hidden="true" tabindex="-1"></a>                  <span class="at">panel.border =</span> <span class="fu">element_blank</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
@@ -2518,7 +2517,7 @@ $ PV10SCIE                 &lt;dbl&gt; 649.719, 655.670, 649.087, 362.702, 473.6
 </div>
 </section>
 <section id="school-characteristics" class="level2">
-<h2 class="anchored" data-anchor-id="school-characteristics">5.4 School Characteristics</h2>
+<h2 class="anchored" data-anchor-id="school-characteristics">5.5 School Characteristics</h2>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -3530,7 +3529,7 @@ $ PV10SCIE                 &lt;dbl&gt; 649.719, 655.670, 649.087, 362.702, 473.6
 <span id="cb78-165"><a href="#cb78-165" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb78-166"><a href="#cb78-166" aria-hidden="true" tabindex="-1"></a>(p_parentsjs_m <span class="sc">+</span> p_parentsjs_r <span class="sc">+</span> p_parentsjs_s) <span class="sc">+</span></span>
 <span id="cb78-167"><a href="#cb78-167" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span></span>
-<span id="cb78-168"><a href="#cb78-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">"Higher scores when employed parents."</span>,</span>
+<span id="cb78-168"><a href="#cb78-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">"Higher scores with employed parents."</span>,</span>
 <span id="cb78-169"><a href="#cb78-169" aria-hidden="true" tabindex="-1"></a>  <span class="at">subtitle=</span><span class="st">"Students with unemployed &lt;span style='color: #73b2c4;'&gt;fathers&lt;/span&gt; had better scores than those with unemployed &lt;span style='color: #f27279;'&gt;mothers&lt;/span&gt;."</span>,</span>
 <span id="cb78-170"><a href="#cb78-170" aria-hidden="true" tabindex="-1"></a>                  <span class="at">theme=</span><span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
 <span id="cb78-171"><a href="#cb78-171" aria-hidden="true" tabindex="-1"></a>                              <span class="at">plot.subtitle =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
@@ -4293,6 +4292,7 @@ $ PV10SCIE                 &lt;dbl&gt; 649.719, 655.670, 649.087, 362.702, 473.6
 <li>Across all 3 subjects, students with limited home access to key study resources, such as computers, educational software, and internet, tend to have lower scores. This pattern is particularly pronounced in cases of internet inaccessibility, leading to noticeably left-skewed score distributions, especially in Reading. The lack of internet access appears to significantly hinder students’ ability to access information and educational materials, which is reflected in their academic performance.</li>
 <li>Interestingly, access to educational software seems to have a relatively minor impact on overall scores compared to other resources. This observation suggests that while educational software can be a useful tool, its absence does not disadvantage students as severely as the lack of more fundamental resources like internet access. This insight could guide educational policies and resource allocation, emphasizing the critical importance of internet access for student learning and achievement.</li>
 <li>These observations highlight the crucial role of basic educational resources in student performance and the varying degrees of impact different resources can have. This understanding is vital for developing targeted strategies to bridge educational gaps and enhance learning outcomes.</li>
+<li>However, recall our sample size for students without access to educational tools are low (see Section 5.3), which might reduce the accuracy of our finding.</li>
 </ul>
 </div>
 </section>
@@ -4303,24 +4303,24 @@ $ PV10SCIE                 &lt;dbl&gt; 649.719, 655.670, 649.087, 362.702, 473.6
 <p>Key Findings:</p>
 <ul>
 <li>There is an improvement in scores with increased time spent on homework, although the benefits diminish beyond a certain point.</li>
-<li>Male students tend to achieve higher scores than females across all subjects.</li>
+<li>Male students tend to achieve slightly higher scores than females.</li>
 <li>The type of school and student-teacher ratios did not show consistent trends in relation to student performance.</li>
 <li>A lower educational attainment by fathers seems to slightly inversely affect student outcomes.</li>
 <li>Father’s unemployment shows a more significant positive correlation with student scores compared to mother’s unemployment.</li>
 <li>Second-generation immigrants are generally outperforming their peers across all subjects.</li>
 <li>Student performance is noticeably influenced by home access to basic educational resources, with varying impacts depending on the type of resource.</li>
 </ul>
-<p>Recommendations for Future Research:</p>
+<p>Recommendations for future research:</p>
 <ul>
 <li><strong>Confirmatory data analysis:</strong> Future studies should incorporate statistical tests to validate the findings from this exploratory data analysis and establish more definitive correlations and causation.</li>
 <li><strong>Exploring Additional Variables</strong>: A more exhaustive analysis that includes a wider range of variables could yield deeper insights into student performance. Investigating psychological factors such as student motivation, stress levels, and mental health is crucial to understand their impact on academic outcomes. Additionally, the role of teacher qualifications, teaching methods, and classroom environments warrants further exploration to assess their influence on student achievement.</li>
 <li><strong>Longitudinal Studies:</strong> Conducting longitudinal studies to track changes in student performance over time can reveal trends and causal effects that cross-sectional studies might miss.</li>
-<li><strong>Economic Factors</strong>: While this study utilized home access to educational resources as a proxy for students’ economic backgrounds, incorporating direct measures such as household income could offer a more accurate assessment of economic influence.</li>
+<li><strong>Economic Factors</strong>: While this study utilised home access to educational resources as a proxy for students’ economic backgrounds, incorporating direct measures such as household income could offer a more accurate assessment of economic influence.</li>
 </ul>
 <p>By addressing these areas, future research can provide a more comprehensive understanding of the various factors that contribute to student performance, thereby aiding in the development of targeted educational strategies and policies.</p>
 </section>
-<section id="references-and-some-of-the-work-that-inspired-me" class="level1">
-<h1>8 References and some of the work that inspired me</h1>
+<section id="references-and-inspiration" class="level1">
+<h1>8 References and inspiration</h1>
 <p>Kam, Tin Seong. (2023). Visualising Distribution. <em>R for Visual Analytics.</em> <a href="https://r4va.netlify.app/chap09" class="uri">https://r4va.netlify.app/chap09</a></p>
 <p>Scherer, Cedric. (2019). A ggplot2 Tutorial for Beautiful Plotting in R. <em>Cedric Scherer.</em> <a href="https://www.cedricscherer.com/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/https://www.cedricscherer.com/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/">https://www.cedricscherer.com/2019/08/05/a-ggplot2-tutorial-for-beautiful-plotting-in-r/</a></p>
 <p>Shuga, Aubrey. (2021). Exploring the raincloudplots Package. <em>Aubrey Shuga.</em> <a href="https://aubreyshuga.netlify.app/post/exploring-the-raincloudplots-package-2/" class="uri">https://aubreyshuga.netlify.app/post/exploring-the-raincloudplots-package-2/</a></p>
