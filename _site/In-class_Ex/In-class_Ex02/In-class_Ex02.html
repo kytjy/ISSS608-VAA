@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-01-20">
+<meta name="dcterms.date" content="2024-01-01">
 
 <title>Visual Analytics and Application - In-class Exercise 2:</title>
 <style>
@@ -62,9 +62,6 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit"
   }
 }</script>
-<script src="../../site_libs/quarto-diagram/mermaid.min.js"></script>
-<script src="../../site_libs/quarto-diagram/mermaid-init.js"></script>
-<link href="../../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -183,7 +180,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercises">    
         <li>
-    <a class="dropdown-item" href="../../Take-Home_Ex/Take-Home_Ex1/Take-Home_Ex1.html" rel="" target="">
+    <a class="dropdown-item" href="../../Take-Home_Ex/Take-Home_Ex01/Take-Home_Ex01.html" rel="" target="">
  <span class="dropdown-text">Take-home Exercise 1</span></a>
   </li>  
         <li>
@@ -234,7 +231,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link active" data-scroll-target="#loading-packages">1 Loading Packages</a></li>
+  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"></a></li>
   </ul>
 </nav>
     </div>
@@ -254,7 +251,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 20, 2024</p>
+      <p class="date">January 1, 2024</p>
     </div>
   </div>
   
@@ -275,122 +272,8 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="images/placeholder.PNG" class="img-fluid figure-img"></p>
 </figure>
 </div>
-<section id="loading-packages" class="level1">
-<h1>1 Loading Packages</h1>
-<table class="table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 80%">
-</colgroup>
-<thead>
-<tr class="header">
-<th><strong>Library</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><a href="https://www.tidyverse.org/"><strong>tidyverse</strong></a></td>
-<td>A collection of core packages designed for data science, used extensively for data preparation and wrangling.</td>
-</tr>
-<tr class="even">
-<td><a href="https://haven.tidyverse.org/"><strong>haven</strong></a></td>
-<td>To enable R to read and write various data formats such as SAS and SPSS.</td>
-</tr>
-<tr class="odd">
-<td><a href="https://patchwork.data-imaginist.com/"><strong>patchwork</strong></a></td>
-<td>For preparing composite figure created using ggplot2.</td>
-</tr>
-<tr class="even">
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<div class="cell" data-fig-width="8">
-<div class="cell-output-display">
-<div>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-    A(Student PISA Survey) --&gt;|\nFilter| B[Singapore Students' Responses]
-
-    B--&gt; F[Schools]
-    F-.-&gt; F1[CNTSCHID]
-    
-    B--&gt; B1[Student ID]
-    B1-.-&gt; B1.1[CNTSTUID]  
-
-    B--&gt; G[Gender]
-    G-.-&gt; M[ST004D01T] 
-
-    B--&gt; H[Socioeconomic status]
-    H--&gt; H1[Immigration status] 
-    H1-.-&gt; H1A[IMMIG]        
-    H--&gt; H2[Parental occupational status] 
-    H2-.-&gt; H2A[OCOD1, OCOD2]
-    H--&gt; H3[Educational resources]
-    H3-.-&gt; H3A[ST250Q02JA, ST250Q03JA, ST250Q05JA]
-
-    H--&gt; H6[Parental educational status]
-    H6-.-&gt; H6A[MISCED, FISCED]          
-
-    B--&gt; C[Math performance]
-    C--&gt; C1[Out-of-school study time]
-    C1-.-&gt; C1A[ST296Q01JA]
-    C--&gt; C2[Curriculum time]   
-    C2-.-&gt; C2A[ST059Q01TA]
-    C--&gt; C3[Plausible Values]   
-    C3-.-&gt; C3A[PV1MATH to PV10MATH]        
-
-    B--&gt; D[Reading performance]
-    D--&gt; D1[Out-of-school study time]
-    D1-.-&gt; D1A[ST296Q02JA] 
-    D--&gt; D2[Plausible Values]
-    D2-.-&gt; D2A[PV1READ to PV10READ]     
-
-    B--&gt; E[Science performance]
-    E--&gt; E1[Out-of-school study time]
-    E1-.-&gt; E1A[ST296Q03JA]   
-    E--&gt; E2[Plausible Values]
-    E2-.-&gt; E12[PV1SCIE to PV10SCIE] 
-
-    1(Schools PISA Survey) --&gt;|\nFilter| 1.1[Singapore Schools \nResponses]
-    F1--&gt; F2[Type, Student-Teacher ratio]
-    F2-.-&gt; F2a[SCHLTYPE, STRATIO]
-    1.1-.-&gt;F1
-
-                       
-         
-
-</pre>
-</div>
-</div>
-</div>
-</div>
+<section id="section" class="level1">
+<h1></h1>
 
 
 </section>

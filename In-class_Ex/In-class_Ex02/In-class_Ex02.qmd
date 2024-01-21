@@ -1,6 +1,6 @@
 ---
 title: "In-class Exercise 2: "
-date: "20 Jan 2024"
+date: "01 Jan 2024"
 date-modified: "last-modified"
 editor: visual
 toc-depth: 4
@@ -19,28 +19,4 @@ format:
 
 ![](images/placeholder.PNG){fig-align="center"}
 
-# 1 Loading Packages
-
-| **Library**                                            | **Description**                                                                                               |
-|---------------------------------|---------------------------------------|
-| [**tidyverse**](https://www.tidyverse.org/)            | A collection of core packages designed for data science, used extensively for data preparation and wrangling. |
-| [**haven**](https://haven.tidyverse.org/)              | To enable R to read and write various data formats such as SAS and SPSS.                                      |
-| [**patchwork**](https://patchwork.data-imaginist.com/) | For preparing composite figure created using ggplot2.                                                         |
-|                                                        |                                                                                                               |
-|                                                        |                                                                                                               |
-|                                                        |                                                                                                               |
-|                                                        |                                                                                                               |
-|                                                        |                                                                                                               |
-|                                                        |                                                                                                               |
-|                                                        |                                                                                                               |
-
-: {tbl-colwidths="\[20,80\]"}
-
-The following code chunk uses `p_load()` of [**pacman**](https://rpubs.com/akshaypatankar/594834) package to check if tidyverse packages are installed in the computer. If they are, the libraries will be called into R.
-
-```{r}
-pacman::p_load(tidyverse, haven, knitr,
-               patchwork, ggthemes, scales,
-               ggridges, ggpubr, gganimate,
-               ggdist)
-```
+# 
