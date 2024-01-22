@@ -705,5 +705,12 @@
     "title": "Hands-on Exercise 4a: Visualising Distribution",
     "section": "5.2 With",
     "text": "5.2 With\n\n\nShow the code\nggplot(exam, \n       aes(x = ENGLISH, \n           y = RACE,\n       color= RACE,\n       fill= RACE)) +\n  theme_ridges()+\n  geom_density_ridges(jittered_points=TRUE,\n                      aes(point_color=RACE),\n                      alpha = 0.7,\n                      point_size = 1.5,\n                      ) +\n  scale_fill_discrete_qualitative('Set 3')+\n  scale_color_discrete_qualitative('Dark 3')+\n\n\n  labs(x = \"English Score\",\n       y = \"\",\n       title=\"Uneven distribution across classes.\") +   \n  theme(\n    legend.position = \"none\",\n    #panel.grid.major = element_blank(),\n    axis.title.x = element_text(hjust=1, angle=0),\n    plot.background = element_rect(fill=\"#f5f5f5\",colour=\"#f5f5f5\")  \n    )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04b.html",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04b.html",
+    "title": "Hands-on Exercise 4b: Visualising Statistical Analysis",
+    "section": "",
+    "text": "~~~~~~~ Working on it ~~~~~~~"
   }
 ]
