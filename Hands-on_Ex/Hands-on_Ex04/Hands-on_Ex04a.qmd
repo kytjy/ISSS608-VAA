@@ -102,6 +102,10 @@ The ridgeline plot below is plotted by using `geom_density_ridges()`.
 ### 3.1.1 `geom_density_ridges`
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+
 ggplot(exam, 
        aes(x = ENGLISH, 
            y = CLASS)) +
@@ -125,58 +129,14 @@ ggplot(exam,
 
 ```
 
-### 3.1.2 geom_textdensity
-
-The attempt to recreate the original plot with [`geom_textdensity`](https://www.rdocumentation.org/packages/geomtextpath/versions/0.1.1/topics/geom_textdensity) from the **geom_textpath** did not go all too well as the function does not take in a y value (i.e. it couldn't arrange the plots along the y-axis. Rather, it was only able to lay out plots along a straight line). It looked much better when there are less groups.
-
-`geom_texthline` and `geom_textvline` can also be used to plot reference lines.
-
-```{r}
-exam_3classes <- filter(exam, CLASS ==c("3A", "3E", "3I"))
-mean_english <- mean(exam$ENGLISH)
-
-ggplot(exam_3classes, aes(x = ENGLISH, 
-                 colour = CLASS, 
-                 label = CLASS,
-                )) +
-  geom_textdensity(
-                   size = 6, 
-                   fontface = 2, 
-                   hjust = 0.3, 
-                   vjust = 0.1,
-                   #linetype= 2 << For dotted line
-                   ) +
-  geom_textvline(aes(xintercept = mean_english, 
-                     label = paste0("Mean Score = ", round(mean_english, 0))),
-                 color = "steelblue4",
-                 linetype = "dotted",
-                 linewidth = .5,
-                 hjust = 0.6,
-                 size = 3) +
-  scale_x_continuous(
-    expand = c(0, 0)
-  ) +  
-  theme_ridges()+
-  labs(x = "English Scores",
-       y = "",
-       title="Higher median English scores among <span style='color: #f8766d;'>3A</span> students.") +   
-  theme(
-    legend.position = "none",
-    #panel.grid.major = element_blank(),
-    axis.title.y = element_blank(),
-    axis.text.y = element_markdown(),
-    plot.title = element_markdown(hjust=0),
-    plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5") ,
-    )
-```
-
-:::
-
 ## 3.2 Varying fill colors along the x axis
 
 Sometimes we would like to have the area under a ridgeline not filled with a single solid color but rather with colors that vary in some form along the x axis. This effect can be achieved by using either [`geom_ridgeline_gradient()`](https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html) or [`geom_density_ridges_gradient()`](https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html). Both geoms work just like `geom_ridgeline()` and `geom_density_ridges()`, except that they allow for varying fill colors. However, they do not allow for alpha transparency in the fill. For technical reasons, we can have changing fill colors or transparency but not both.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 ggplot(exam, 
        aes(x = ENGLISH, 
            y = CLASS,
@@ -211,6 +171,9 @@ Beside providing additional geom objects to support the need to plot ridgeline p
 Figure below is plotted by mapping the probabilities calculated by using `stat(ecdf)` which represent the empirical cumulative density function for the distribution of English score.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 ggplot(exam,
        aes(x = ENGLISH, 
            y = CLASS, 
@@ -234,6 +197,9 @@ ggplot(exam,
 ### 3.4 **Ridgeline plots with quantile lines**
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 ggplot(exam,
        aes(x = ENGLISH, 
            y = CLASS, 
@@ -260,6 +226,9 @@ ggplot(exam,
 Instead of using number to define the quantiles, we can also specify quantiles by cut points such as 2.5% and 97.5% tails to colour the ridgeline plot as shown in the figure below.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 ggplot(exam,
        aes(x = ENGLISH, 
            y = CLASS, 
@@ -302,6 +271,9 @@ This produces a Half Eye visualization, which is contains a half-density and a s
 We remove the slab interval by setting .width = 0 and point_colour = NA.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 ggplot(exam, 
        aes(x = RACE, 
            y = ENGLISH)) +
@@ -325,6 +297,9 @@ ggplot(exam,
 Next, we will add the second geometry layer using [`geom_boxplot()`](https://r4va.netlify.app/chap09) of ggplot2. This produces a narrow boxplot. We reduce the width and adjust the opacity.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 ggplot(exam, 
        aes(x = RACE, 
            y = ENGLISH)) +
@@ -350,6 +325,9 @@ ggplot(exam,
 Next, we will add the third geometry layer using [`stat_dots()`](https://mjskay.github.io/ggdist/reference/stat_dots.html) of ggdist package. This produces a half-dotplot, which is similar to a histogram that indicates the number of samples (number of dots) in each bin. We select side = "left" to indicate we want it on the left-hand side.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 ggplot(exam, 
        aes(x = RACE, 
            y = ENGLISH)) +
@@ -379,6 +357,9 @@ ggplot(exam,
 Lastly, [`coord_flip()`](https://ggplot2.tidyverse.org/reference/coord_flip.html) of ggplot2 package will be used to flip the raincloud chart horizontally to give it the raincloud appearance.
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 ggplot(exam, 
        aes(x = RACE, 
            y = ENGLISH)) +
@@ -410,6 +391,9 @@ ggplot(exam,
 ## 5.1 \|-shaped jitters
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 ggplot(exam, 
        aes(x = ENGLISH, 
            y = RACE, 
@@ -442,6 +426,9 @@ ggplot(exam,
 ## 5.2 With
 
 ```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
 ggplot(exam, 
        aes(x = ENGLISH, 
            y = RACE,
@@ -468,14 +455,64 @@ ggplot(exam,
     )    
 ```
 
-# 5 Tips
+# 6 Labelling density plots with `geom_textdensity`
+
+The attempt to recreate the original plot with [`geom_textdensity`](https://www.rdocumentation.org/packages/geomtextpath/versions/0.1.1/topics/geom_textdensity) from the **geom_textpath** did not go all too well as the function does not take in a y value (i.e. it couldn't arrange the plots along the y-axis. Rather, it was only able to lay out plots along a straight line). It looked much better when there are less groups.
+
+`geom_texthline` and `geom_textvline` can also be used to plot reference lines.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+exam_3classes <- filter(exam, CLASS ==c("3A", "3E", "3I"))
+mean_english <- mean(exam$ENGLISH)
+
+ggplot(exam_3classes, aes(x = ENGLISH, 
+                 colour = CLASS, 
+                 label = CLASS,
+                )) +
+  geom_textdensity(
+                   size = 6, 
+                   fontface = 2, 
+                   hjust = 0.3, 
+                   vjust = 0.1,
+                   #linetype= 2 << For dotted line
+                   ) +
+  geom_textvline(aes(xintercept = mean_english, 
+                     label = paste0("Mean Score = ", round(mean_english, 0))),
+                 color = "steelblue4",
+                 linetype = "dotted",
+                 linewidth = .5,
+                 hjust = 0.6,
+                 size = 3) +
+  scale_x_continuous(
+    expand = c(0, 0)
+  ) +  
+  theme_ridges()+
+  labs(x = "English Scores",
+       y = "",
+       title="Higher median English scores among <span style='color: #f8766d;'>3A</span> students.") +   
+  theme(
+    legend.position = "none",
+    #panel.grid.major = element_blank(),
+    axis.title.y = element_blank(),
+    axis.text.y = element_markdown(),
+    plot.title = element_markdown(hjust=0),
+    plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5") ,
+    )
+```
+
+# 7 Tips
 
 ::: {.thunderbox .thunder data-latex="thunder"}
 **Controlling Parameters**
 
-`scale`: Larger scale = higher ridgeplots = more overlaps `rel_min_height`: Default = 0. Lines with height below this cutoff will be removed.
+-   `scale`: Larger scale = higher ridgeplots = more overlaps
+
+-   `rel_min_height`: Default = 0. Lines with height below this cutoff will be removed.
 :::
 
-# 6 Reference
+# 8 Reference
 
 -   Kam, T.S. (2023). [Programming Interactive Data Visualisation with R](https://r4va.netlify.app/chap03).
