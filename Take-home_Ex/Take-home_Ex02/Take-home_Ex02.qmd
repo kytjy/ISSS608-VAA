@@ -1,5 +1,5 @@
 ---
-title: "Take-on Exercise 2: DataVis Makeover For Take-home Exercise 1"
+title: "Take-home Exercise 2: DataVis Makeover For Take-home Exercise 1"
 date: "28 Jan 2024"
 date-modified: "last-modified"
 editor: visual
@@ -1051,9 +1051,9 @@ scie_breakdown <- pisa.ben.pv(pvlabel= paste0("PV",1:10,"SCIE"), by="CNT", atlev
 
 Inspecting the outputs:
 
-:::panel-tabset
-
+::: panel-tabset
 ## Math
+
 ```{r}
 math_breakdown
 ```
