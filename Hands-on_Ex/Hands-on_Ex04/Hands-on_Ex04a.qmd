@@ -515,4 +515,4 @@ ggplot(exam_3classes, aes(x = ENGLISH,
 
 # 8 Reference
 
--   Kam, T.S. (2023). [Programming Interactive Data Visualisation with R](https://r4va.netlify.app/chap03).
+-   Kam, T.S. (2023). [Visualising Distribution](https://r4va.netlify.app/chap09).
