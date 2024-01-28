@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-01-01">
+<meta name="dcterms.date" content="2024-01-28">
 
 <title>Visual Analytics and Application - Take-on Exercise 2: DataVis Makeover For Take-home Exercise 1</title>
 <style>
@@ -283,25 +283,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages">2.1 Loading Packages</a></li>
   <li><a href="#pisa-data" id="toc-pisa-data" class="nav-link" data-scroll-target="#pisa-data">2.2 PISA Data</a></li>
   </ul></li>
-  <li><a href="#datavis-makeover" id="toc-datavis-makeover" class="nav-link" data-scroll-target="#datavis-makeover">3 DataVis Makeover</a></li>
-  <li><a href="#distribution-of-subject-scores" id="toc-distribution-of-subject-scores" class="nav-link" data-scroll-target="#distribution-of-subject-scores">3.1 Distribution of Subject Scores</a>
+  <li><a href="#datavis-makeover" id="toc-datavis-makeover" class="nav-link" data-scroll-target="#datavis-makeover">3 DataVis Makeover</a>
   <ul>
-  <li><a href="#remake" id="toc-remake" class="nav-link" data-scroll-target="#remake">Remake</a></li>
+  <li><a href="#distribution-of-subject-scores" id="toc-distribution-of-subject-scores" class="nav-link" data-scroll-target="#distribution-of-subject-scores">3.1 Distribution of Subject Scores</a>
+  <ul class="collapse">
+  <li><a href="#revamp" id="toc-revamp" class="nav-link" data-scroll-target="#revamp">Revamp</a></li>
+  </ul></li>
   <li><a href="#relationship-between-scores-and-school-id" id="toc-relationship-between-scores-and-school-id" class="nav-link" data-scroll-target="#relationship-between-scores-and-school-id">3.2 Relationship between Scores and School ID</a>
   <ul class="collapse">
-  <li><a href="#remake-1" id="toc-remake-1" class="nav-link" data-scroll-target="#remake-1">Remake</a></li>
+  <li><a href="#revamp-1" id="toc-revamp-1" class="nav-link" data-scroll-target="#revamp-1">Revamp</a></li>
   </ul></li>
   <li><a href="#relationship-between-gender-and-scores" id="toc-relationship-between-gender-and-scores" class="nav-link" data-scroll-target="#relationship-between-gender-and-scores">3.3 Relationship between Gender and Scores</a>
   <ul class="collapse">
-  <li><a href="#remake-2" id="toc-remake-2" class="nav-link" data-scroll-target="#remake-2">Remake</a></li>
+  <li><a href="#revamp-2" id="toc-revamp-2" class="nav-link" data-scroll-target="#revamp-2">Revamp</a></li>
   </ul></li>
   <li><a href="#relationship-between-scores-and-socioeconomic-status-of-students" id="toc-relationship-between-scores-and-socioeconomic-status-of-students" class="nav-link" data-scroll-target="#relationship-between-scores-and-socioeconomic-status-of-students">3.4 Relationship between Scores and Socioeconomic Status of Students</a>
   <ul class="collapse">
-  <li><a href="#remake-3" id="toc-remake-3" class="nav-link" data-scroll-target="#remake-3">Remake</a></li>
+  <li><a href="#revamp-3" id="toc-revamp-3" class="nav-link" data-scroll-target="#revamp-3">Revamp</a></li>
   </ul></li>
-  <li><a href="#breakdown-of-scores-per-subject" id="toc-breakdown-of-scores-per-subject" class="nav-link" data-scroll-target="#breakdown-of-scores-per-subject">3.5 Breakdown of Scores per Subject</a></li>
+  <li><a href="#breakdown-of-scores-per-subject" id="toc-breakdown-of-scores-per-subject" class="nav-link" data-scroll-target="#breakdown-of-scores-per-subject">3.5 Breakdown of Scores per Subject</a>
+  <ul class="collapse">
+  <li><a href="#revamp-4" id="toc-revamp-4" class="nav-link" data-scroll-target="#revamp-4">Revamp</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">4 Summary</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources">5 Resources</a></li>
   </ul>
 </nav>
     </div>
@@ -321,14 +327,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 1, 2024</p>
+      <p class="date">January 28, 2024</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 27, 2024</p>
+      <p class="date-modified">January 28, 2024</p>
     </div>
   </div>
     
@@ -337,10 +343,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/placeholder.PNG" class="img-fluid figure-img"></p>
+</figure>
+</div>
 <section id="overview" class="level1">
 <h1>1 Overview</h1>
 <p>In the <a href="https://akalestale.netlify.app/take-home_ex/take-home_ex01/take-home_ex01">previous Take-home Exercise</a>, we utilised Exploratory Data Analysis methods and ggplot functions to uncover the distribution of performance among Singaporean students in mathematics, reading, and science. We also explored the relationships between these performance metrics and factors such as schools, gender, and socioeconomic status, leveraging data from the PISA Student Questionnaire Survey.</p>
-<p>In this post, the objective is to enhance the original visualizations created by a fellow classmate based on Ben Jones’ data visualisation <a href="https://dataremixed.com/2012/05/data-visualization-clarity-or-aesthetics/">four quadrants of clarity and aesthetic</a>.</p>
+<p>In this post, the objective is to enhance the original visualisations created by a fellow classmate based on Ben Jones’ data visualisation <a href="https://dataremixed.com/2012/05/data-visualization-clarity-or-aesthetics/">four quadrants of clarity and aesthetic</a>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/quads.PNG" class="img-fluid figure-img"></p>
@@ -384,33 +395,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>For ridgeline plots that create the impression of a mountain range. They can be useful for visualising changes in distributions over time or space.</td>
 </tr>
 <tr class="even">
+<td><a href="https://mjskay.github.io/ggdist/"><strong>ggdist</strong></a></td>
+<td>For visualisations of distributions and uncertainty.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://wilkelab.org/ggtext/"><strong>ggtext</strong></a></td>
+<td>Supports improved text rendering for ggplot2.</td>
+</tr>
+<tr class="even">
 <td><a href="https://github.com/kassambara/ggpubr"><strong>ggpubr</strong></a></td>
 <td>For publication-ready plots.</td>
 </tr>
 <tr class="odd">
-<td><a href="https://mjskay.github.io/ggdist/"><strong>ggdist</strong></a></td>
-<td>For visualisations of distributions and uncertainty.</td>
+<td><a href="https://daniel-caro.com/r-intsvy"><strong>intsvy</strong></a></td>
+<td>Provides analysis tools for international assessment data. OP used this package to derive means and probabilities of subject scores.</td>
 </tr>
 <tr class="even">
-<td><a href="https://wilkelab.org/ggtext/"><strong>ggtext</strong></a></td>
-<td>Supports improved text rendering for ggplot2.</td>
-</tr>
-<tr class="odd">
-<td><a href="https://yonicd.github.io/ggalt/index.html"><strong>ggalt</strong></a></td>
-<td>A compendium of ‘geoms’, ‘coords’, ‘stats’, scales and fonts for ggplots2.</td>
-</tr>
-<tr class="even">
-<td><a href="https://github.com/daattali/ggExtra"><strong>ggextra</strong></a></td>
-<td>For adding marginal plots to ggplot2.</td>
+<td><a href="https://github.com/hrbrmstr/waffle"><strong>waffle</strong></a> and <a href="https://github.com/hrbrmstr/hrbrthemes"><strong>hrbrthemes</strong></a></td>
+<td>For plotting and tweaking waffle charts to communicate parts of a while for categorical attributes.</td>
 </tr>
 </tbody>
 </table>
 <p>The following code chunk uses <code>p_load()</code> of <a href="https://rpubs.com/akshaypatankar/594834"><strong>pacman</strong></a> package to check if tidyverse packages are installed in the computer. If they are, the libraries will be called into R.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, haven, patchwork, </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               scales, ggridges, ggdist, ggtext, </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               intsvy, grid, tidyverse, shadowtext,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               ggpubr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               scales, ggridges, ggdist, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               ggtext, ggpubr, intsvy,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               waffle, hrbrthemes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="pisa-data" class="level2">
@@ -475,9 +486,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="datavis-makeover" class="level1">
 <h1>3 DataVis Makeover</h1>
 <p>In the next few sections, I will step through some of the <a href="https://isss608-ay2023-24jan.netlify.app/lesson/lesson02/lesson02-designing%20graphs%20to%20enlighten#/title-slide">best practices shared</a> to make storytelling with data more accessible.</p>
-</section>
-<section id="distribution-of-subject-scores" class="level1">
-<h1>3.1 Distribution of Subject Scores</h1>
+<section id="distribution-of-subject-scores" class="level2">
+<h2 class="anchored" data-anchor-id="distribution-of-subject-scores">3.1 Distribution of Subject Scores</h2>
 <p>The histograms plotted aim to show the distribution of scores across the 3 subjects, and a overlapping density plot to compare distributions across subjects.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Original</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Areas for Improvement</a></li></ul>
@@ -498,7 +508,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p><strong>Aesthetics</strong></p>
 <ul>
-<li><strong>Colour scheme:</strong> The consistent color scheme for each subject throughout the post makes it easier to relate the color to the subject from plot to plot.</li>
+<li><strong>Colour scheme:</strong> The consistent colour scheme for each subject throughout the post makes it easier to relate the colour to the subject from plot to plot.</li>
 </ul>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
@@ -507,7 +517,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="images/MO1_1.PNG" class="img-fluid figure-img" width="550"></p>
 </figure>
 </div>
-<p>However, there are some room for improvement. Each point below corresponds to the annotated labels in the image above.</p>
+<p>However, there is some room for improvement. Each point raised below corresponds to the annotated labels in the image above.</p>
 <p><strong>Clarity</strong></p>
 <ol type="1">
 <li><strong>Graph title:</strong> A more concise and informative title that effectively conveys the plot’s key message would enhance clarity.</li>
@@ -523,8 +533,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="remake" class="level3">
-<h3 class="anchored" data-anchor-id="remake">Remake</h3>
+<section id="revamp" class="level3">
+<h3 class="anchored" data-anchor-id="revamp">Revamp</h3>
 <p>The code chunk below is first used to calculate the mean PV of each subject using PV1.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate mean values for 3 subjects</span></span>
@@ -534,7 +544,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>The remake features similar histograms with trio of colours to represent each of the subject.</p>
 <ul>
-<li>Using <code>element_markdown</code> within <code>theme()</code> enables colour-coding of the graph title.</li>
+<li>Using <code>element_markdown()</code> of the <strong>ggtext</strong> package within <code>theme()</code> enables colour-coding of the graph title. This is used in conjunction with <code>span style='color:'</code> to specify the colour hexcode of choice.</li>
 <li><code>limits()</code> is explicitly declared inside <code>scale_x_continuous()</code> to ensure the range of x-axis used is consistent throughout.</li>
 </ul>
 <div class="cell">
@@ -699,14 +709,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Clarity</strong></p>
 <ol type="1">
-<li><strong>Graph title:</strong> TThe title encapsulates the primary observation derived from the graph. The utilization of colour-coded words for each subject obviates the necessity for a legend, fostering subject identification.</li>
-<li><strong>x-axis tick marks and scale:</strong> The histograms consolidated into a single column with a unified x-axis, exhibit aligned bin numbers across each subject, enhancing clarity and comparability.</li>
-<li><strong>Mean Line:</strong> The mean using PV1 values for each subject, ensures a more precise benchmarking process, contributing to the graph’s accuracy.</li>
+<li><strong>Graph title:</strong> The title encapsulates the primary observation derived from the graph. The use of colour-coded words for each subject eliminares the need for a legend and fosters subject identification.</li>
+<li><strong>x-axis tick marks and scale:</strong> The histograms are consolidated into a single column with a share x-axis. It features aligned bin numbers across each subject to improve clarity and comparability.</li>
+<li><strong>Mean Line:</strong> The mean is calculated using PV1 values for each subject to ensure a more precise benchmarking process that contributes to the graph’s accuracy.</li>
 </ol>
 <p><strong>Aesthetic</strong></p>
 <ol start="4" type="1">
-<li><strong>Annotation placement:</strong> The move of the mean line’s annotation to the top enhances the overall view of the plot, avoiding obstruction.</li>
+<li><strong>Annotation placement:</strong> The move of the mean line’s annotation to the top enhances the overall view of the plot and avoids obstruction.</li>
 </ol>
+</section>
 </section>
 <section id="relationship-between-scores-and-school-id" class="level2">
 <h2 class="anchored" data-anchor-id="relationship-between-scores-and-school-id">3.2 Relationship between Scores and School ID</h2>
@@ -720,10 +731,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="images/MO2.PNG" class="img-fluid figure-img" width="550"></p>
 </figure>
 </div>
+<p>Starting off with the good:</p>
 <p><strong>Clarity</strong></p>
 <ul>
-<li><p>The graph layout is clear and user-friendly. The tabset format allows easy naivgation across different subjects’ plot.</p></li>
-<li><p>The Interactive plot with a tooltips makes it convenient to identify School ID, average score, and frequency.</p></li>
+<li><p>The graph layout is clear and user-friendly. The tabset format allows easy navigation across different subjects’ plot.</p></li>
+<li><p>The interactive plot with a tooltips makes it convenient to identify School ID, average score, and frequency.</p></li>
+</ul>
+<p><strong>Aesthetic</strong></p>
+<ul>
+<li>The font and colours used are easy to read. It is easy to grasp the idea of the plot without distractions.</li>
 </ul>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
@@ -732,6 +748,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="images/MO2_1.PNG" class="img-fluid figure-img" width="550"></p>
 </figure>
 </div>
+<p>Next, the not so good and some improvements I would make:</p>
 <p><strong>Clarity</strong></p>
 <ol type="1">
 <li><strong>Use of a bubble plot:</strong> The bubble plot may not be the most effective way to visualise scores (continuous variable) against School ID (categorical variable). Scatter plots are typically more suited for charting 2 continuous variables.</li>
@@ -746,11 +763,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<section id="remake-1" class="level3">
-<h3 class="anchored" data-anchor-id="remake-1">Remake</h3>
+<section id="revamp-1" class="level3">
+<h3 class="anchored" data-anchor-id="revamp-1">Revamp</h3>
 <p>Firstly, <code>as.character()</code> is used to convert the <em>SchID</em> variable from numeric to categorical data type.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert School ID to character</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert School ID to character data type</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>stu_SG <span class="ot">&lt;-</span> stu_SG <span class="sc">%&gt;%</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CNTSCHID =</span> <span class="fu">as.character</span>(CNTSCHID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -762,10 +779,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] 164</code></pre>
 </div>
 </div>
-<p>Rather than cramming all 164 points of data into a plot, visualising the top 5 and bottom 5 results by subject performanceshould convey the message sufficiently. The below code serves the following purpose:</p>
+<p>Rather than cramming all 164 points of data into a plot, visualising the top 5 and bottom 5 results by subject performance should convey the message sufficiently (I have also tried plotting the top 10 and bottom 10 but did not find any additional information to be particularly insightful).</p>
+<p>The below code serves the following purpose:</p>
 <ul>
-<li><code>group_by</code> and <code>mutate</code>;</li>
-<li><code>summarize()</code>, <code>count = n()</code> and <code>mean()</code>: This summarizes the grouped data, calculating the count of observations within each school and the overall mean scores for each subject across all schools.</li>
+<li><code>group_by()</code>: is first used to group all the rows with the same School ID together.</li>
+<li><code>summarize()</code>, <code>count = n()</code> and <code>mean()</code>: This summarises the grouped data, calculating the count of observations within each school and the overall mean scores for each subject across all schools.</li>
 <li><code>dense_rank(avg_sci) &lt;= 5 and dense_rank(desc(avg_sci)) &lt;= 5</code> are then used filter the top 5 and bottom 5 schools based on the average subject scores.</li>
 </ul>
 <div class="cell">
@@ -795,7 +813,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">dense_rank</span>(avg_sci) <span class="sc">&lt;=</span> <span class="dv">5</span> <span class="sc">|</span> <span class="fu">dense_rank</span>(<span class="fu">desc</span>(avg_sci)) <span class="sc">&lt;=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The remade version showcases a lollipop plot, akin to a barplot, where the traditional bar is transformed into a combination of a line and a dot. This visualisation illustrates the relationship between a numeric variable (average subject scores per school) and a categorical variable (school).</p>
+<p>Since the original plot aimed to compare average subject scores of each school, the remade version proposes the use of a bar plot to visualise ranking of the school subject averages.</p>
+<p>The remade version showcases a lollipop plot, akin to a barplot, where the traditional bar is transformed into a combination of a line using <code>geom_segment()</code> and a dot with <code>geom_point()</code>. This visualisation illustrates the relationship between a numeric variable (average subject scores per school) and a categorical variable (school).</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -823,9 +842,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste</span>(CNTSCHID), </span>
 <span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>                 <span class="at">x =</span> <span class="dv">130</span>, </span>
 <span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> CNTSCHID),</span>
-<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="fu">if_else</span>(stu_SG_schools_m<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
-<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"white"</span>,</span>
-<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"#2e272A"</span>),</span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="fu">if_else</span>(stu_SG_schools_m<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_m<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#2e272A"</span>)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>                            ),</span>
 <span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span>,</span>
 <span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface=</span> <span class="fu">if_else</span>(stu_SG_schools_m<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
 <span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"bold"</span>,</span>
@@ -875,178 +894,181 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb19-74"><a href="#cb19-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb19-75"><a href="#cb19-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb19-76"><a href="#cb19-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb19-77"><a href="#cb19-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>),</span>
-<span id="cb19-78"><a href="#cb19-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb19-79"><a href="#cb19-79" aria-hidden="true" tabindex="-1"></a>  )  </span>
-<span id="cb19-80"><a href="#cb19-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-81"><a href="#cb19-81" aria-hidden="true" tabindex="-1"></a>lolly_r <span class="ot">&lt;-</span></span>
-<span id="cb19-82"><a href="#cb19-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(stu_SG_schools_r, </span>
-<span id="cb19-83"><a href="#cb19-83" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> avg_read, </span>
-<span id="cb19-84"><a href="#cb19-84" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> <span class="fu">reorder</span>(CNTSCHID, avg_read))) <span class="sc">+</span></span>
-<span id="cb19-85"><a href="#cb19-85" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-86"><a href="#cb19-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="dv">0</span>, </span>
-<span id="cb19-87"><a href="#cb19-87" aria-hidden="true" tabindex="-1"></a>                 <span class="at">xend=</span>avg_read, </span>
-<span id="cb19-88"><a href="#cb19-88" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y=</span>CNTSCHID, </span>
-<span id="cb19-89"><a href="#cb19-89" aria-hidden="true" tabindex="-1"></a>                 <span class="at">yend=</span>CNTSCHID),</span>
-<span id="cb19-90"><a href="#cb19-90" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span> <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
-<span id="cb19-91"><a href="#cb19-91" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#989d9e"</span>)</span>
-<span id="cb19-92"><a href="#cb19-92" aria-hidden="true" tabindex="-1"></a>                            ),</span>
-<span id="cb19-93"><a href="#cb19-93" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
-<span id="cb19-94"><a href="#cb19-94" aria-hidden="true" tabindex="-1"></a>             <span class="at">linewidth=</span> <span class="fl">4.2</span>)<span class="sc">+</span></span>
-<span id="cb19-95"><a href="#cb19-95" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-96"><a href="#cb19-96" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color=</span> <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
-<span id="cb19-97"><a href="#cb19-97" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#989d9e"</span>)),</span>
-<span id="cb19-98"><a href="#cb19-98" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
-<span id="cb19-99"><a href="#cb19-99" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">3.5</span>)<span class="sc">+</span>            </span>
-<span id="cb19-100"><a href="#cb19-100" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-101"><a href="#cb19-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> stu_SG_schools_r,</span>
-<span id="cb19-102"><a href="#cb19-102" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste</span>(CNTSCHID), </span>
-<span id="cb19-103"><a href="#cb19-103" aria-hidden="true" tabindex="-1"></a>                 <span class="at">x =</span> <span class="dv">130</span>, </span>
-<span id="cb19-104"><a href="#cb19-104" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> CNTSCHID),</span>
-<span id="cb19-105"><a href="#cb19-105" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
-<span id="cb19-106"><a href="#cb19-106" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"white"</span>,</span>
-<span id="cb19-107"><a href="#cb19-107" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"#2e272A"</span>),</span>
-<span id="cb19-108"><a href="#cb19-108" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span>,</span>
-<span id="cb19-109"><a href="#cb19-109" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface=</span> <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
-<span id="cb19-110"><a href="#cb19-110" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"bold"</span>,</span>
-<span id="cb19-111"><a href="#cb19-111" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"plain"</span>)) <span class="sc">+</span></span>
-<span id="cb19-112"><a href="#cb19-112" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-113"><a href="#cb19-113" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data callout</span></span>
-<span id="cb19-114"><a href="#cb19-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label=</span><span class="fu">round</span>(avg_read,<span class="dv">0</span>)</span>
-<span id="cb19-115"><a href="#cb19-115" aria-hidden="true" tabindex="-1"></a>                ),</span>
-<span id="cb19-116"><a href="#cb19-116" aria-hidden="true" tabindex="-1"></a>            <span class="at">color=</span><span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
-<span id="cb19-117"><a href="#cb19-117" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#2e272A"</span>)</span>
-<span id="cb19-118"><a href="#cb19-118" aria-hidden="true" tabindex="-1"></a>                            ),</span>
-<span id="cb19-119"><a href="#cb19-119" aria-hidden="true" tabindex="-1"></a>            <span class="at">size=</span><span class="dv">3</span>,</span>
-<span id="cb19-120"><a href="#cb19-120" aria-hidden="true" tabindex="-1"></a>            <span class="at">nudge_x=</span> <span class="dv">30</span>,   <span class="co"># move it to the right of the point</span></span>
-<span id="cb19-121"><a href="#cb19-121" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust=</span> <span class="dv">0</span>, <span class="co"># left justify</span></span>
-<span id="cb19-122"><a href="#cb19-122" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface=</span> <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
-<span id="cb19-123"><a href="#cb19-123" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"bold"</span>, </span>
-<span id="cb19-124"><a href="#cb19-124" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"plain"</span>)) <span class="sc">+</span></span>
-<span id="cb19-125"><a href="#cb19-125" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-126"><a href="#cb19-126" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Insert mean line</span></span>
-<span id="cb19-127"><a href="#cb19-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(</span>
-<span id="cb19-128"><a href="#cb19-128" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">xintercept =</span> mean_r),</span>
-<span id="cb19-129"><a href="#cb19-129" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour=</span><span class="st">"#7161f0"</span>, </span>
-<span id="cb19-130"><a href="#cb19-130" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">0.5</span>, </span>
-<span id="cb19-131"><a href="#cb19-131" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
-<span id="cb19-132"><a href="#cb19-132" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb19-133"><a href="#cb19-133" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-134"><a href="#cb19-134" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Include annotation for mean line</span></span>
-<span id="cb19-135"><a href="#cb19-135" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
-<span id="cb19-136"><a href="#cb19-136" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>, </span>
-<span id="cb19-137"><a href="#cb19-137" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> mean_r <span class="sc">+</span> <span class="dv">145</span>, </span>
-<span id="cb19-138"><a href="#cb19-138" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fl">3.5</span>,</span>
-<span id="cb19-139"><a href="#cb19-139" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Mean:</span><span class="sc">\n</span><span class="st">"</span>, mean_r),</span>
-<span id="cb19-140"><a href="#cb19-140" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">"#7161f0"</span>,</span>
-<span id="cb19-141"><a href="#cb19-141" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">3.2</span>,</span>
-<span id="cb19-142"><a href="#cb19-142" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
-<span id="cb19-143"><a href="#cb19-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
-<span id="cb19-144"><a href="#cb19-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-145"><a href="#cb19-145" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set same limits for plots for consistency</span></span>
-<span id="cb19-146"><a href="#cb19-146" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">800</span>), </span>
-<span id="cb19-147"><a href="#cb19-147" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
-<span id="cb19-148"><a href="#cb19-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb19-149"><a href="#cb19-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb19-150"><a href="#cb19-150" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Reading"</span>,</span>
-<span id="cb19-151"><a href="#cb19-151" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
-<span id="cb19-152"><a href="#cb19-152" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb19-153"><a href="#cb19-153" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb19-154"><a href="#cb19-154" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb19-155"><a href="#cb19-155" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb19-156"><a href="#cb19-156" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb19-157"><a href="#cb19-157" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>),</span>
-<span id="cb19-158"><a href="#cb19-158" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb19-159"><a href="#cb19-159" aria-hidden="true" tabindex="-1"></a>  ) </span>
-<span id="cb19-160"><a href="#cb19-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-161"><a href="#cb19-161" aria-hidden="true" tabindex="-1"></a>lolly_s <span class="ot">&lt;-</span></span>
-<span id="cb19-162"><a href="#cb19-162" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(stu_SG_schools_s, </span>
-<span id="cb19-163"><a href="#cb19-163" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> avg_sci, </span>
-<span id="cb19-164"><a href="#cb19-164" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> <span class="fu">reorder</span>(CNTSCHID, avg_sci))) <span class="sc">+</span></span>
-<span id="cb19-165"><a href="#cb19-165" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-166"><a href="#cb19-166" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="dv">0</span>, </span>
-<span id="cb19-167"><a href="#cb19-167" aria-hidden="true" tabindex="-1"></a>                 <span class="at">xend=</span>avg_sci, </span>
-<span id="cb19-168"><a href="#cb19-168" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y=</span>CNTSCHID, </span>
-<span id="cb19-169"><a href="#cb19-169" aria-hidden="true" tabindex="-1"></a>                 <span class="at">yend=</span>CNTSCHID),</span>
-<span id="cb19-170"><a href="#cb19-170" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span> <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
-<span id="cb19-171"><a href="#cb19-171" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#989d9e"</span>)</span>
-<span id="cb19-172"><a href="#cb19-172" aria-hidden="true" tabindex="-1"></a>                            ),</span>
-<span id="cb19-173"><a href="#cb19-173" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
-<span id="cb19-174"><a href="#cb19-174" aria-hidden="true" tabindex="-1"></a>             <span class="at">linewidth=</span> <span class="fl">4.2</span>)<span class="sc">+</span></span>
-<span id="cb19-175"><a href="#cb19-175" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-176"><a href="#cb19-176" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color=</span> <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
-<span id="cb19-177"><a href="#cb19-177" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#989d9e"</span>)),</span>
-<span id="cb19-178"><a href="#cb19-178" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
-<span id="cb19-179"><a href="#cb19-179" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">3.5</span>)<span class="sc">+</span>            </span>
-<span id="cb19-180"><a href="#cb19-180" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-181"><a href="#cb19-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> stu_SG_schools_s,</span>
-<span id="cb19-182"><a href="#cb19-182" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste</span>(CNTSCHID), </span>
-<span id="cb19-183"><a href="#cb19-183" aria-hidden="true" tabindex="-1"></a>                 <span class="at">x =</span> <span class="dv">130</span>, </span>
-<span id="cb19-184"><a href="#cb19-184" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> CNTSCHID),</span>
-<span id="cb19-185"><a href="#cb19-185" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
-<span id="cb19-186"><a href="#cb19-186" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"white"</span>,</span>
-<span id="cb19-187"><a href="#cb19-187" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"#2e272A"</span>),</span>
-<span id="cb19-188"><a href="#cb19-188" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span>,</span>
-<span id="cb19-189"><a href="#cb19-189" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface=</span> <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
-<span id="cb19-190"><a href="#cb19-190" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"bold"</span>,</span>
-<span id="cb19-191"><a href="#cb19-191" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"plain"</span>)) <span class="sc">+</span></span>
-<span id="cb19-192"><a href="#cb19-192" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-193"><a href="#cb19-193" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data callout</span></span>
-<span id="cb19-194"><a href="#cb19-194" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label=</span><span class="fu">round</span>(avg_sci,<span class="dv">0</span>)</span>
-<span id="cb19-195"><a href="#cb19-195" aria-hidden="true" tabindex="-1"></a>                ),</span>
-<span id="cb19-196"><a href="#cb19-196" aria-hidden="true" tabindex="-1"></a>            <span class="at">color=</span><span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
-<span id="cb19-197"><a href="#cb19-197" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#2e272A"</span>)</span>
-<span id="cb19-198"><a href="#cb19-198" aria-hidden="true" tabindex="-1"></a>                            ),</span>
-<span id="cb19-199"><a href="#cb19-199" aria-hidden="true" tabindex="-1"></a>            <span class="at">size=</span><span class="dv">3</span>,</span>
-<span id="cb19-200"><a href="#cb19-200" aria-hidden="true" tabindex="-1"></a>            <span class="at">nudge_x=</span> <span class="dv">30</span>,   <span class="co"># move it to the right of the point</span></span>
-<span id="cb19-201"><a href="#cb19-201" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust=</span> <span class="dv">0</span>, <span class="co"># left justify</span></span>
-<span id="cb19-202"><a href="#cb19-202" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface=</span> <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
-<span id="cb19-203"><a href="#cb19-203" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"bold"</span>, </span>
-<span id="cb19-204"><a href="#cb19-204" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"plain"</span>)) <span class="sc">+</span></span>
-<span id="cb19-205"><a href="#cb19-205" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-206"><a href="#cb19-206" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Insert mean line</span></span>
-<span id="cb19-207"><a href="#cb19-207" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(</span>
-<span id="cb19-208"><a href="#cb19-208" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">xintercept =</span> mean_s),</span>
-<span id="cb19-209"><a href="#cb19-209" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour=</span><span class="st">"#7161f0"</span>, </span>
-<span id="cb19-210"><a href="#cb19-210" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">0.5</span>, </span>
-<span id="cb19-211"><a href="#cb19-211" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
-<span id="cb19-212"><a href="#cb19-212" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb19-213"><a href="#cb19-213" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-214"><a href="#cb19-214" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Include annotation for mean line</span></span>
-<span id="cb19-215"><a href="#cb19-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
-<span id="cb19-216"><a href="#cb19-216" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>, </span>
-<span id="cb19-217"><a href="#cb19-217" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> mean_s <span class="sc">+</span> <span class="dv">145</span>, </span>
-<span id="cb19-218"><a href="#cb19-218" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fl">3.5</span>,</span>
-<span id="cb19-219"><a href="#cb19-219" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Mean:</span><span class="sc">\n</span><span class="st">"</span>, mean_s),</span>
-<span id="cb19-220"><a href="#cb19-220" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">"#7161f0"</span>,</span>
-<span id="cb19-221"><a href="#cb19-221" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">3.2</span>,</span>
-<span id="cb19-222"><a href="#cb19-222" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
-<span id="cb19-223"><a href="#cb19-223" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
-<span id="cb19-224"><a href="#cb19-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-225"><a href="#cb19-225" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set same limits for plots for consistency</span></span>
-<span id="cb19-226"><a href="#cb19-226" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">800</span>), </span>
-<span id="cb19-227"><a href="#cb19-227" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
-<span id="cb19-228"><a href="#cb19-228" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb19-229"><a href="#cb19-229" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb19-230"><a href="#cb19-230" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Science"</span>,</span>
-<span id="cb19-231"><a href="#cb19-231" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
-<span id="cb19-232"><a href="#cb19-232" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb19-233"><a href="#cb19-233" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb19-234"><a href="#cb19-234" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb19-235"><a href="#cb19-235" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb19-236"><a href="#cb19-236" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb19-237"><a href="#cb19-237" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>),</span>
-<span id="cb19-238"><a href="#cb19-238" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb19-239"><a href="#cb19-239" aria-hidden="true" tabindex="-1"></a>  ) </span>
-<span id="cb19-240"><a href="#cb19-240" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-241"><a href="#cb19-241" aria-hidden="true" tabindex="-1"></a>lolly_m <span class="sc">+</span> lolly_r <span class="sc">+</span> lolly_s <span class="sc">+</span></span>
-<span id="cb19-242"><a href="#cb19-242" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">widths=</span><span class="fu">c</span>(<span class="fl">1.2</span>,<span class="dv">1</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb19-243"><a href="#cb19-243" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title=</span><span class="st">"Uneven distribution of scores across schools"</span>,</span>
-<span id="cb19-244"><a href="#cb19-244" aria-hidden="true" tabindex="-1"></a>                  <span class="at">subtitle=</span><span class="st">"School &lt;span style='color: #69aebf;'&gt;70200003&lt;/span&gt; has one of the highest mean scores across all subjects,&lt;br&gt; while schools &lt;span style='color: #dc7068;'&gt;70200056, 70200115, 70200149&lt;/span&gt; remained at the bottom consistently."</span>,</span>
-<span id="cb19-245"><a href="#cb19-245" aria-hidden="true" tabindex="-1"></a>                  <span class="at">theme=</span><span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">face=</span><span class="st">"bold"</span>),</span>
-<span id="cb19-246"><a href="#cb19-246" aria-hidden="true" tabindex="-1"></a>                              <span class="at">plot.subtitle =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
-<span id="cb19-247"><a href="#cb19-247" aria-hidden="true" tabindex="-1"></a>                              <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>, <span class="at">colour =</span> <span class="st">"#f5f5f5"</span>),</span>
-<span id="cb19-248"><a href="#cb19-248" aria-hidden="true" tabindex="-1"></a>                              <span class="at">panel.border =</span> <span class="fu">element_blank</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-77"><a href="#cb19-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span><span class="st">"bold"</span>),</span>
+<span id="cb19-78"><a href="#cb19-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>),</span>
+<span id="cb19-79"><a href="#cb19-79" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb19-80"><a href="#cb19-80" aria-hidden="true" tabindex="-1"></a>  )  </span>
+<span id="cb19-81"><a href="#cb19-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-82"><a href="#cb19-82" aria-hidden="true" tabindex="-1"></a>lolly_r <span class="ot">&lt;-</span></span>
+<span id="cb19-83"><a href="#cb19-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(stu_SG_schools_r, </span>
+<span id="cb19-84"><a href="#cb19-84" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> avg_read, </span>
+<span id="cb19-85"><a href="#cb19-85" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> <span class="fu">reorder</span>(CNTSCHID, avg_read))) <span class="sc">+</span></span>
+<span id="cb19-86"><a href="#cb19-86" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-87"><a href="#cb19-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="dv">0</span>, </span>
+<span id="cb19-88"><a href="#cb19-88" aria-hidden="true" tabindex="-1"></a>                 <span class="at">xend=</span>avg_read, </span>
+<span id="cb19-89"><a href="#cb19-89" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y=</span>CNTSCHID, </span>
+<span id="cb19-90"><a href="#cb19-90" aria-hidden="true" tabindex="-1"></a>                 <span class="at">yend=</span>CNTSCHID),</span>
+<span id="cb19-91"><a href="#cb19-91" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span> <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
+<span id="cb19-92"><a href="#cb19-92" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#989d9e"</span>)</span>
+<span id="cb19-93"><a href="#cb19-93" aria-hidden="true" tabindex="-1"></a>                            ),</span>
+<span id="cb19-94"><a href="#cb19-94" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb19-95"><a href="#cb19-95" aria-hidden="true" tabindex="-1"></a>             <span class="at">linewidth=</span> <span class="fl">4.2</span>)<span class="sc">+</span></span>
+<span id="cb19-96"><a href="#cb19-96" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-97"><a href="#cb19-97" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color=</span> <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
+<span id="cb19-98"><a href="#cb19-98" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#989d9e"</span>)),</span>
+<span id="cb19-99"><a href="#cb19-99" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
+<span id="cb19-100"><a href="#cb19-100" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">3.5</span>)<span class="sc">+</span>            </span>
+<span id="cb19-101"><a href="#cb19-101" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-102"><a href="#cb19-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> stu_SG_schools_r,</span>
+<span id="cb19-103"><a href="#cb19-103" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste</span>(CNTSCHID), </span>
+<span id="cb19-104"><a href="#cb19-104" aria-hidden="true" tabindex="-1"></a>                 <span class="at">x =</span> <span class="dv">130</span>, </span>
+<span id="cb19-105"><a href="#cb19-105" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> CNTSCHID),</span>
+<span id="cb19-106"><a href="#cb19-106" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
+<span id="cb19-107"><a href="#cb19-107" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#2e272A"</span>)</span>
+<span id="cb19-108"><a href="#cb19-108" aria-hidden="true" tabindex="-1"></a>                            ),</span>
+<span id="cb19-109"><a href="#cb19-109" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb19-110"><a href="#cb19-110" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface=</span> <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
+<span id="cb19-111"><a href="#cb19-111" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"bold"</span>,</span>
+<span id="cb19-112"><a href="#cb19-112" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"plain"</span>)) <span class="sc">+</span></span>
+<span id="cb19-113"><a href="#cb19-113" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-114"><a href="#cb19-114" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data callout</span></span>
+<span id="cb19-115"><a href="#cb19-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label=</span><span class="fu">round</span>(avg_read,<span class="dv">0</span>)</span>
+<span id="cb19-116"><a href="#cb19-116" aria-hidden="true" tabindex="-1"></a>                ),</span>
+<span id="cb19-117"><a href="#cb19-117" aria-hidden="true" tabindex="-1"></a>            <span class="at">color=</span><span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
+<span id="cb19-118"><a href="#cb19-118" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#2e272A"</span>)</span>
+<span id="cb19-119"><a href="#cb19-119" aria-hidden="true" tabindex="-1"></a>                            ),</span>
+<span id="cb19-120"><a href="#cb19-120" aria-hidden="true" tabindex="-1"></a>            <span class="at">size=</span><span class="dv">3</span>,</span>
+<span id="cb19-121"><a href="#cb19-121" aria-hidden="true" tabindex="-1"></a>            <span class="at">nudge_x=</span> <span class="dv">30</span>,   <span class="co"># move it to the right of the point</span></span>
+<span id="cb19-122"><a href="#cb19-122" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust=</span> <span class="dv">0</span>, <span class="co"># left justify</span></span>
+<span id="cb19-123"><a href="#cb19-123" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface=</span> <span class="fu">if_else</span>(stu_SG_schools_r<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
+<span id="cb19-124"><a href="#cb19-124" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"bold"</span>, </span>
+<span id="cb19-125"><a href="#cb19-125" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"plain"</span>)) <span class="sc">+</span></span>
+<span id="cb19-126"><a href="#cb19-126" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-127"><a href="#cb19-127" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Insert mean line</span></span>
+<span id="cb19-128"><a href="#cb19-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(</span>
+<span id="cb19-129"><a href="#cb19-129" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">xintercept =</span> mean_r),</span>
+<span id="cb19-130"><a href="#cb19-130" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour=</span><span class="st">"#7161f0"</span>, </span>
+<span id="cb19-131"><a href="#cb19-131" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">0.5</span>, </span>
+<span id="cb19-132"><a href="#cb19-132" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
+<span id="cb19-133"><a href="#cb19-133" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb19-134"><a href="#cb19-134" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-135"><a href="#cb19-135" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Include annotation for mean line</span></span>
+<span id="cb19-136"><a href="#cb19-136" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
+<span id="cb19-137"><a href="#cb19-137" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>, </span>
+<span id="cb19-138"><a href="#cb19-138" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> mean_r <span class="sc">+</span> <span class="dv">145</span>, </span>
+<span id="cb19-139"><a href="#cb19-139" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fl">3.5</span>,</span>
+<span id="cb19-140"><a href="#cb19-140" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Mean:</span><span class="sc">\n</span><span class="st">"</span>, mean_r),</span>
+<span id="cb19-141"><a href="#cb19-141" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">"#7161f0"</span>,</span>
+<span id="cb19-142"><a href="#cb19-142" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">3.2</span>,</span>
+<span id="cb19-143"><a href="#cb19-143" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
+<span id="cb19-144"><a href="#cb19-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb19-145"><a href="#cb19-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-146"><a href="#cb19-146" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set same limits for plots for consistency</span></span>
+<span id="cb19-147"><a href="#cb19-147" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">800</span>), </span>
+<span id="cb19-148"><a href="#cb19-148" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
+<span id="cb19-149"><a href="#cb19-149" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb19-150"><a href="#cb19-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb19-151"><a href="#cb19-151" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Reading"</span>,</span>
+<span id="cb19-152"><a href="#cb19-152" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
+<span id="cb19-153"><a href="#cb19-153" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb19-154"><a href="#cb19-154" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb19-155"><a href="#cb19-155" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-156"><a href="#cb19-156" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-157"><a href="#cb19-157" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-158"><a href="#cb19-158" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span><span class="st">"bold"</span>),</span>
+<span id="cb19-159"><a href="#cb19-159" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>),</span>
+<span id="cb19-160"><a href="#cb19-160" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb19-161"><a href="#cb19-161" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb19-162"><a href="#cb19-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-163"><a href="#cb19-163" aria-hidden="true" tabindex="-1"></a>lolly_s <span class="ot">&lt;-</span></span>
+<span id="cb19-164"><a href="#cb19-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(stu_SG_schools_s, </span>
+<span id="cb19-165"><a href="#cb19-165" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> avg_sci, </span>
+<span id="cb19-166"><a href="#cb19-166" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> <span class="fu">reorder</span>(CNTSCHID, avg_sci))) <span class="sc">+</span></span>
+<span id="cb19-167"><a href="#cb19-167" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-168"><a href="#cb19-168" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="dv">0</span>, </span>
+<span id="cb19-169"><a href="#cb19-169" aria-hidden="true" tabindex="-1"></a>                 <span class="at">xend=</span>avg_sci, </span>
+<span id="cb19-170"><a href="#cb19-170" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y=</span>CNTSCHID, </span>
+<span id="cb19-171"><a href="#cb19-171" aria-hidden="true" tabindex="-1"></a>                 <span class="at">yend=</span>CNTSCHID),</span>
+<span id="cb19-172"><a href="#cb19-172" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span> <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
+<span id="cb19-173"><a href="#cb19-173" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#989d9e"</span>)</span>
+<span id="cb19-174"><a href="#cb19-174" aria-hidden="true" tabindex="-1"></a>                            ),</span>
+<span id="cb19-175"><a href="#cb19-175" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb19-176"><a href="#cb19-176" aria-hidden="true" tabindex="-1"></a>             <span class="at">linewidth=</span> <span class="fl">4.2</span>)<span class="sc">+</span></span>
+<span id="cb19-177"><a href="#cb19-177" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-178"><a href="#cb19-178" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color=</span> <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
+<span id="cb19-179"><a href="#cb19-179" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#989d9e"</span>)),</span>
+<span id="cb19-180"><a href="#cb19-180" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
+<span id="cb19-181"><a href="#cb19-181" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">3.5</span>)<span class="sc">+</span>            </span>
+<span id="cb19-182"><a href="#cb19-182" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-183"><a href="#cb19-183" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> stu_SG_schools_s,</span>
+<span id="cb19-184"><a href="#cb19-184" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste</span>(CNTSCHID), </span>
+<span id="cb19-185"><a href="#cb19-185" aria-hidden="true" tabindex="-1"></a>                 <span class="at">x =</span> <span class="dv">130</span>, </span>
+<span id="cb19-186"><a href="#cb19-186" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> CNTSCHID),</span>
+<span id="cb19-187"><a href="#cb19-187" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
+<span id="cb19-188"><a href="#cb19-188" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#2e272A"</span>)</span>
+<span id="cb19-189"><a href="#cb19-189" aria-hidden="true" tabindex="-1"></a>                            ),</span>
+<span id="cb19-190"><a href="#cb19-190" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb19-191"><a href="#cb19-191" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface=</span> <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
+<span id="cb19-192"><a href="#cb19-192" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"bold"</span>,</span>
+<span id="cb19-193"><a href="#cb19-193" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"plain"</span>)) <span class="sc">+</span></span>
+<span id="cb19-194"><a href="#cb19-194" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-195"><a href="#cb19-195" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data callout</span></span>
+<span id="cb19-196"><a href="#cb19-196" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label=</span><span class="fu">round</span>(avg_sci,<span class="dv">0</span>)</span>
+<span id="cb19-197"><a href="#cb19-197" aria-hidden="true" tabindex="-1"></a>                ),</span>
+<span id="cb19-198"><a href="#cb19-198" aria-hidden="true" tabindex="-1"></a>            <span class="at">color=</span><span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>), <span class="st">"#69aebf"</span>, </span>
+<span id="cb19-199"><a href="#cb19-199" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), <span class="st">"#dc7068"</span>,<span class="st">"#2e272A"</span>)</span>
+<span id="cb19-200"><a href="#cb19-200" aria-hidden="true" tabindex="-1"></a>                            ),</span>
+<span id="cb19-201"><a href="#cb19-201" aria-hidden="true" tabindex="-1"></a>            <span class="at">size=</span><span class="dv">3</span>,</span>
+<span id="cb19-202"><a href="#cb19-202" aria-hidden="true" tabindex="-1"></a>            <span class="at">nudge_x=</span> <span class="dv">30</span>,   <span class="co"># move it to the right of the point</span></span>
+<span id="cb19-203"><a href="#cb19-203" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust=</span> <span class="dv">0</span>, <span class="co"># left justify</span></span>
+<span id="cb19-204"><a href="#cb19-204" aria-hidden="true" tabindex="-1"></a>            <span class="at">fontface=</span> <span class="fu">if_else</span>(stu_SG_schools_s<span class="sc">$</span>CNTSCHID <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"70200003"</span>, <span class="st">"70200056"</span>, <span class="st">"70200115"</span>, <span class="st">"70200149"</span>), </span>
+<span id="cb19-205"><a href="#cb19-205" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"bold"</span>, </span>
+<span id="cb19-206"><a href="#cb19-206" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"plain"</span>)) <span class="sc">+</span></span>
+<span id="cb19-207"><a href="#cb19-207" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-208"><a href="#cb19-208" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Insert mean line</span></span>
+<span id="cb19-209"><a href="#cb19-209" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(</span>
+<span id="cb19-210"><a href="#cb19-210" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">xintercept =</span> mean_s),</span>
+<span id="cb19-211"><a href="#cb19-211" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour=</span><span class="st">"#7161f0"</span>, </span>
+<span id="cb19-212"><a href="#cb19-212" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">0.5</span>, </span>
+<span id="cb19-213"><a href="#cb19-213" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span></span>
+<span id="cb19-214"><a href="#cb19-214" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb19-215"><a href="#cb19-215" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-216"><a href="#cb19-216" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Include annotation for mean line</span></span>
+<span id="cb19-217"><a href="#cb19-217" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
+<span id="cb19-218"><a href="#cb19-218" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom =</span> <span class="st">"text"</span>, </span>
+<span id="cb19-219"><a href="#cb19-219" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> mean_s <span class="sc">+</span> <span class="dv">145</span>, </span>
+<span id="cb19-220"><a href="#cb19-220" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fl">3.5</span>,</span>
+<span id="cb19-221"><a href="#cb19-221" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">paste0</span>(<span class="st">"Mean:</span><span class="sc">\n</span><span class="st">"</span>, mean_s),</span>
+<span id="cb19-222"><a href="#cb19-222" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">"#7161f0"</span>,</span>
+<span id="cb19-223"><a href="#cb19-223" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">3.2</span>,</span>
+<span id="cb19-224"><a href="#cb19-224" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
+<span id="cb19-225"><a href="#cb19-225" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb19-226"><a href="#cb19-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-227"><a href="#cb19-227" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set same limits for plots for consistency</span></span>
+<span id="cb19-228"><a href="#cb19-228" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">800</span>), </span>
+<span id="cb19-229"><a href="#cb19-229" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
+<span id="cb19-230"><a href="#cb19-230" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb19-231"><a href="#cb19-231" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb19-232"><a href="#cb19-232" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Science"</span>,</span>
+<span id="cb19-233"><a href="#cb19-233" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span></span>
+<span id="cb19-234"><a href="#cb19-234" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb19-235"><a href="#cb19-235" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb19-236"><a href="#cb19-236" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-237"><a href="#cb19-237" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-238"><a href="#cb19-238" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-239"><a href="#cb19-239" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span><span class="st">"bold"</span>),</span>
+<span id="cb19-240"><a href="#cb19-240" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>),</span>
+<span id="cb19-241"><a href="#cb19-241" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb19-242"><a href="#cb19-242" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb19-243"><a href="#cb19-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-244"><a href="#cb19-244" aria-hidden="true" tabindex="-1"></a>lolly_m <span class="sc">+</span> lolly_r <span class="sc">+</span> lolly_s <span class="sc">+</span></span>
+<span id="cb19-245"><a href="#cb19-245" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">widths=</span><span class="fu">c</span>(<span class="fl">1.2</span>,<span class="dv">1</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb19-246"><a href="#cb19-246" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title=</span><span class="st">"Uneven distribution of scores across schools"</span>,</span>
+<span id="cb19-247"><a href="#cb19-247" aria-hidden="true" tabindex="-1"></a>                  <span class="at">subtitle=</span><span class="st">"School &lt;span style='color: #69aebf;'&gt;70200003&lt;/span&gt; has one of the highest mean scores across all subjects,&lt;br&gt; while schools &lt;span style='color: #dc7068;'&gt;70200056, 70200115, 70200149&lt;/span&gt; remained at the bottom consistently."</span>,</span>
+<span id="cb19-248"><a href="#cb19-248" aria-hidden="true" tabindex="-1"></a>                  <span class="at">theme=</span><span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">face=</span><span class="st">"bold"</span>),</span>
+<span id="cb19-249"><a href="#cb19-249" aria-hidden="true" tabindex="-1"></a>                              <span class="at">plot.subtitle =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb19-250"><a href="#cb19-250" aria-hidden="true" tabindex="-1"></a>                              <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>, <span class="at">colour =</span> <span class="st">"#f5f5f5"</span>),</span>
+<span id="cb19-251"><a href="#cb19-251" aria-hidden="true" tabindex="-1"></a>                              <span class="at">panel.border =</span> <span class="fu">element_blank</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
@@ -1054,8 +1076,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Clarity</strong></p>
 <ol type="1">
-<li><strong>Use of a lollipop plot:</strong> The lollipop plot is a straightforward yet effective visualisation of the top and bottom average scores by school. The schools are sorted in descending order based on their scores for each subject to enhance interpretability.</li>
-<li><strong>Colour:</strong> The use of colors, with blue highlighting consistently high-performing schools and pink delineating consistently low-performing schools across subjects, serves to direct the reader’s attention towards salient findings.</li>
+<li><strong>Use of a lollipop plot:</strong> The lollipop plot is a straightforward yet effective visualisation of the top and bottom average scores by school. The schools are sorted in descending order based on their average scores for each subject to enhance interpretability.</li>
+<li><strong>Colour:</strong> The use of colours, with blue highlighting consistently high-performing schools and pink delineating consistently low-performing schools across subjects, serves to direct the reader’s attention towards salient findings.</li>
 <li><strong>Mean line:</strong> The inclusion of a mean line, along with annotations, facilitates easy comparison of school performance against the average score for each subject across all schools.</li>
 <li><strong>Chart labelling</strong>: Each point in the graph is annotated, enhancing overall clarity and providing additional context to the visual representation.</li>
 </ol>
@@ -1067,6 +1089,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="relationship-between-gender-and-scores" class="level2">
 <h2 class="anchored" data-anchor-id="relationship-between-gender-and-scores">3.3 Relationship between Gender and Scores</h2>
+<p>Density plots are used to illustrate the disparity in distribution across genders for the 3 subjects.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Original</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Areas for Improvement</a></li></ul>
 <div class="tab-content">
@@ -1078,8 +1101,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Clarity</strong></p>
 <ul>
-<li><p>Density plot with quantile lines is a good choice of chart that helps put emphasis on the difference in median scores between genders.</p></li>
-<li><p>-</p></li>
+<li><p>Density plot with quantile lines effectively highlights the variance in median scores between genders.</p></li>
+<li><p>The graph is aptly labeled, with clear titles and axes.</p></li>
 </ul>
 <p><strong>Aesthetics</strong></p>
 </div>
@@ -1090,28 +1113,121 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 <p><strong>Clarity</strong></p>
+<ol type="1">
+<li><strong>Quartile lines:</strong> Some of the quartile lines do not seem to be used, and can be removed to avoid cluttering the charts.</li>
+<li><strong>Range of x-axis:</strong> The differing ranges of the x-axis hinder a direct comparison across the three subjects. Using a consistent scale could enhance the identification of discrepancies.</li>
+</ol>
 <p><strong>Aesthetics</strong></p>
+<ol type="1">
+<li><strong>Colours:</strong> The colours of the density plot serves little purpose.</li>
+<li><strong>Repetition of x-axis:</strong> Consistency in the x-axis ranges across all subjects can help remove redundant axes, potentially optimising space for the plots.</li>
+</ol>
 </div>
 </div>
 </div>
-<section id="remake-2" class="level3">
-<h3 class="anchored" data-anchor-id="remake-2">Remake</h3>
+<section id="revamp-2" class="level3">
+<h3 class="anchored" data-anchor-id="revamp-2">Revamp</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rcp_long <span class="ot">&lt;-</span> </span>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dp_long <span class="ot">&lt;-</span> </span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  stu_SG <span class="sc">%&gt;%</span> </span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(ST004D01T, PV1MATH, PV1READ, PV1SCIE) <span class="sc">%&gt;%</span> </span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"PV1"</span>),</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"subject"</span>,</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_prefix=</span><span class="st">"PV1"</span>,</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">"score"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">"Score"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Gender=</span>(<span class="fu">recode</span>(ST004D01T, <span class="st">'1'</span><span class="ot">=</span><span class="st">"Female"</span>, </span>
 <span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                        <span class="st">'2'</span><span class="ot">=</span><span class="st">"Male"</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>ST004D01T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>ST004D01T) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">subject=</span>(<span class="fu">recode</span>(subject, </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'MATH'</span><span class="ot">=</span><span class="st">"Math"</span>,</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'READ'</span><span class="ot">=</span><span class="st">"Reading"</span>,</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'SCIE'</span><span class="ot">=</span><span class="st">'Science'</span>)))</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dp_long, </span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> Score, </span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> Gender, </span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> Gender, </span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> Gender)) <span class="sc">+</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density_ridges</span>(</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">quantile_lines =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">quantiles =</span> <span class="dv">2</span>,</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">scale =</span> <span class="fl">1.5</span>,</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#bandwidth= 0.1,</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">rel_min_height =</span> <span class="fl">0.01</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ridges</span>() <span class="sc">+</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">c</span>(<span class="st">"#f27279"</span>,</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"#73b2c4"</span>)) <span class="sc">+</span></span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">c</span>(<span class="st">"#f27279"</span>,</span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"#73b2c4"</span>)) <span class="sc">+</span>  </span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> subject, <span class="at">ncol=</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Scores"</span>,</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span>  </span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">expand =</span> <span class="fu">expansion</span>(<span class="at">add=</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">1.8</span>)))<span class="sc">+</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>   <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">620</span>, <span class="at">y =</span> <span class="fl">1.5</span>, <span class="at">subject =</span> <span class="st">"Math"</span>, <span class="at">Gender =</span> <span class="st">"Female"</span>, <span class="at">label =</span> <span class="st">"Median"</span>),</span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>   <span class="fu">aes</span>(<span class="at">x =</span> x,</span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> y,</span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">label =</span> label),</span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"red"</span>,</span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>   <span class="at">fontface =</span> <span class="st">"italic"</span></span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span>      </span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"&lt;b&gt;Scores&lt;/b&gt;"</span>,</span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">""</span>,</span>
+<span id="cb20-55"><a href="#cb20-55" aria-hidden="true" tabindex="-1"></a>       <span class="at">title=</span><span class="st">"Gaps in academic achievement between genders."</span>,</span>
+<span id="cb20-56"><a href="#cb20-56" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span><span class="st">"&lt;b&gt;&lt;span style='color: #73b2c4;'&gt;Male&lt;/span&gt;&lt;/b&gt; students have higher median scores in Math and Science than &lt;b&gt;&lt;span style='color: #f27279;'&gt;female&lt;/b&gt;&lt;/span&gt; students."</span>) <span class="sc">+</span></span>
+<span id="cb20-57"><a href="#cb20-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span><span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb20-58"><a href="#cb20-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb20-59"><a href="#cb20-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb20-60"><a href="#cb20-60" aria-hidden="true" tabindex="-1"></a>    <span class="co">#panel.grid.major = element_blank(),</span></span>
+<span id="cb20-61"><a href="#cb20-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb20-62"><a href="#cb20-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">color =</span> <span class="st">"#a6a6a6"</span>),</span>
+<span id="cb20-63"><a href="#cb20-63" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb20-64"><a href="#cb20-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">color =</span> <span class="st">"#a6a6a6"</span>),</span>
+<span id="cb20-65"><a href="#cb20-65" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_markdown</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"#a6a6a6"</span>, <span class="at">hjust=</span> <span class="fl">0.5</span>),</span>
+<span id="cb20-66"><a href="#cb20-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"#a6a6a6"</span>), </span>
+<span id="cb20-67"><a href="#cb20-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.x =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">"#a6a6a6"</span>),</span>
+<span id="cb20-68"><a href="#cb20-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb20-69"><a href="#cb20-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
+<span id="cb20-70"><a href="#cb20-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb20-71"><a href="#cb20-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>),</span>
+<span id="cb20-72"><a href="#cb20-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">color=</span><span class="st">"#ecebeb"</span>),</span>
+<span id="cb20-73"><a href="#cb20-73" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.switch.pad.grid =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">"in"</span>),</span>
+<span id="cb20-74"><a href="#cb20-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="fl">9.5</span>, </span>
+<span id="cb20-75"><a href="#cb20-75" aria-hidden="true" tabindex="-1"></a>                              <span class="at">color =</span><span class="st">"#202120"</span>,</span>
+<span id="cb20-76"><a href="#cb20-76" aria-hidden="true" tabindex="-1"></a>                              <span class="at">margin =</span> <span class="fu">unit</span>(<span class="fu">rep</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="st">"pt"</span>))</span>
+<span id="cb20-77"><a href="#cb20-77" aria-hidden="true" tabindex="-1"></a>    )  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
+</div>
+<p>The revamped version retains the use of density plots to compare the distributions of subject scores between genders, with vertical lines showing the median.</p>
+<p><strong>Clarity</strong></p>
+<ol type="1">
+<li><strong>Use of colours:</strong> In this version, colours are used to differentiate between the 2 genders. This colour scheme extends to the plot title, establishing a clear connection between the key finding in the title and the plots.</li>
+<li><strong>Median line:</strong> The <code>quantile_lines</code> argument is introduced to <code>geom_density_ridges()</code>, allowing control over the number of lines to represent quantiles. Setting the quantiles argument to 2 divides each density plot in half, effectively highlighting the median. Additionally, an annotation is included to provide context for the line’s significance.</li>
+<li><strong>Consistent x-axis:</strong> Through the use of <code>facet_wrap()</code>, the graph is divided into individual sections for the three subjects. Importantly, the x-axis maintains a consistent range/scale throughout, aiding in distinguishing differences across subjects. For instance, the width of the density plots highlights that the range of scores for Science for both genders is notably smaller compared to the other two subjects.</li>
+</ol>
+<p><strong>Aesthetics</strong></p>
+<ol start="4" type="1">
+<li><strong>Muted labels:</strong> The axes are in muted grey tones to ensure that the reader’s focus remains on the graph itself without being distracted by the axes labels.</li>
+</ol>
 </section>
 </section>
 <section id="relationship-between-scores-and-socioeconomic-status-of-students" class="level2">
 <h2 class="anchored" data-anchor-id="relationship-between-scores-and-socioeconomic-status-of-students">3.4 Relationship between Scores and Socioeconomic Status of Students</h2>
+<p>The original approach to assess the association between subject scores and socioeconomic status involves the use of a scatterplot, accompanied by an R-squared value to quantify the correlation’s strength. The socio-economic status used <em>ESCS</em> is measured by the PISA index of economic, social, and cultural status.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Original</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Areas for Improvement</a></li></ul>
 <div class="tab-content">
@@ -1123,11 +1239,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Clarity</strong></p>
 <ul>
-<li><p>Title summarises the gist of the plot well.</p></li>
-<li><p>Use of consistent colours for each subject helps reader link colour to subject when looking at different plots.</p></li>
-<li></li>
+<li><p>The title effectively captures the essence of the plot, providing a clear summary of its main message or findings.</p></li>
+<li><p>The consistent use of colours for each subject facilitates easy association between colour and subject, which is particularly helpful when comparing different plots throughout the submission post.</p></li>
 </ul>
 <p><strong>Aesthetics</strong></p>
+<ul>
+<li>The graph maintains a clean and straightforward appearance, avoiding distracting colours or excessive details that could overwhelm the viewer. OP has done well to eliminate some of the chart junk such as the y-axis since the correlation coeffcient is rather indicative of the strength of the relationship.</li>
+<li>The inclusion of the correlation coefficient adds a layer of statistical evidence to illustrate the strength of the relationship depicted in the plot.</li>
+</ul>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
 <div class="quarto-figure quarto-figure-center">
@@ -1137,18 +1256,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Clarity</strong></p>
 <ol type="1">
-<li><strong>x-axis:</strong> It would probably be more understandable if the ESCS scores are recoded as there was little context provided with regards to how the scores can be interpreted. If kept on a numerical scale, it would be more intuitive for readers if the axis is shifted to beside where the 0 value is as its not immediately obvious there is a positive and negative side to the ESCS score. x-axis is also repeated thrice in this plot.</li>
+<li><strong>x-axis:</strong> Recoding the ESCS scores could enhance understanding, since little context is provided with regards to how the scores can be interpreted. Shifting the axis to start from where the 0 value is located might make it more intuitive, as it’s not immediately evident that ESCS scores have both positive and negative sides. Additionally, the repetition of the x-axis across three plots could be avoided to streamline the visualisation.</li>
 </ol>
 <p><strong>Aesthetics</strong></p>
 <ol start="2" type="1">
-<li>y-axis title: Adjusting the y-axis title horizontally would improve readability of the plot.</li>
-<li>Graph title: A bolded graph title would stand out more and emphasise on the finding.</li>
+<li><strong>y-axis title:</strong> Rotating the y-axis title horizontally would improve readability of the plot.</li>
+<li><strong>Graph title:</strong> A bolded graph title would stand out more and emphasise on the finding.</li>
 </ol>
 </div>
 </div>
 </div>
-<section id="remake-3" class="level3">
-<h3 class="anchored" data-anchor-id="remake-3">Remake</h3>
+<section id="revamp-3" class="level3">
+<h3 class="anchored" data-anchor-id="revamp-3">Revamp</h3>
 <p>The code chunk below serves assigns a quartile classification to the variable <em>ESCS</em> to create 4 roughly equal-sized groups, recodes the variables to more intuitive categories, and finally orders the variables as socio-economic levels increase.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>stu_SG <span class="ot">&lt;-</span> stu_SG <span class="sc">%&gt;%</span></span>
@@ -1165,7 +1284,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"Advantaged"</span>, <span class="st">"Highly Advantaged"</span>),</span>
 <span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">ordered =</span> <span class="cn">TRUE</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The following code chunk prepares the dataset for plotting using <code>pivot_longer()</code> to reshape the data by converting multiple columns into 2 columns. The processed data is then grouped by ECSC category and subject. For each group, it calculates the mean score using the <code>summarise()</code> function</p>
+<p>The following code chunk prepares the dataset for plotting using <code>pivot_longer()</code> to reshape the data by converting multiple columns into 2 columns. The processed data is then grouped by ECSC category and subject. For each group, it calculates the mean score using the <code>summarise()</code> function.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -1186,58 +1305,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  bar_escs <span class="sc">%&gt;%</span> </span>
 <span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(ESCS, subject) <span class="sc">%&gt;%</span> </span>
 <span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(score, <span class="at">na.rm=</span><span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_avg =</span> <span class="fu">if_else</span>(subject<span class="sc">==</span><span class="st">"MATH"</span>, mean_m, </span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(subject<span class="sc">==</span><span class="st">"READ"</span>, mean_r,</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>                                    mean_s)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_avg =</span> <span class="fu">if_else</span>(subject<span class="sc">==</span><span class="st">"Math"</span>, mean_m, </span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">if_else</span>(subject<span class="sc">==</span><span class="st">"Reading"</span>, mean_r,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>                                    mean_s)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The strip plot shows the range, density, and central tendencies of each socio-economic level faceted by subject. The points have low alpha value to visualise the density and the purple points refer to the mean of each subject at a socio-economic level. Lastly, a mean line is added for comparison.</p>
+<p>The remade strip plot shows the range, density, and central tendencies of each socio-economic level faceted by subject. By adding a low alpha value <code>geom_point()</code>, the strip plot is able to highlight the density and range of scores. The purple points refer to the mean of each subject at a socio-economic level. Lastly, a mean line indicating the overall subject-level average is added for comparison.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bar_escs,</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> ESCS, <span class="at">y =</span> score)) <span class="sc">+</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>(<span class="at">clip =</span> <span class="st">"off"</span>) <span class="sc">+</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, </span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.1</span>,</span>
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span><span class="st">"#3E5058"</span>) <span class="sc">+</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> subject, <span class="at">nrow =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">data =</span> mean_escs,</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">yintercept =</span> total_avg),</span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"#c71e1d"</span>,</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> mean_escs,</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> ESCS,</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">xend =</span> ESCS,</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> total_avg,</span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">yend =</span> mean),</span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#8c8ed6"</span>,</span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">0.8</span>,</span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">fun=</span>mean,</span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom=</span><span class="st">"point"</span>,</span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">5</span>,</span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">"#8c8ed6"</span>,</span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="fl">0.02</span>,<span class="fl">0.02</span>)) <span class="sc">+</span></span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"English Scores"</span>,</span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">""</span>,</span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">title=</span><span class="st">"Disparities in academic achievement among different socio-economic&lt;br&gt;groups."</span>,</span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span><span class="st">"Mean values highlighted in &lt;span style='color: #8c8ed6;'&gt;purple&lt;/span&gt;."</span>) <span class="sc">+</span>   </span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
-<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>    <span class="co">#panel.grid.major = element_blank(),</span></span>
-<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(),</span>
-<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(),</span>
-<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),    </span>
-<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
-<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
-<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">data =</span> mean_escs,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">yintercept =</span> total_avg),</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"#c71e1d"</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span>  </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> subject, <span class="at">nrow =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> mean_escs,</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> ESCS,</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">xend =</span> ESCS,</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">y =</span> total_avg,</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">yend =</span> mean),</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#8c8ed6"</span>,</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">0.8</span>,</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">fun=</span>mean,</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">geom=</span><span class="st">"point"</span>,</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">5</span>,</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">color=</span><span class="st">"#8c8ed6"</span>,</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">y =</span> <span class="dv">580</span>, <span class="at">label =</span> <span class="st">"Subject Mean"</span>),</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">subject =</span> <span class="st">"Science"</span>)) <span class="sc">+</span>    </span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1000</span>), <span class="at">expand =</span> <span class="fu">c</span>(<span class="fl">0.02</span>,<span class="fl">0.02</span>)) <span class="sc">+</span></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"English Scores"</span>,</span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">""</span>,</span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>       <span class="at">title=</span><span class="st">"Disparities in academic achievement among different&lt;br&gt;socio-economic groups."</span>,</span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span><span class="st">"Mean values highlighted in &lt;span style='color: #8c8ed6;'&gt;purple&lt;/span&gt;."</span>) <span class="sc">+</span>   </span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">#panel.grid.major = element_blank(),</span></span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(),</span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(),</span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),    </span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>),</span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">color=</span><span class="st">"#ecebeb"</span>),</span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span><span class="st">"#202120"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
@@ -1245,14 +1371,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p><strong>Clarity</strong></p>
 <ol type="1">
-<li><strong>x-axis:</strong></li>
-<li><strong>Mean line</strong>: e can further highlight that the baseline is the average scores for each subject by adding a line from the average of each ESCS level to the subject average. The result is a combination of a strip and lollipop plot.</li>
+<li><strong>x-axis:</strong> The remade strip plot highlights the variance in range of subject scores by using a shared x-axis.</li>
+<li><strong>ESCS-level mean:</strong> The subject mean of each ESCS level is indicated by adding a summary statistic via <code>stat_summary()</code> with a different point size and colour to distinguish it from the points of <code>geom_point()</code>. Since the mean is a more important point of reference here, it is highlighted with a bigger size, zero transparency, and in bright purple colour.</li>
+<li><strong>Mean line and annotation</strong>: To relate all these points to a baseline, a red mean line is added to indicate the subject-level average score. We further highlight that the baseline is the subject-level average scores by adding a line from the average of each ESCS level to the subject average. The result is a combination of a strip and lollipop plot. The annotation for Subject Mean also helps explain the baseline level via <code>geom_text()</code>.</li>
 </ol>
 <p><strong>Aesthetics</strong></p>
+<ol start="4" type="1">
+<li>The overall format, design, and colour scheme have been refined to deliver a polished and professional appearance while maintaining clarity and avoiding information overload.</li>
+</ol>
 </section>
 </section>
 <section id="breakdown-of-scores-per-subject" class="level2">
 <h2 class="anchored" data-anchor-id="breakdown-of-scores-per-subject">3.5 Breakdown of Scores per Subject</h2>
+<p>The original visualisation features grouped bar chart to visualise proportion of proficiency levels.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Original</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">Areas for Improvement</a></li></ul>
 <div class="tab-content">
@@ -1263,7 +1394,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 <p><strong>Clarity</strong></p>
-<p><strong>Aesthetics</strong></p>
+<ul>
+<li><p>The axes are appropriately labeled, contributing to the overall clarity of the visualisation.</p></li>
+<li><p>The proportions displayed on each bar are clearly marked, eliminating any potential ambiguity in interpretation.</p></li>
+</ul>
+<p><strong>Aesthetics:</strong></p>
+<ul>
+<li>Tiled x-axis label is a thoughtful feature to enhance readability and prevent overlap of long axis labels, thereby improving the aesthetic appeal of the plot.</li>
+</ul>
 </div>
 <div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
 <div class="quarto-figure quarto-figure-center">
@@ -1272,16 +1410,292 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 <p><strong>Clarity</strong></p>
+<ol type="1">
+<li><strong>Graph title:</strong> The title appears somewhat confusing and potentially misleading. I think the OP intention was to convey the higher proportion of students performing poorly in Reading compared to other subjects.</li>
+<li><strong>Grouped barchart</strong>: The use of a grouped bar chart to represent proportions may not be the most suitable choice, especially when comparing bins of continuous scores. Typically, a histogram is used to visualise the distribution and relative frequencies of continuous data, providing a clearer representation of the data distribution. Additionally, with a grouped bar chart, there’s a risk of overlapping information, especially when presenting data for multiple subjects simultaneously.</li>
+<li><strong>y-axis title:</strong> Rotating the y-axis title horizontally could enhance readability and user convenience.</li>
+</ol>
 <p><strong>Aesthetics</strong></p>
+<ol start="4" type="1">
+<li><strong>x-axis labels:</strong> These can be recoded to represent more meaningful categories, reflecting the varying levels of proficiency.</li>
+</ol>
 </div>
 </div>
 </div>
+<section id="revamp-4" class="level3">
+<h3 class="anchored" data-anchor-id="revamp-4">Revamp</h3>
+<p>First, I wanted to understand the functionality of <a href="https://search.r-project.org/CRAN/refmans/intsvy/html/pisa.ben.pv.html"><code>pisa.ben.pv()</code></a> used by the OP.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>math_breakdown <span class="ot">&lt;-</span> <span class="fu">pisa.ben.pv</span>(<span class="at">pvlabel=</span> <span class="fu">paste0</span>(<span class="st">"PV"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="st">"MATH"</span>), <span class="at">by=</span><span class="st">"CNT"</span>, <span class="at">atlevel=</span><span class="cn">TRUE</span>, <span class="at">data=</span>stu_SG)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>read_breakdown <span class="ot">&lt;-</span> <span class="fu">pisa.ben.pv</span>(<span class="at">pvlabel=</span> <span class="fu">paste0</span>(<span class="st">"PV"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="st">"READ"</span>), <span class="at">by=</span><span class="st">"CNT"</span>, <span class="at">atlevel=</span><span class="cn">TRUE</span>, <span class="at">data=</span>stu_SG)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>scie_breakdown <span class="ot">&lt;-</span> <span class="fu">pisa.ben.pv</span>(<span class="at">pvlabel=</span> <span class="fu">paste0</span>(<span class="st">"PV"</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="st">"SCIE"</span>), <span class="at">by=</span><span class="st">"CNT"</span>, <span class="at">atlevel=</span><span class="cn">TRUE</span>, <span class="at">data=</span>stu_SG)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Inspecting the outputs:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">Math</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false">Reading</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false">Science</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>math_breakdown</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  CNT       Benchmarks Percentage Std. err.
+1 SGP        &lt;= 357.77       2.17      0.22
+2 SGP (357.77, 420.07]       5.85      0.38
+3 SGP (420.07, 482.38]      11.25      0.59
+4 SGP (482.38, 544.68]      17.59      0.61
+5 SGP (544.68, 606.99]      22.62      0.69
+6 SGP  (606.99, 669.3]      21.96      0.69
+7 SGP          &gt; 669.3      18.56      0.52</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>read_breakdown</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  CNT       Benchmarks Percentage Std. err.
+1 SGP        &lt;= 357.77       5.19      0.37
+2 SGP (357.77, 420.07]       8.06      0.51
+3 SGP (420.07, 482.38]      14.15      0.63
+4 SGP (482.38, 544.68]      20.15      0.80
+5 SGP (544.68, 606.99]      23.40      0.76
+6 SGP  (606.99, 669.3]      18.61      0.62
+7 SGP          &gt; 669.3      10.44      0.45</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>scie_breakdown</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  CNT       Benchmarks Percentage Std. err.
+1 SGP        &lt;= 357.77       2.87      0.30
+2 SGP (357.77, 420.07]       6.36      0.49
+3 SGP (420.07, 482.38]      12.07      0.52
+4 SGP (482.38, 544.68]      19.05      0.59
+5 SGP (544.68, 606.99]      25.13      0.66
+6 SGP  (606.99, 669.3]      21.14      0.65
+7 SGP          &gt; 669.3      13.38      0.43</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The objective of the function was to compute the percentage of students at each proficiency level as defined by PISA. However, for the purpose of visualising binned results, recoding the variables into more meaningful and intuitive categories might help with understanding.</p>
+<p>In the code chunk below, the 2 lowest categories <em>&lt;= 357.77</em> and <em>(357.77, 420.07]</em> are recoded as “low” to represent low proficiency levels, while <em>&gt; 669.3</em> and <em>(606.99, 669.3]</em> are recoded as “high” to represent high proficiency levels. The remaining 3 bins are grouped as “average”. This recoding helps simplify the interpretation of proficiency levels for visualisation purposes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a new combined table</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>math_breakdown<span class="sc">$</span>Subject <span class="ot">&lt;-</span> <span class="st">'Math'</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>read_breakdown<span class="sc">$</span>Subject <span class="ot">&lt;-</span> <span class="st">'Reading'</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>scie_breakdown<span class="sc">$</span>Subject <span class="ot">&lt;-</span> <span class="st">'Science'</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>combined_breakdown <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(math_breakdown, read_breakdown, scie_breakdown)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Recoding proficiency levels</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>combined_breakdown <span class="ot">&lt;-</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  combined_breakdown <span class="sc">%&gt;%</span> </span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">proficiency=</span>(<span class="fu">recode</span>(Benchmarks, </span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'&lt;= 357.77'</span><span class="ot">=</span><span class="st">"Low"</span>,</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'(357.77, 420.07]'</span><span class="ot">=</span><span class="st">"Low"</span>,</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'(420.07, 482.38]'</span><span class="ot">=</span><span class="st">'Average'</span>,</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'(482.38, 544.68]'</span><span class="ot">=</span><span class="st">'Average'</span>,</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'(544.68, 606.99]'</span><span class="ot">=</span><span class="st">'Average'</span>,</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'(606.99, 669.3]'</span><span class="ot">=</span><span class="st">'High'</span>,</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>                            <span class="st">'&gt; 669.3'</span><span class="ot">=</span><span class="st">'High'</span>)))</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordering factors</span></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>combined_breakdown<span class="sc">$</span>proficiency <span class="ot">&lt;-</span> <span class="fu">factor</span>(combined_breakdown<span class="sc">$</span>proficiency, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Low"</span>, <span class="st">"Average"</span>, <span class="st">"High"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The revamped version proposes using waffle charts to visualise proportions using <code>geom_waffle()</code>. Each square grid represents a portion of the total data, making them idea for illustrating categorical data.</p>
+<ul>
+<li><code>nrow()</code> within the <code>geom_waffle()</code> are used to specific the number of rows in the waffle chart. <code>nrow=10</code> indicates that the chart will have 10 rows of squares.</li>
+<li><code>scale_fill_manual()</code>allows manual specification for the fill colours of the waffle chart.</li>
+<li><code>facet_wrap()</code> allows visualisation of subsets of the data in separate panels within the same plot.</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the waffle chart</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>waf2 <span class="ot">&lt;-</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  combined_breakdown <span class="sc">%&gt;%</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> proficiency, </span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">values =</span> Percentage)) <span class="sc">+</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_limits</span>(<span class="at">x=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), </span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">y=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="cn">NULL</span>, </span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="cn">NULL</span>)<span class="sc">+</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ipsum</span>(<span class="at">grid=</span><span class="st">""</span>)</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>waf2 <span class="sc">+</span></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_waffle</span>(</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_rows =</span> <span class="dv">10</span>, </span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">0.33</span>, </span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"#f5f5f5"</span>, </span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">flip =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">make_proportional =</span> <span class="cn">TRUE</span></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>               <span class="st">"#fcd9e5"</span>, </span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>               <span class="st">"#f99cbc"</span>,</span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>               <span class="st">"#f5347f"</span>) </span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Subject, <span class="at">nrow =</span><span class="dv">1</span>, <span class="at">strip.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"A proportional perspective of subject performance"</span>,</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span><span class="st">"Higher proportion of students with high proficiency in Math than other subjects."</span>) <span class="sc">+</span>   </span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"bottom"</span>,</span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">#panel.grid.major = element_blank(),</span></span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),    </span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text.x =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">margin=</span><span class="fu">margin</span>(<span class="at">l=</span><span class="dv">0</span>), <span class="at">face =</span><span class="st">"bold"</span>),</span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>,),</span>
+<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), </span>
+<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"inches"</span>)</span>
+<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="657"></p>
+</div>
+</div>
+<p>An alternative approach using mean subject scores to dichotomise proficiency levels could be explored.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recoding to above and below average</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>proficiency <span class="ot">&lt;-</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  stu_SG <span class="sc">%&gt;%</span> </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PV1MATH, PV1READ, PV1SCIE) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">proficiency_math =</span> </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">if_else</span>(PV1MATH <span class="sc">&lt;</span> mean_m, <span class="st">"Below Average"</span>, <span class="st">"Above Average"</span>),</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">proficiency_read =</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>           <span class="fu">if_else</span>(PV1READ <span class="sc">&lt;</span> mean_r, <span class="st">"Below Average"</span>, <span class="st">"Above Average"</span>),</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">proficiency_scie =</span> </span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>           <span class="fu">if_else</span>(PV1SCIE <span class="sc">&lt;</span> mean_s, <span class="st">"Below Average"</span>, <span class="st">"Above Average"</span>))</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating the frequency and percentage of each category</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>proficiency_summary <span class="ot">&lt;-</span> proficiency <span class="sc">%&gt;%</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">math_below_average =</span> <span class="fu">sum</span>(proficiency_math <span class="sc">==</span> <span class="st">"Below Average"</span>),</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">math_above_average =</span> <span class="fu">sum</span>(proficiency_math <span class="sc">==</span> <span class="st">"Above Average"</span>),</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">read_below_average =</span> <span class="fu">sum</span>(proficiency_read <span class="sc">==</span> <span class="st">"Below Average"</span>),</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">read_above_average =</span> <span class="fu">sum</span>(proficiency_read <span class="sc">==</span> <span class="st">"Above Average"</span>),</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">scie_below_average =</span> <span class="fu">sum</span>(proficiency_scie <span class="sc">==</span> <span class="st">"Below Average"</span>),</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">scie_above_average =</span> <span class="fu">sum</span>(proficiency_scie <span class="sc">==</span> <span class="st">"Above Average"</span>)</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">Math_below_average_pct =</span> math_below_average <span class="sc">/</span> <span class="fu">nrow</span>(stu_SG) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">Math_above_average_pct =</span> math_above_average <span class="sc">/</span> <span class="fu">nrow</span>(stu_SG) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">Reading_below_average_pct =</span> read_below_average <span class="sc">/</span> <span class="fu">nrow</span>(stu_SG) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">Reading_above_average_pct =</span> read_above_average <span class="sc">/</span> <span class="fu">nrow</span>(stu_SG) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">Science_below_average_pct =</span> scie_below_average <span class="sc">/</span> <span class="fu">nrow</span>(stu_SG) <span class="sc">*</span> <span class="dv">100</span>,</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">Science_above_average_pct =</span> scie_above_average <span class="sc">/</span> <span class="fu">nrow</span>(stu_SG) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>  )  <span class="sc">%&gt;%</span></span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">"pct"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"Math"</span>) <span class="sc">|</span> <span class="fu">starts_with</span>(<span class="st">"Reading_"</span>) <span class="sc">|</span> <span class="fu">starts_with</span>(<span class="st">"Science_"</span>),</span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"level"</span>),</span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_sep =</span> <span class="st">"_"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"Math"</span>) <span class="sc">|</span> <span class="fu">starts_with</span>(<span class="st">"Reading"</span>) <span class="sc">|</span> <span class="fu">starts_with</span>(<span class="st">"Science"</span>),</span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"subject"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">level =</span> <span class="fu">factor</span>(level, </span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"above"</span>, <span class="st">"below"</span>),</span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a>                <span class="at">ordered =</span> <span class="cn">TRUE</span>)) </span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the waffle chart</span></span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-42"><a href="#cb33-42" aria-hidden="true" tabindex="-1"></a>waf <span class="ot">&lt;-</span> </span>
+<span id="cb33-43"><a href="#cb33-43" aria-hidden="true" tabindex="-1"></a>  proficiency_summary <span class="sc">%&gt;%</span></span>
+<span id="cb33-44"><a href="#cb33-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> level, </span>
+<span id="cb33-45"><a href="#cb33-45" aria-hidden="true" tabindex="-1"></a>             <span class="at">values =</span> value)) <span class="sc">+</span></span>
+<span id="cb33-46"><a href="#cb33-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_limits</span>(<span class="at">x=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), </span>
+<span id="cb33-47"><a href="#cb33-47" aria-hidden="true" tabindex="-1"></a>                <span class="at">y=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb33-48"><a href="#cb33-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb33-49"><a href="#cb33-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="cn">NULL</span>, </span>
+<span id="cb33-50"><a href="#cb33-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="cn">NULL</span>)<span class="sc">+</span></span>
+<span id="cb33-51"><a href="#cb33-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_ipsum</span>(<span class="at">grid=</span><span class="st">""</span>)</span>
+<span id="cb33-52"><a href="#cb33-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-53"><a href="#cb33-53" aria-hidden="true" tabindex="-1"></a>waf <span class="sc">+</span></span>
+<span id="cb33-54"><a href="#cb33-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_waffle</span>(</span>
+<span id="cb33-55"><a href="#cb33-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_rows =</span> <span class="dv">10</span>, </span>
+<span id="cb33-56"><a href="#cb33-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">0.33</span>, </span>
+<span id="cb33-57"><a href="#cb33-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"#f5f5f5"</span>, </span>
+<span id="cb33-58"><a href="#cb33-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">flip =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb33-59"><a href="#cb33-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">make_proportional =</span> <span class="cn">TRUE</span></span>
+<span id="cb33-60"><a href="#cb33-60" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb33-61"><a href="#cb33-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb33-62"><a href="#cb33-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#f5347f"</span>, </span>
+<span id="cb33-63"><a href="#cb33-63" aria-hidden="true" tabindex="-1"></a>               <span class="fu">alpha</span>(<span class="st">"#65666a"</span>, <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>)) </span>
+<span id="cb33-64"><a href="#cb33-64" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">+</span></span>
+<span id="cb33-65"><a href="#cb33-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>subject, <span class="at">nrow =</span><span class="dv">1</span>, <span class="at">strip.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="cb33-66"><a href="#cb33-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">"A proportional perspective of subject performance"</span>,</span>
+<span id="cb33-67"><a href="#cb33-67" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle=</span><span class="st">"More than half with &lt;span style='color: #e0218a;'&gt;above average&lt;/span&gt; of national subject scores."</span>) <span class="sc">+</span>   </span>
+<span id="cb33-68"><a href="#cb33-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb33-69"><a href="#cb33-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb33-70"><a href="#cb33-70" aria-hidden="true" tabindex="-1"></a>    <span class="co">#panel.grid.major = element_blank(),</span></span>
+<span id="cb33-71"><a href="#cb33-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb33-72"><a href="#cb33-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb33-73"><a href="#cb33-73" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb33-74"><a href="#cb33-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb33-75"><a href="#cb33-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb33-76"><a href="#cb33-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),    </span>
+<span id="cb33-77"><a href="#cb33-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">hjust=</span><span class="dv">0</span>),</span>
+<span id="cb33-78"><a href="#cb33-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_markdown</span>(<span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb33-79"><a href="#cb33-79" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text.x =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">margin=</span><span class="fu">margin</span>(<span class="at">l=</span><span class="dv">0</span>), <span class="at">face =</span><span class="st">"bold"</span>),</span>
+<span id="cb33-80"><a href="#cb33-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>),</span>
+<span id="cb33-81"><a href="#cb33-81" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), </span>
+<span id="cb33-82"><a href="#cb33-82" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"inches"</span>)</span>
+<span id="cb33-83"><a href="#cb33-83" aria-hidden="true" tabindex="-1"></a>)  <span class="sc">+</span></span>
+<span id="cb33-84"><a href="#cb33-84" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"text"</span>, </span>
+<span id="cb33-85"><a href="#cb33-85" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="dv">6</span>, </span>
+<span id="cb33-86"><a href="#cb33-86" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span><span class="fl">2.5</span>, </span>
+<span id="cb33-87"><a href="#cb33-87" aria-hidden="true" tabindex="-1"></a>             <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"53%"</span>),</span>
+<span id="cb33-88"><a href="#cb33-88" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span><span class="st">"#f5347f"</span>,</span>
+<span id="cb33-89"><a href="#cb33-89" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex02_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>In the example above, the waffle charts efficiently convey parts of a whole using 2 colours to represent the proportion of students who performed above and below average.</p>
+<p><strong>Clarity</strong></p>
+<ol type="1">
+<li><strong>Annotation:</strong> The annotation indicates the proportion of students who scored above the average scores, eliminating the need for manual counting of filled squares.</li>
+<li><strong>Facet Wrap:</strong> The use of facet wrap helps divide a plot into a matrix of panels, with each panel showing a distinct subset of the data.</li>
+</ol>
+<p><strong>Aesthetic</strong></p>
+<ol start="3" type="1">
+<li><strong>Colours</strong>: The pink and grey colour combination serves to differentiate the contribution of students who performed above and below the average subject mean score. Each square represents a percentage point, totaling 100. The muted grey tone aims to avoid drawing excessive attention while still visually representing the full extent of the chart, allowing for a clear visualisation of proportion. In the first example, the use of multiple colours was incorporated to reflect the number of categories. Furthermore, the colour gradient helps indicate the order of variables, with intensity increasing accordingly.</li>
+</ol>
+</section>
 </section>
 </section>
 <section id="summary" class="level1">
 <h1>4 Summary</h1>
-<p>5 References</p>
-<p>https://r-graph-gallery.com/web-dumbbell-chart-with-a-gap-column.html</p>
+<p>From this makeover, we can already pick several checklist items for better visualisation, including</p>
+<ol type="1">
+<li>A meaningful chart title is a must-have,</li>
+<li>Use annotations to add value to the story</li>
+<li>Avoid cluttering the visualisations with too much information,</li>
+<li>Use colour, grid-lines, and aces wisely, and last but not least,</li>
+<li>Use the appropriate chart for the data on hand.</li>
+</ol>
+<p>I hope you found some inspiration from the data visualisation makeovers and perhaps even picked up a few new ideas along the way. Taking a closer look at these transformations has given me a chance to reflect on how I can improve my own work too.</p>
+<p>There are inifinite ways to represent data. Whichever type of data visualisation you opt for, remember to make it accessible and understandable to the audience.</p>
+</section>
+<section id="resources" class="level1">
+<h1>5 Resources</h1>
+<p>Duong, Fred. (2021). Dumbbell Chart with a Gap Column. <em>R Graph Gallery.</em> https://r-graph-gallery.com/web-dumbbell-chart-with-a-gap-column.html</p>
+<p>Scherer, Cedric. (2019). The Evolution of a ggplot (Ep. 1). <em>Cedric Scherer</em>. https://www.cedricscherer.com/2019/05/17/the-evolution-of-a-ggplot-ep.-1/</p>
 
 
 </section>
