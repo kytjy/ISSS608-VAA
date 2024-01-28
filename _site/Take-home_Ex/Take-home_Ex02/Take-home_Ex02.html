@@ -765,6 +765,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="revamp-1" class="level3">
 <h3 class="anchored" data-anchor-id="revamp-1">Revamp</h3>
+<p>This remake is inspired by <a href="https://twitter.com/toeb18/status/1480174139377917953">Tobias Stalder’s submission for TidyTuesday</a>.</p>
 <p>Firstly, <code>as.character()</code> is used to convert the <em>SchID</em> variable from numeric to categorical data type.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert School ID to character data type</span></span>
@@ -1268,7 +1269,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="revamp-3" class="level3">
 <h3 class="anchored" data-anchor-id="revamp-3">Revamp</h3>
-<p>The code chunk below serves assigns a quartile classification to the variable <em>ESCS</em> to create 4 roughly equal-sized groups, recodes the variables to more intuitive categories, and finally orders the variables as socio-economic levels increase.</p>
+<p>The source of inspiration came from <a href="https://jmablog.com/post/astronaut-mission-length-longest-v-average/">this blog</a>.</p>
+<p>The code chunk below assigns a quartile classification to the variable <em>ESCS</em> to create 4 roughly equal-sized groups, recodes the variables to more intuitive categories, and finally orders the variables as socio-economic levels increase.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>stu_SG <span class="ot">&lt;-</span> stu_SG <span class="sc">%&gt;%</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ESCS =</span> <span class="fu">ntile</span>(ESCS, <span class="dv">4</span>), <span class="at">.after =</span> ESCS) <span class="sc">%&gt;%</span></span>

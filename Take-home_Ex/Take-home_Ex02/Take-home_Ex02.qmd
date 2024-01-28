@@ -391,6 +391,8 @@ Next, the not so good and some improvements I would make:
 
 ### Revamp
 
+This remake is inspired by [Tobias Stalder's submission for TidyTuesday](https://twitter.com/toeb18/status/1480174139377917953).
+
 Firstly, `as.character()` is used to convert the *SchID* variable from numeric to categorical data type.
 
 ```{r}
@@ -883,7 +885,9 @@ The original approach to assess the association between subject scores and socio
 
 ### Revamp
 
-The code chunk below serves assigns a quartile classification to the variable *ESCS* to create 4 roughly equal-sized groups, recodes the variables to more intuitive categories, and finally orders the variables as socio-economic levels increase.
+The source of inspiration came from [this blog](https://jmablog.com/post/astronaut-mission-length-longest-v-average/).
+
+The code chunk below assigns a quartile classification to the variable *ESCS* to create 4 roughly equal-sized groups, recodes the variables to more intuitive categories, and finally orders the variables as socio-economic levels increase.
 
 ```{r}
 stu_SG <- stu_SG %>%
