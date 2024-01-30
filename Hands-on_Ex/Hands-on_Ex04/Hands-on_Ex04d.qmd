@@ -33,7 +33,7 @@ In this exercise, we aim to gain hands-on experience on:
 
 -   plotting interactive funnel plot by using both **plotly R** and **ggplot2** packages.
 
-## 2 Getting Started
+# 2 Getting Started
 
 ::: panel-tabset
 ## Installing and Launching R Packages
@@ -76,7 +76,7 @@ n_distinct(covid19$"Sub-district")
 ```
 :::
 
-## 3 FunnelPlotR methods
+# 3 FunnelPlotR methods
 
 [**FunnelPlotR**](https://nhs-r-community.github.io/FunnelPlotR/) package uses ggplot to generate funnel plots. It requires a `numerator` (events of interest), `denominator` (population to be considered) and `group`. The key arguments selected for customisation are:
 
@@ -295,6 +295,6 @@ fp_ggplotly <- ggplotly(p,
 fp_ggplotly
 ```
 
-# 6 Reference
+# 5 Reference
 
 -   Kam, T.S. (2023). [Funnel Plots for Fair Comparisons](https://r4va.netlify.app/chap12).
