@@ -26,7 +26,7 @@ Correlation coefficient is a popular statistic that use to measure the type and 
 When multivariate data are used, the correlation coefficeints of the pair comparisons are displayed in a table form known as correlation matrix or scatterplot matrix.
 
 1.  First, we will learn how to create correlation matrix using *pairs()* of R Graphics.
-2.  Next, you will learn how to plot corrgram using **corrplot** package of R.
+2.  Next, you will learn how to plot corrgram using **corrplot** package of R.
 3.  Lastly, you will learn how to create an interactive correlation matrix using plotly R.
 
 # 2 Getting Starting
@@ -151,8 +151,7 @@ In this section, we learn how to visualising correlation matrix by using `ggcorr
 -   `sig.level` = 0.05
 -   `conf.level` = 0.95
 
-```{r, fig.width=7, fig.height=5}
-
+```{r, fig.width=6.4, fig.height=5}
 #| code-fold: true
 #| code-summary: "Show the code"
 
@@ -171,8 +170,7 @@ ggstatsplot::ggcorrmat(
     )      
 ```
 
-```{r, fig.width=7, fig.height=6}
-
+```{r, fig.width=6.6, fig.height=6}
 #| code-fold: true
 #| code-summary: "Show the code"
 
@@ -221,9 +219,9 @@ ggplot.component = list(
 [ggstatsplot](https://indrajeetpatil.github.io/ggstatsplot/) provides a special helper function for grouped analysis: [`grouped_ggcorrmat()`](https://indrajeetpatil.github.io/ggstatsplot/reference/grouped_ggcorrmat.html). This is merely a wrapper function around[`combine_plots()`](https://indrajeetpatil.github.io/ggstatsplot/reference/combine_plots.html). It applies [`ggcorrmat()`](https://indrajeetpatil.github.io/ggstatsplot/reference/ggcorrmat.html) across all **levels** of a specified **grouping variable** and then combines list of individual plots into a single plot.
 
 ```{r, fig.width=15, fig.height=7}
-
 #| code-fold: true
 #| code-summary: "Show the code"
+
 
 grouped_ggcorrmat(
   data = wine,
