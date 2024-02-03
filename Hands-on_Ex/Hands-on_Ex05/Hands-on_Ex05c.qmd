@@ -1,0 +1,180 @@
+---
+title: "Hands-on Exercise 5c: Heatmap for Visualising and Analysing Multivariate Data"
+date: "03 Feb 2024"
+date-modified: "last-modified"
+editor: visual
+toc-depth: 4
+execute:
+  freeze: true #never re-render during project render
+  echo: true #if false, displays charts without codes
+  eval: true #if false, displays codes without charts
+  warning: false #dont display if there are any warnings
+format: 
+  html:
+    code-fold: false
+    code-overflow: scroll
+    code-summary: "Show the code"
+    code-line-numbers: false
+---
+
+![](image/corrgram.PNG){fig-align="center"}
+
+# 1 Overview
+
+Heatmaps visualise data through variations in colouring. When applied to a tabular format, heatmaps are useful for cross-examining multivariate data, through placing variables in the columns and observation (or records) in rows and colouring the cells within the table. Heatmaps are good for showing variance across multiple variables, revealing any patterns, displaying whether any variables are similar to each other, and for detecting if any correlations exist in-between them.
+
+In this hands-on exercise, we will gain hands-on experience on using R to plot static and interactive heatmap for visualising and analysing multivariate data.
+
+# 2 Getting Starting
+
+::: panel-tabset
+## Installing & Launching R Packages
+
+```{r}
+pacman::p_load(seriation, dendextend, heatmaply, 
+               tidyverse, ggridges)
+```
+
+## Importing Data
+
+In this hands-on exercise, the data of [World Happiness 2018 report](https://worldhappiness.report/ed/2018/) will be used. The data set is downloaded from here. The original data set is in Microsoft Excel format. It has been extracted and saved in csv file called **WHData-2018.csv**.
+
+```{r}
+wh <- read_csv("data/WHData-2018.csv")
+```
+
+The output is a tibble data frame called **wh**, with 156 observations (rows) across 12 variables (columns).
+
+```{r}
+glimpse(wh)
+```
+## Understanding the Variables
+```{r}
+# Calculate Median and Mean values for plotting normal curve
+med_hs <- median(wh$`Happiness score`)
+mean_hs <- mean(wh$`Happiness score`)
+std_hs <- sd(wh$`Happiness score`)
+
+ggplot(
+    wh, 
+    aes(x = `Happiness score`)
+  ) +
+  geom_density(
+    color = "#d18a7d",
+    fill = "#d18a7d",
+    
+  # Adjust bandwidth to reduce smoothness of density plot to reveal variations
+    adjust = .2,
+    alpha = .6
+  ) +
+  # Plot normal curve
+  stat_function(
+    fun = dnorm,
+    args = list(mean = mean_hs,
+                sd = std_hs),
+    col = "#65666a",
+    size = .6
+  ) +
+  labs(
+    title = "Uneven Distribution of Happiness Scores",
+    subtitle = "Median joviality score is close to Mean score, but distribution density reveals multiple peaks and troughs",
+    x = "Happiness Score"
+  ) +
+  theme(
+    axis.title.y = element_blank(),
+    axis.text.y = element_blank(),
+    panel.grid.major = element_blank(),
+    plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5")
+  )
+```
+
+
+## Data Preparation
+
+### Step 1: Changing Row Names
+
+Next, we need to change the rows by country name instead of row number by using the code chunk below.
+
+```{r}
+row.names(wh) <- wh$Country
+```
+
+### Step 2: Transforming the data frame into a matrix
+
+The data was loaded into a data frame, but it has to be a data matrix to make your heatmap.
+
+The code chunk below will be used to transform **wh** data frame into a data matrix.
+
+```{r}
+wh1 <- dplyr::select(wh, c(3, 7:12))
+wh_matrix <- data.matrix(wh) #Transforms categorial variable into numerical representations.
+```
+:::
+
+# 3 Static Heatmap
+
+There are many R packages and functions can be used to drawing static heatmaps, they are:
+
+-   [heatmap()](https://www.rdocumentation.org/packages/stats/versions/3.6.0/topics/heatmap) of R stats package for simple heatmaps.
+
+-   [heatmap.2()](https://www.rdocumentation.org/packages/gplots/versions/3.0.1.1/topics/heatmap.2) of **gplots** R package for enhanced heatmaps.
+
+-   [pheatmap()](https://www.rdocumentation.org/packages/pheatmap/versions/1.0.12/topics/pheatmap) of [**pheatmap**](https://www.rdocumentation.org/packages/pheatmap/versions/1.0.12) R package. **pheatmap** package also known as Pretty Heatmap. The package provides functions to draws pretty heatmaps and provides more control to change the appearance of heatmaps.
+
+-   [**ComplexHeatmap**](https://bioconductor.org/packages/release/bioc/html/ComplexHeatmap.html) package of **R/Bioconductor** package. The package draws, annotates and arranges complex heatmaps (very useful for genomic data analysis). Full reference guide of the package is available [here](https://jokergoo.github.io/ComplexHeatmap-reference/book/).
+
+-   [**superheat**](https://cran.r-project.org/web/packages/superheat/) package: A Graphical Tool for Exploring Complex Datasets Using Heatmaps. A system for generating extendable and customizable heatmaps for exploring complex datasets, including big data and data with multiple data types. The full reference guide of the package is available [here](https://rlbarter.github.io/superheat/).
+
+# 4 `heatmap()` of R Stats
+
+:::panel-tabset
+
+## Basic Heatmap
+
+```{r}
+par(bg = "#f5f5f5")
+
+wh_heatmap <- heatmap(wh_matrix,
+                      Rowv=NA, Colv=NA)
+```
+::: {.thunderbox .thunder data-latex="thunder"}
+
+**Notes from Code Chunk**
+
+By default, `heatmap()` plots a cluster heatmap. The arguments `Rowv=NA` and `Colv=NA` are used to switch off the option of plotting the row and column dendrograms.
+
+:::
+
+## Cluster Heatmap
+
+```{r}
+par(bg = "#f5f5f5")
+
+wh_heatmap <- heatmap(wh_matrix)
+```
+
+::: {.thunderbox .thunder data-latex="thunder"}
+
+**Notes from Code Chunk**
+-     The order of both rows and columns is different compare to the native **wh_matrix**. This is because heatmap do a reordering using clusterisation: it calculates the distance between each pair of rows and columns and try to order them by similarity. Moreover, the corresponding dendrogram are provided beside the heatmap.
+
+**Insights**
+-   Here, red cells denotes small values, and red small ones. This heatmap is not really informative. Indeed, the Happiness Score variable have relatively higher values, what makes that the other variables with small values all look the same. Thus, we need to normalize this matrix. This is done using the scale argument. It can be applied to rows or to columns following your needs.
+
+:::
+
+
+
+
+## Normalised Heatmap
+
+```{r}
+
+```
+
+
+:::
+
+# 8 Reference
+
+-   Kam, T.S. (2023). [Visual Correlation Analysis](https://r4va.netlify.app/chap14).

@@ -111,11 +111,11 @@ By hovering the mouse pointer on an data point of interest, the student's ID (ch
 
 p <- ggplot(data=exam_data,
             aes(x=MATHS)) +
-  geom_dotplot_interactive(aes(tooltip=ID),
+  geom_dotplot_interactive(aes(tooltip=ID),  #<<< Interactivity at the tooltip, aes() maps objects
                            stackgroups = TRUE,
                            binwidth = 1,
                            method = "histodot") +
-  scale_y_continuous(NULL,
+  scale_y_continuous(NULL, #<<< Scale can also be interactive
                      breaks= NULL) +  #<<< null to suppress axis labels
   labs(x ="Distribution of Math Scores") + 
   theme(axis.line = element_blank(),
@@ -294,7 +294,7 @@ Code chunk below shows an advanced way to customise tooltip. In this example, a 
 tooltip <- function(y, ymax, accuracy = 0.01) {
   mean <- scales::number(y, accuracy = accuracy)
   sem <- scales:: number (ymax-y, accuracy = accuracy)
-  paste("Mean maths scores (with standard error):" , mean, "+/-", sem)
+  paste("Mean maths scores (with standard error):" , mean, "+/-", sem) #<<< Paste the results in tooltip
 }
 
 
@@ -360,18 +360,23 @@ There are a few summary functions from the Hmisc package which are reformatted f
 
 Code chunk below shows the second interactive feature of ggiraph, namely `data_id`.
 
-Elements associated with a *data_id* (i.e CLASS) will be highlighted upon mouse over.
+Elements associated with a *data_id* (i.e ID) will be highlighted upon mouse over.
 
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
 
+tooltip_css <- 'background-color:#dfdfeb; font-style:bold;  font-style:italic;
+color:black;font-size:18px;'  #<<<
+
 p <- ggplot(data= exam_data,
             aes(x=MATHS)) +
-  geom_dotplot_interactive(aes(data_id=CLASS),
+  geom_dotplot_interactive(aes(tooltip = ID,  #<<< Tooltip popup
+                               data_id = ID),
                            stackgroups = TRUE,
                            binwidth= 1,
-                           method = 'histodot') +
+                           method = 'histodot'
+                           ) +
   scale_y_continuous( NULL,
                       breaks = NULL) +
   labs(x ="Math Scores") + 
@@ -380,7 +385,12 @@ p <- ggplot(data= exam_data,
 
 girafe(ggobj=p,
        width_svg = 6,
-       height_svg = 6 *0.618)
+       height_svg = 6 *0.618,
+       #options = list(                          #<<<
+       #opts_hover(css='fill: black;'),         #<<<
+       #opts_hover_inv(css = 'opacity: 0.2;'))  #<<<
+         )
+
 ```
 
 **Note**: the default value of the hover css is *hover_css = "fill:orange;"*.
@@ -498,11 +508,23 @@ Notice that when a data point of one of the dotplot is selected, the correspondi
 #| code-fold: true
 #| code-summary: "Show the code"
 
+exam_data$tooltip2 <- c(paste0("Name = ",
+                              exam_data$ID,
+                              "\n Class = ",
+                              exam_data$CLASS,
+                              "\n English Score = ",
+                              exam_data$ENGLISH,
+                              "\n Math Score = ",
+                              exam_data$MATHS                              
+                              ))
+
+
+
 p1 <- ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_dotplot_interactive(              
     aes(data_id = ID,
-        tooltip = ID),      #<<< Added          
+        tooltip = tooltip2),      #<<< Added          
     stackgroups = TRUE,                  
     binwidth = 1,                        
     method = "histodot") +  
@@ -517,7 +539,7 @@ p2 <- ggplot(data=exam_data,
        aes(x = ENGLISH)) +
   geom_dotplot_interactive(              
     aes(data_id = ID,
-        tooltip = ID),      #<<< Added                
+        tooltip = tooltip2),      #<<< Added                
     stackgroups = TRUE,                  
     binwidth = 1,                        
     method = "histodot") + 
@@ -672,7 +694,7 @@ The creation of a coordinated linked plot by using plotly involves three steps:
 
 d <- highlight_key(exam_data)
 
-p1 <- ggplot(data=d, 
+p1 <- ggplot(data=d, #<<< the data here is using d, rather than exam_data
             aes(x = MATHS,
                 y = ENGLISH)) +
   geom_point(size=1) +
