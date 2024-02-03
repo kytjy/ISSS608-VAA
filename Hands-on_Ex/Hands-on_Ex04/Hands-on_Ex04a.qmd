@@ -129,9 +129,18 @@ ggplot(exam,
 
 ```
 
+::: {.brainbox .brain data-latex="brain"}
+
+**Insights:**
+
+-   All density plots in 1 column to give the same context.
+-   Density plot for 3B narrower than 3A. 3A has bigger variability while students in 3B performs quite similarly.
+-   3C and 3H have 2 humps. 
+:::
+
 ## 3.2 Varying fill colors along the x axis
 
-Sometimes we would like to have the area under a ridgeline not filled with a single solid color but rather with colors that vary in some form along the x axis. This effect can be achieved by using either [`geom_ridgeline_gradient()`](https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html) or [`geom_density_ridges_gradient()`](https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html). Both geoms work just like `geom_ridgeline()` and `geom_density_ridges()`, except that they allow for varying fill colors. However, they do not allow for alpha transparency in the fill. For technical reasons, we can have changing fill colors or transparency but not both.
+Sometimes we would like to have the area under a ridgeline not filled with a single solid color but rather with colors that vary in some form along the x axis. This effect can be achieved by using either [`geom_ridgeline_gradient()`](https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html) or [`geom_density_ridges_gradient()`](https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html). Both geoms work just like `geom_ridgeline()` and `geom_density_ridges()`, except that they allow for varying fill colors. However, they do not allow for alpha transparency in the fill. For technical reasons, we can have changing fill colors or transparency but not both.
 
 ```{r}
 #| code-fold: true
@@ -164,6 +173,15 @@ ggplot(exam,
     )  
 ```
 
+::: {.brainbox .brain data-latex="brain"}
+
+**Observations:**
+
+-   Colour intensity to represent range of scores.
+-   With facets, 1 legend for each facet so hard to compare across groups.
+
+:::
+
 ### 3.3 **Mapping the probabilities directly onto colour**
 
 Beside providing additional geom objects to support the need to plot ridgeline plot, ggridges package also provides a stat function called [`stat_density_ridges()`](https://wilkelab.org/ggridges/reference/stat_density_ridges.html) that replaces [`stat_density()`](https://ggplot2.tidyverse.org/reference/geom_density.html) of ggplot2.
@@ -193,6 +211,15 @@ ggplot(exam,
     plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5")  
     )    
 ```
+
+::: {.brainbox .brain data-latex="brain"}
+
+**Insights:**
+
+-   Colour intensity to represent percentile of values.
+-   Top 10% of 3A is doing better than 3B, but lower percentile of 3A and 3B are similar.
+
+:::
 
 ### 3.4 **Ridgeline plots with quantile lines**
 
@@ -511,6 +538,8 @@ ggplot(exam_3classes, aes(x = ENGLISH,
 -   `scale`: Larger scale = higher ridgeplots = more overlaps
 
 -   `rel_min_height`: Default = 0. Lines with height below this cutoff will be removed.
+
+-   `height` required in **ggridgeline** but is interpolated in **gg_density_ridges**
 :::
 
 # 8 Reference

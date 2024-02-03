@@ -303,7 +303,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#raincloud-plot-with-geom_density_ridges" id="toc-raincloud-plot-with-geom_density_ridges" class="nav-link" data-scroll-target="#raincloud-plot-with-geom_density_ridges">5 Raincloud plot with <code>geom_density_ridges()</code></a>
   <ul>
   <li><a href="#shaped-jitters" id="toc-shaped-jitters" class="nav-link" data-scroll-target="#shaped-jitters">5.1 |-shaped jitters</a></li>
-  <li><a href="#with" id="toc-with" class="nav-link" data-scroll-target="#with">5.2 With</a></li>
+  <li><a href="#with-jittered-points" id="toc-with-jittered-points" class="nav-link" data-scroll-target="#with-jittered-points">5.2 With Jittered Points</a></li>
   </ul></li>
   <li><a href="#labelling-density-plots-with-geom_textdensity" id="toc-labelling-density-plots-with-geom_textdensity" class="nav-link" data-scroll-target="#labelling-density-plots-with-geom_textdensity">6 Labelling density plots with <code>geom_textdensity</code></a></li>
   <li><a href="#tips" id="toc-tips" class="nav-link" data-scroll-target="#tips">7 Tips</a></li>
@@ -334,7 +334,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">January 28, 2024</p>
+      <p class="date-modified">February 3, 2024</p>
     </div>
   </div>
     
@@ -481,11 +481,19 @@ $ SCIENCE &lt;dbl&gt; 15, 16, 16, 31, 25, 16, 25, 27, 15, 37, 42, 22, 32, 36, 35
 <p><img src="Hands-on_Ex04a_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<div class="brainbox brain">
+<p><strong>Insights:</strong></p>
+<ul>
+<li>All density plots in 1 column to give the same context.</li>
+<li>Density plot for 3B narrower than 3A. 3A has bigger variability while students in 3B performs quite similarly.</li>
+<li>3C and 3H have 2 humps.</li>
+</ul>
+</div>
 </section>
 </section>
 <section id="varying-fill-colors-along-the-x-axis" class="level2">
 <h2 class="anchored" data-anchor-id="varying-fill-colors-along-the-x-axis">3.2 Varying fill colors along the x axis</h2>
-<p>Sometimes we would like to have the area under a ridgeline not filled with a single solid color but rather with colors that vary in some form along the x axis. This effect can be achieved by using either <a href="https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html"><code>geom_ridgeline_gradient()</code></a>&nbsp;or&nbsp;<a href="https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html"><code>geom_density_ridges_gradient()</code></a>. Both geoms work just like&nbsp;<code>geom_ridgeline()</code>&nbsp;and&nbsp;<code>geom_density_ridges()</code>, except that they allow for varying fill colors. However, they do not allow for alpha transparency in the fill. For technical reasons, we can have changing fill colors or transparency but not both.</p>
+<p>Sometimes we would like to have the area under a ridgeline not filled with a single solid color but rather with colors that vary in some form along the x axis. This effect can be achieved by using either <a href="https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html"><code>geom_ridgeline_gradient()</code></a> or <a href="https://wilkelab.org/ggridges/reference/geom_ridgeline_gradient.html"><code>geom_density_ridges_gradient()</code></a>. Both geoms work just like <code>geom_ridgeline()</code> and <code>geom_density_ridges()</code>, except that they allow for varying fill colors. However, they do not allow for alpha transparency in the fill. For technical reasons, we can have changing fill colors or transparency but not both.</p>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -519,6 +527,13 @@ $ SCIENCE &lt;dbl&gt; 15, 16, 16, 31, 25, 16, 25, 27, 15, 37, 42, 22, 32, 36, 35
 <p><img src="Hands-on_Ex04a_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<div class="brainbox brain">
+<p><strong>Observations:</strong></p>
+<ul>
+<li>Colour intensity to represent range of scores.</li>
+<li>With facets, 1 legend for each facet so hard to compare across groups.</li>
+</ul>
+</div>
 <section id="mapping-the-probabilities-directly-onto-colour" class="level3">
 <h3 class="anchored" data-anchor-id="mapping-the-probabilities-directly-onto-colour">3.3 <strong>Mapping the probabilities directly onto colour</strong></h3>
 <p>Beside providing additional geom objects to support the need to plot ridgeline plot, ggridges package also provides a stat function called <a href="https://wilkelab.org/ggridges/reference/stat_density_ridges.html"><code>stat_density_ridges()</code></a> that replaces <a href="https://ggplot2.tidyverse.org/reference/geom_density.html"><code>stat_density()</code></a> of ggplot2.</p>
@@ -548,6 +563,13 @@ $ SCIENCE &lt;dbl&gt; 15, 16, 16, 31, 25, 16, 25, 27, 15, 37, 42, 22, 32, 36, 35
 <div class="cell-output-display">
 <p><img src="Hands-on_Ex04a_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
+</div>
+<div class="brainbox brain">
+<p><strong>Insights:</strong></p>
+<ul>
+<li>Colour intensity to represent percentile of values.</li>
+<li>Top 10% of 3A is doing better than 3B, but lower percentile of 3A and 3B are similar.</li>
+</ul>
 </div>
 </section>
 <section id="ridgeline-plots-with-quantile-lines" class="level3">
@@ -793,8 +815,8 @@ $ SCIENCE &lt;dbl&gt; 15, 16, 16, 31, 25, 16, 25, 27, 15, 37, 42, 22, 32, 36, 35
 </div>
 </div>
 </section>
-<section id="with" class="level2">
-<h2 class="anchored" data-anchor-id="with">5.2 With</h2>
+<section id="with-jittered-points" class="level2">
+<h2 class="anchored" data-anchor-id="with-jittered-points">5.2 With Jittered Points</h2>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -885,13 +907,14 @@ $ SCIENCE &lt;dbl&gt; 15, 16, 16, 31, 25, 16, 25, 27, 15, 37, 42, 22, 32, 36, 35
 <ul>
 <li><p><code>scale</code>: Larger scale = higher ridgeplots = more overlaps</p></li>
 <li><p><code>rel_min_height</code>: Default = 0. Lines with height below this cutoff will be removed.</p></li>
+<li><p><code>height</code> required in <strong>ggridgeline</strong> but is interpolated in <strong>gg_density_ridges</strong></p></li>
 </ul>
 </div>
 </section>
 <section id="reference" class="level1">
 <h1>8 Reference</h1>
 <ul>
-<li>Kam, T.S. (2023). <a href="https://r4va.netlify.app/chap03">Programming Interactive Data Visualisation with R</a>.</li>
+<li>Kam, T.S. (2023). <a href="https://r4va.netlify.app/chap09">Visualising Distribution</a>.</li>
 </ul>
 
 

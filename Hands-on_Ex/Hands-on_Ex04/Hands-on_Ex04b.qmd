@@ -249,7 +249,7 @@ ggbetweenstats(
 ## might need to call library(PMCMRplus) and library(rstantools) if this code chunck doesnt work.
 ```
 
-Since p-value \< 0.05, we have enough statistical evidence to reject the null hypothesis and conclude that NOT ALL means of EL scores by race are the same. The results shows that the means of EL scores of Chinese, Indian and Malay are significantly different.
+Since p-value \< 0.05, we have enough statistical evidence to reject the null hypothesis and conclude that NOT ALL means of EL scores by race are the same. The results shows that the means of EL scores of Chinese, Indian and Malay are significantly different. **This is also highlighted in the bracket at the top of the plot!**
 
 Once again, lets go backwards and confirm that the distribution of EL scores by RACE conforms to normal distribution.
 

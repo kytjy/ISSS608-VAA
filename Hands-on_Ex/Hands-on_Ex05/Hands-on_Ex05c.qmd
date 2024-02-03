@@ -32,7 +32,8 @@ In this hands-on exercise, we will gain hands-on experience on using R to plot s
 
 ```{r}
 pacman::p_load(seriation, dendextend, heatmaply, 
-               tidyverse, ggridges)
+               tidyverse, ggridges, 
+               geom_textpath, ggtext)
 ```
 
 ## Importing Data
@@ -59,6 +60,8 @@ ggplot(
     wh, 
     aes(x = `Happiness score`)
   ) +
+  
+  # Density plot of target variable
   geom_density(
     color = "#d18a7d",
     fill = "#d18a7d",
@@ -67,6 +70,7 @@ ggplot(
     adjust = .2,
     alpha = .6
   ) +
+  
   # Plot normal curve
   stat_function(
     fun = dnorm,
@@ -75,15 +79,53 @@ ggplot(
     col = "#65666a",
     size = .6
   ) +
+  
+  # Adding mean line with annotation
+  geom_vline(aes(xintercept = mean_hs, 
+                     ),
+                 color = "#dc7068",
+                 linetype = "dotted",
+                 linewidth = .8,
+                 hjust = 0.6,
+                 size = 3) +
+    annotate(
+      "text", 
+      x = mean_hs-0.3, 
+      y = 0.4,
+      label = paste("Mean: ", round(mean_hs, 2)),
+      color = "#dc7068",
+      size = 3.5
+    ) +
+  
+  # Adding median line with annotation
+  geom_vline(aes(xintercept = med_hs, 
+                     ),
+                 color = "steelblue",
+                 linetype = "dotted",
+                 linewidth = .8,
+                 hjust = 0.6,
+                 size = 3) +  
+
+    annotate(
+      "text", 
+      x = med_hs+0.4, 
+      y = 0.4,
+      label = paste("Median: ", round(med_hs, 2)),
+      color = "steelblue",
+      size = 3.5
+    ) +  
+        
+  # Adding titles, subtitles, and axes labels
   labs(
     title = "Uneven Distribution of Happiness Scores",
-    subtitle = "Median joviality score is close to Mean score, but distribution density reveals multiple peaks and troughs",
+    subtitle = "Median and Mean happiness indicators are similar, with various humps noted",
     x = "Happiness Score"
   ) +
   theme(
+    panel.grid.major = element_blank(),
+    plot.title = element_text(face="bold"),
     axis.title.y = element_blank(),
     axis.text.y = element_blank(),
-    panel.grid.major = element_blank(),
     plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5")
   )
 ```
@@ -137,6 +179,8 @@ par(bg = "#f5f5f5")
 wh_heatmap <- heatmap(wh_matrix,
                       Rowv=NA, Colv=NA)
 ```
+
+
 ::: {.thunderbox .thunder data-latex="thunder"}
 
 **Notes from Code Chunk**
