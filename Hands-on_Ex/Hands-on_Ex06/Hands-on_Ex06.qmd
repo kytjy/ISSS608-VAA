@@ -1,0 +1,534 @@
+---
+title: "Hands-on Exercise 6: Visualising and Analysing Time-oriented Data"
+date: "04 Feb 2024"
+date-modified: "last-modified"
+editor: visual
+toc-depth: 4
+execute:
+  freeze: true #never re-render during project render
+  echo: true #if false, displays charts without codes
+  eval: true #if false, displays codes without charts
+  warning: false #dont display if there are any warnings
+format: 
+  html:
+    code-fold: false
+    code-overflow: scroll
+    code-summary: "Show the code"
+    code-line-numbers: false
+---
+
+![](images/time.PNG){fig-align="center"}
+
+# 1 Overview
+
+This hands-on exercise aims to plot the following data visualsations with R:
+
+-   calender heatmap by using ggplot2 functions,
+-   cycle plot by using ggplot2 function,
+-   slopegraph
+-   horizon chart
+
+# 2 Getting Started
+
+::: panel-tabset \## Installing & Launching R Packages
+
+For this exercise, the **scales**, **viridis**, **lubridate**, **ggthemes**, **gridExtra**, **readxl**, **knitr**, **data.table** and **tidyverse** packages will be used.
+
+```{r}
+pacman::p_load(scales, viridis, lubridate, 
+               ggthemes, gridExtra, readxl, 
+               knitr, data.table, 
+               CGPfunctions, ggHoriPlot, 
+               tidyverse, ggHoriPlot)
+```
+
+# 3 Plotting Calendar Heatmap
+
+Objectives for this section:
+
+-   plot a calender heatmap by using ggplot2 functions and extension,
+-   to write function using R programming,
+-   to derive specific date and time related field by using base R and lubridate packages
+-   to perform data preparation task by using tidyr and dplyr packages.
+
+## 3.1 Step 1: The Data
+
+For the purpose of this hands-on exercise, *eventlog.csv* file will be used. This data file consists of 199,999 rows of time-series cyber attack records by country.
+
+The code chunk below is used to import *eventlog.csv* file into R as a data frame *attacks*.
+
+```{r}
+attacks <- read_csv("data/eventlog.csv")
+```
+
+## 3.2 Step 2: Examining the data structure
+
+*kable()* can be used to review the structure of the imported data frame.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+kable(head(attacks))
+```
+
+There are three columns, namely *timestamp*, *source_country* and *tz*.
+
+-   *timestamp* field stores date-time values in POSIXct format.
+-   *source_country* field stores the source of the attack. It is in *ISO 3166-1 alpha-2* country code.
+-   *tz* field stores time zone of the source IP address.
+
+## 3.3 Step 3: Data Preparation
+
+**Step 1:** Deriving *weekday* and *hour of day* fields
+
+Before we can plot the calender heatmap, two new fields namely *wkday* and *hour* need to be derived. In this step, we will write a function to perform the task.
+
+```{r}
+make_hr_wkday <- function (ts, sc, tz) {
+    # convert each time with the appropriate timezone,
+    # the timezone parameter, tz, only takes a single value,
+    # then extract its weekdays and hour  
+  real_times <- ymd_hms(ts,
+                        tz = tz[1],     #<< for group by tz later, simply use the first tz value of groupby
+                        quiet = TRUE)
+  
+  dt <- data.table(source_country = sc,
+                   wkday= weekdays(real_times),
+                   hour = hour(real_times))
+  return (dt)
+}
+```
+
+-   [`ymd_hms()`](https://lubridate.tidyverse.org/reference/ymd_hms.html) and [`hour()`](https://lubridate.tidyverse.org/reference/hour.html) are from [**lubridate**](https://lubridate.tidyverse.org/) package, and
+
+-   [`weekdays()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/weekdays) is a **base** R function.
+
+**Step 2:** Deriving the attacks tibble data frame
+
+```{r}
+# convert weekday and hour into factor so they'll be ordered when plotting
+wkday_levels <- c('Saturday', 'Friday', 
+                  'Thursday', 'Wednesday', 
+                  'Tuesday', 'Monday', 
+                  'Sunday')
+
+attacks <- attacks %>%
+  group_by(tz) %>%
+  do(make_hr_wkday(.$timestamp, 
+                   .$source_country, 
+                   .$tz)) %>% 
+  ungroup() %>% 
+  mutate(wkday = factor(wkday, levels = wkday_levels),
+         hour = factor(hour, levels = 0:23))  #<< 24 hrs 
+```
+
+::: {.brainbox .brain data-latex="brain"}
+**Explanation of the code chunk above**
+
+1.  **`tz`** refers to the **`tz`** column of the **`attacks`** dataframe.
+2.  **`tz[1]`** selects the first element of the **`tz`** column within each group.
+3.  The **`group_by(tz)`** statement groups the data based on unique values in the **`tz`** column.
+4.  The **`do()`** function is used to apply the **`make_hr_wkday`** function to each group of the grouped dataframe.
+5.  Within the **`make_hr_wkday`** function, **`tz[1]`** is used to specify the time zone for the conversion of the timestamps within each group. Since each group has the same time zone value, using **`tz[1]`** ensures that the function uses the correct time zone for each group.
+
+By grouping the **`attacks`** dataframe by the **`tz`** column and applying the **`make_hr_wkday`** function within each group, the resulting dataframe will contain the source country, weekday, and hour columns based on the timestamp, source country, and time zone information, grouped by the unique time zones in the **`tz`** column of the **`attacks`** dataframe.
+
+Beside extracting the necessary data into *attacks* data frame, `mutate()` of **dplyr** package is used to convert *wkday* and *hour* fields into **factor** so they'll be ordered when plotting.
+:::
+
+Table below shows the tidy tibble table after processing.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+kable(head(attacks))
+```
+
+## 3.4 Step 4: Building the Calendar Heatmaps
+
+```{r, fig.width=6.5, fig.height=2}
+grouped <- attacks %>% 
+  count(wkday, hour) %>% 
+  ungroup() %>% 
+  na.omit()
+
+ggplot(grouped,
+       aes(hour,
+           wkday,
+           fill = n)) +
+  geom_tile(color = 'white',  #<<< border color and line size of tiles
+            size= 0.1) +
+  theme_tufte(base_family = 'Helvetica') + #<< to remove unneccessary graph features
+  coord_equal() + #<< asp ratio of 1:1
+  
+  scale_fill_gradient(name = "# of attacks",
+                    low = "sky blue", 
+                    high = "dark blue") +
+labs(x = NULL, 
+     y = NULL, 
+     title = "Attacks by weekday and time of day") +
+theme(axis.ticks = element_blank(),
+      plot.title = element_text(hjust=0.5, family = "Bold"),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(hjust=1, angle=0),
+      legend.title = element_text(size = 8),
+      legend.text = element_text(size=6),
+      #legend.key.size = unit(1,"line"),
+      plot.background = element_rect(fill = "#f5f5f5", color = "#f5f2f5"),
+      legend.background = element_rect(fill="#f5f5f5"),
+      panel.background = element_rect(fill="#f5f5f5")
+      )
+  
+```
+
+::: {.brainbox .brain data-latex="brain"}
+**Explanation of the code chunk above**
+
+-   a tibble data table called *grouped* is derived by aggregating the attack by *wkday* and *hour* fields.
+-   a new field called *n* is derived by using `group_by()` and `count()` functions.
+-   `count()` is use to count the number of records for each pair of wkday and hour
+-   `na.omit()` is used to exclude missing value.
+-   `geom_tile()` is used to plot tiles (grids) at each x and y position. `color` and `size` arguments are used to specify the border color and line size of the tiles.
+-   [`theme_tufte()`](https://jrnold.github.io/ggthemes/reference/theme_tufte.html) of [**ggthemes**](https://jrnold.github.io/ggthemes/reference/) package is used to remove unnecessary chart junk.
+-   `coord_equal()` is used to ensure the plot will have an aspect ratio of 1:1.
+-   `scale_fill_gradient()` function is used to creates a two colour gradient (low-high).
+:::
+
+## 3.5 Building Multiple Calendar Heatmaps
+
+**Step 1:** Deriving attack by country object
+
+In order to identify the top 4 countries with the highest number of attacks, you are required to do the followings:
+
+-   count the number of attacks by country,
+-   calculate the percent of attackes by country, and
+-   save the results in a tibble data frame.
+
+```{r}
+attacks_by_country <- count(attacks, source_country) %>% #<< Count the observations of a country
+  mutate(percent = percent(n/sum(n))) %>% 
+  arrange(desc(n))   #<< arranged from largest to smallest count of attacks
+```
+
+**Step 2:** Preparing the tidy data frame
+
+In this step, you are required to extract the attack records of the top 4 countries from *attacks* data frame and save the data in a new tibble data frame (i.e. *top4_attacks*).
+
+First, prepare vector of top 4 country names:
+
+```{r}
+top4 <- attacks_by_country$source_country[1:4] #<< Top 4 countries 
+summary(top4)
+top4
+```
+
+We can achieve the same thing using `top_n()`:
+
+```{r}
+#| eval: false
+top4 <- attacks_by_country %>%  top_n(4, wt= n) %>% pull(source_country)
+```
+
+Next, create **top4_attacks** dataframe by using 'top4' list to filter 'attacks' dataframe.
+
+This is more reproducible than manually listing the countries to filter, eg `filter(source_country %in% c('CN', 'US', 'KR', 'NL'))`.
+
+```{r}
+top4_attacks <- attacks %>% 
+  filter(source_country %in% top4) %>% 
+  count(source_country, wkday,hour) %>% 
+  ungroup() %>% 
+  mutate(source_country = factor(
+    source_country, levels = top4)) %>% 
+  na.omit()
+```
+
+::: {.brainbox .brain data-latex="brain"}
+'top4_attacks' dataframe is similar to 'grouped' dataframe, except that it has one more column called 'source_country'. This additional column will be useful for faceting later.
+:::
+
+**Step 3:** Plotting Multiple Calendar Heatmaps using ggplot2 package.
+
+```{r, fig.width=7.9, fig.height=3.9}
+
+ggplot(top4_attacks, 
+       aes(hour, 
+           wkday, 
+           fill = n)) + 
+  geom_tile(color = "white", 
+          size = 0.1) + 
+  theme_tufte(base_family = "Helvetica") + 
+  coord_equal() +
+  scale_fill_gradient(name = "Number of Attacks",
+                    low = "sky blue", 
+                    high = "dark blue") +
+  facet_wrap(~source_country, ncol = 2) +
+  labs(x = NULL, y = NULL, 
+     title = "Attacks on top 4 countries by weekday and time of day") +
+  theme(axis.ticks = element_blank(),
+        axis.text.x = element_text(size = 7),
+        plot.title = element_text(hjust = 0.5),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        legend.position = "bottom",
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f2f5"),
+        legend.background = element_rect(fill="#f5f5f5"),
+        panel.background = element_rect(fill="#f5f5f5"),
+        panel.border = element_blank(),
+
+      )
+```
+
+# 4 Plotting Cycle Plot
+
+In this section, we learn how to plot a cycle plot showing the time-series patterns and trend of visitor arrivals from Vietnam programmatically by using ggplot2 functions.
+
+## 4.1 Step 1: Data Import
+
+The dataset *arrivals_by_air.xlsx* will be used. The code chunk below imports *arrivals_by_air.xlsx* by using `read_excel()` of **readxl** package and save it as a tibble data frame called *air*.
+
+```{r}
+air <- read_excel("data/arrivals_by_air.xlsx")
+
+air %>% 
+  head(5) %>% 
+  kable()
+```
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+glimpse(air)
+```
+
+Note that *Month-year* column is detected as date-time format in R.
+
+## 4.2 Step 2: Deriving month and year fields
+
+Next, two new fields called *month* and *year* are derived from *Month-Year* field.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+air$month <- factor(month(air$`Month-Year`),  # extract month
+                    levels = 1:12,  #<< 12 months
+                    ordered= TRUE)
+
+air$year <- year(ymd(air$`Month-Year`))   # extract year
+```
+
+## 4.3 Step 3: Extracting the target country
+
+Next, the code chunk below is use to create dataframe containing the arrival data for Vietnam from 2010 onwards by selecting columns 'Vietnam', ' month' and 'year' from the air dataframe.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+Vietnam <- air %>% 
+  select(`Vietnam`, 
+         month, 
+         year) %>%
+  filter(year >= 2010)
+```
+
+## 4.4 Step 4: Computing year average arrivals by month
+
+The code chunk below uses `group_by()` and `summarise()` of **dplyr** to compute year average arrivals by month for all the years in *Vietnam* dataframe.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+hline.data <- Vietnam %>% 
+  group_by(month) %>%
+  summarise(avgvalue = mean(`Vietnam`))
+```
+
+## 4.5 Step 5: Plotting the cycle plot
+
+The code chunk below is used to plot the cycle plot.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+ggplot() + 
+  geom_line(data=Vietnam,
+            aes(x=factor(year), 
+                y=`Vietnam`, 
+                group=month), 
+            colour="black") +
+  geom_hline(aes(yintercept=avgvalue),  #<< geom_hline does not require group=month for facet?
+             data=hline.data, 
+             linetype=6, 
+             colour="red", 
+             size=0.5) + 
+  facet_grid(~month) +
+  labs(axis.text.x = element_blank(),
+       title = "Visitor arrivals from Vietnam by air, Jan 2010-Dec 2019") +
+  ylab("No. of Visitors") +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+    plot.title = element_text(hjust = 0.5),
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 6),
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f2f5"),
+        legend.background = element_rect(fill="#f5f5f5"),
+        panel.background = element_rect(fill="#f5f5f5")
+      ) 
+```
+
+# 5 Plotting Slopegraph
+
+In this section, we learn how to plot a [slopegraph](https://www.storytellingwithdata.com/blog/2020/7/27/what-is-a-slopegraph) with R.
+
+Ensure **CGPfunctions** is installed and loaded in R. For more reference materials, refer to [Using newggslopegraph](https://cran.r-project.org/web/packages/CGPfunctions/vignettes/Using-newggslopegraph.html) and [`newggslopegraph()`](https://www.rdocumentation.org/packages/CGPfunctions/versions/0.6.3/topics/newggslopegraph).
+
+## 5.1 Step 1: Data Import
+
+Import the rice data set into R environment by using the code chunk below.
+
+```{r}
+rice <- read_csv("data/rice.csv")
+```
+
+Notice that 'year' column is in the wrong format of number. We should convert it to factor instead.
+
+## 5.2 Step 2: Plotting the slopegraph
+
+Next, code chunk below will be used to plot a basic slopegraph as shown below.
+
+Key arguments include: - `Times`: - `Measurement`: Where the highest values are at the top of the graph. - `Grouping`:
+
+Since slopegraph contains information only for two years, we will filter data in 1960 and 1980 only.
+
+`factor()` is used convert the value type of *Year* field from numeric to factor.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+rice %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(1961, 1980)) %>%
+  newggslopegraph(Times = Year, 
+                  Measurement = Yield, 
+                  Grouping = Country,
+                Title = "Rice Yield of Top 11 Asian Counties",
+                SubTitle = "1961-1980",
+                Caption = "My VA Prof: Dr. Kam Tin Seong",
+                DataLabelFillColor = "#f5f5f5",) +
+    theme(
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f2f5"),
+        panel.background = element_rect(fill="#f5f5f5")
+      ) 
+```
+
+## 5.3 Highlighting a country
+
+LineColor is simply a character vector that you can fill any way you choose.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+rice %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(2005, 2006, 2007, 2008, 2009, 2010)) %>%
+  newggslopegraph(Year, Yield, Country,
+                Title = "Rice Yield of Top 11 Asian Counties",
+                SubTitle = "2005 to 2010",
+                Caption = NULL,
+                LineColor = c("#c7c8cc", "#c7c8cc", "#c7c8cc", "#c7c8cc","red","#c7c8cc","#c7c8cc","#c7c8cc","#c7c8cc","#c7c8cc"),      
+                DataLabelFillColor = "#f5f5f5",) +
+    theme(
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f2f5"),
+        panel.background = element_rect(fill="#f5f5f5")
+      ) 
+```
+
+Assigning by country name is much clearer!
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+rice %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(2005, 2006, 2007, 2008, 2009, 2010)) %>%
+  newggslopegraph(Year, Yield, Country,
+                Title = "Rice Yield of Top 11 Asian Counties",
+                SubTitle = "2005 to 2010",
+                Caption = NULL,
+                LineColor = c("Korea" = "#e0218a", "Thailand" = "#FFBC2F"),
+                DataLabelFillColor = "#f5f5f5",) +
+    theme(
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f2f5"),
+        panel.background = element_rect(fill="#f5f5f5")
+      ) 
+
+```
+
+# 6 BumpCharts in R
+
+Another popular visualisation is the bump chart, which is a type of line chart which shows changes in rankings over time.
+
+```{r}
+rice %>% 
+  mutate(Year = factor(Year)) %>%
+  filter(Year %in% c(2005, 2006, 2007, 2008, 2009, 2010)) %>%
+  ggplot(aes(x = Year,
+         y = Yield,
+         color = Country))+
+  geom_point(color = "#FFFFFF", size = 1) +
+  ggbump::geom_bump(mapping=aes(x = Year,
+                                y = Yield, 
+                                group = Country
+                                ))+
+  labs(title = "Rice Yield of Top 11 Asian Counties") +  
+  theme_minimal()+
+  theme(
+        plot.background = element_rect(fill = "#f5f5f5", color = "#f5f2f5"),
+        panel.background = element_rect(fill="#f5f5f5"))
+```
+
+
+# 7 Horizon Chart (WIP)
+
+```{r}
+rice %>% 
+    filter(Year %in% c(2005, 2006, 2007, 2008, 2009, 2010)) %>%
+  ggplot() +
+  geom_horizon(
+    aes(x = factor(Year), 
+        y = Yield,
+        fill=  ..Cutpoints..), 
+    origin = "midpoint", 
+    horizonscale = 6
+  )+
+  facet_grid(Country~.) +
+  theme_few() +
+  scale_fill_hcl(palette = 'RdBu') +
+  labs(
+    title = "Rice Yield of Top 11 Asian Counties (From 2005 to 2010)"
+  ) +
+  theme(
+    panel.spacing.y = unit(0, "lines"), 
+    strip.text.y = element_text(size = 5, angle = 0, hjust = 0),
+    legend.position = "none",
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = 7, angle = 0),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"),
+    plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"))
+```
+
