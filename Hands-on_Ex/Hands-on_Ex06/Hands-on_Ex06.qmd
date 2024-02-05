@@ -1,6 +1,6 @@
 ---
 title: "Hands-on Exercise 6: Visualising and Analysing Time-oriented Data"
-date: "04 Feb 2024"
+date: "05 Feb 2024"
 date-modified: "last-modified"
 editor: visual
 toc-depth: 4
