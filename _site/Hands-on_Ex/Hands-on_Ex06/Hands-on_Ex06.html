@@ -294,7 +294,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">1 Overview</a></li>
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">2 Getting Started</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">2 Getting Started</a>
+  <ul>
+  <li><a href="#installing-launching-r-packages" id="toc-installing-launching-r-packages" class="nav-link" data-scroll-target="#installing-launching-r-packages">Installing &amp; Launching R Packages</a></li>
+  </ul></li>
   <li><a href="#plotting-calendar-heatmap" id="toc-plotting-calendar-heatmap" class="nav-link" data-scroll-target="#plotting-calendar-heatmap">3 Plotting Calendar Heatmap</a>
   <ul>
   <li><a href="#step-1-the-data" id="toc-step-1-the-data" class="nav-link" data-scroll-target="#step-1-the-data">3.1 Step 1: The Data</a></li>
@@ -345,7 +348,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 5, 2024</p>
+      <p class="date-modified">February 11, 2024</p>
     </div>
   </div>
     
@@ -371,7 +374,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="getting-started" class="level1">
 <h1>2 Getting Started</h1>
-<p>::: panel-tabset ## Installing &amp; Launching R Packages</p>
+<p>:::panel-tabset</p>
+<section id="installing-launching-r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="installing-launching-r-packages">Installing &amp; Launching R Packages</h2>
 <p>For this exercise, the <strong>scales</strong>, <strong>viridis</strong>, <strong>lubridate</strong>, <strong>ggthemes</strong>, <strong>gridExtra</strong>, <strong>readxl</strong>, <strong>knitr</strong>, <strong>data.table</strong> and <strong>tidyverse</strong> packages will be used.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(scales, viridis, lubridate, </span>
@@ -380,6 +385,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               CGPfunctions, ggHoriPlot, </span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               tidyverse, ggHoriPlot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
 </section>
 <section id="plotting-calendar-heatmap" class="level1">
 <h1>3 Plotting Calendar Heatmap</h1>
@@ -1140,7 +1146,7 @@ $ `New Zealand`              &lt;dbl&gt; 5034, 3938, 4668, 6890, 7006, 7634, 950
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">newggslopegraph</span>(<span class="at">Times =</span> Year, </span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Measurement =</span> Yield, </span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Grouping =</span> Country,</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">Title =</span> <span class="st">"Rice Yield of Top 11 Asian Counties"</span>,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">Title =</span> <span class="st">"Rice Yield of Top 11 Asian Countries"</span>,</span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">SubTitle =</span> <span class="st">"1961-1980"</span>,</span>
 <span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">Caption =</span> <span class="st">"My VA Prof: Dr. Kam Tin Seong"</span>,</span>
 <span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">DataLabelFillColor =</span> <span class="st">"#f5f5f5"</span>,) <span class="sc">+</span></span>
@@ -1164,7 +1170,7 @@ $ `New Zealand`              &lt;dbl&gt; 5034, 3938, 4668, 6890, 7006, 7634, 950
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">factor</span>(Year)) <span class="sc">%&gt;%</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2005</span>, <span class="dv">2006</span>, <span class="dv">2007</span>, <span class="dv">2008</span>, <span class="dv">2009</span>, <span class="dv">2010</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">newggslopegraph</span>(Year, Yield, Country,</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">Title =</span> <span class="st">"Rice Yield of Top 11 Asian Counties"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">Title =</span> <span class="st">"Rice Yield of Top 11 Asian Countries"</span>,</span>
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">SubTitle =</span> <span class="st">"2005 to 2010"</span>,</span>
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">Caption =</span> <span class="cn">NULL</span>,</span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">LineColor =</span> <span class="fu">c</span>(<span class="st">"#c7c8cc"</span>, <span class="st">"#c7c8cc"</span>, <span class="st">"#c7c8cc"</span>, <span class="st">"#c7c8cc"</span>,<span class="st">"red"</span>,<span class="st">"#c7c8cc"</span>,<span class="st">"#c7c8cc"</span>,<span class="st">"#c7c8cc"</span>,<span class="st">"#c7c8cc"</span>,<span class="st">"#c7c8cc"</span>),      </span>
@@ -1186,7 +1192,7 @@ $ `New Zealand`              &lt;dbl&gt; 5034, 3938, 4668, 6890, 7006, 7634, 950
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Year =</span> <span class="fu">factor</span>(Year)) <span class="sc">%&gt;%</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2005</span>, <span class="dv">2006</span>, <span class="dv">2007</span>, <span class="dv">2008</span>, <span class="dv">2009</span>, <span class="dv">2010</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">newggslopegraph</span>(Year, Yield, Country,</span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">Title =</span> <span class="st">"Rice Yield of Top 11 Asian Counties"</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">Title =</span> <span class="st">"Rice Yield of Top 11 Asian Countries"</span>,</span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">SubTitle =</span> <span class="st">"2005 to 2010"</span>,</span>
 <span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">Caption =</span> <span class="cn">NULL</span>,</span>
 <span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">LineColor =</span> <span class="fu">c</span>(<span class="st">"Korea"</span> <span class="ot">=</span> <span class="st">"#e0218a"</span>, <span class="st">"Thailand"</span> <span class="ot">=</span> <span class="st">"#FFBC2F"</span>),</span>
@@ -1217,7 +1223,7 @@ $ `New Zealand`              &lt;dbl&gt; 5034, 3938, 4668, 6890, 7006, 7634, 950
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>                                <span class="at">y =</span> Yield, </span>
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>                                <span class="at">group =</span> Country</span>
 <span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>                                ))<span class="sc">+</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Rice Yield of Top 11 Asian Counties"</span>) <span class="sc">+</span>  </span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Rice Yield of Top 11 Asian Countries"</span>) <span class="sc">+</span>  </span>
 <span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
 <span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#f5f5f5"</span>, <span class="at">color =</span> <span class="st">"#f5f2f5"</span>),</span>
@@ -1244,7 +1250,7 @@ $ `New Zealand`              &lt;dbl&gt; 5034, 3938, 4668, 6890, 7006, 7634, 950
 <span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_few</span>() <span class="sc">+</span></span>
 <span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_hcl</span>(<span class="at">palette =</span> <span class="st">'RdBu'</span>) <span class="sc">+</span></span>
 <span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Rice Yield of Top 11 Asian Counties (From 2005 to 2010)"</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Rice Yield of Top 11 Asian Countries (From 2005 to 2010)"</span></span>
 <span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
 <span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.spacing.y =</span> <span class="fu">unit</span>(<span class="dv">0</span>, <span class="st">"lines"</span>), </span>
