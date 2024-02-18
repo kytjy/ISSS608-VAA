@@ -30,10 +30,6 @@ This hands-on exercise aims to plot the following data visualsations with R:
 
 # 2 Getting Started
 
-:::panel-tabset
-
-## Installing & Launching R Packages
-
 For this exercise, the **scales**, **viridis**, **lubridate**, **ggthemes**, **gridExtra**, **readxl**, **knitr**, **data.table** and **tidyverse** packages will be used.
 
 ```{r}
