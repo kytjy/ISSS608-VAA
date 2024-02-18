@@ -1169,6 +1169,7 @@ warmdays <- dailytemp %>%
 -   Tooltip Information: Jitter points display a description of the corresponding record upon hovering, providing contextual information. The tooltips for boxplots offer a statistical summary at the weather station and period level, including details such as median, minimum, maximum, and quartiles.
 -   Zooming Functionality: The *Zoom with rectangle* function enables users to conduct detailed exploration of specific areas of the graph, particularly useful for densely plotted jitter points.
 -   Color Coding: Both charts are color-coded according to month, distinguishing between wet and dry seasons. Blue is used to represent the wet season, while brown is used for the dry season, aiding in seasonal identification within the visualisation.
+-   Coordinated Highlighting: Unlike the previous plot, this visualisation employs color to emphasize the corresponding point in the neighboring plot, as borders are less distinct against the backdrop of the boxplot, rendering highlights less effective. In this case, a light purple hue is utilized to direct attention to the selected boxplot or bar without obscuring pertinent information.
 
 ```{r}
 #| code-fold: true
@@ -1196,7 +1197,7 @@ bar <- ggplot(warmdays,
   scale_x_discrete(labels = scales::label_wrap(6)) +
   labs(x = "",
       y = "",
-      title="Percentage of Warm Days (≥ 34°C)",
+      title="% of Very Warm Days (≥ 34°C)",
       fill = "Month") +
   theme_minimal() +
   theme(
