@@ -1,5 +1,6 @@
 ---
 title: "Hands-on Exercise 7c: Analytical Mapping"
+date: "21 Feb 2024"
 date-modified: "last-modified"
 editor: visual
 toc-depth: 4
@@ -16,13 +17,146 @@ format:
     code-line-numbers: false
 ---
 
+![](images/placeholder.png){fig-align="center"}
+
 # 1 Overview
 
-In this in-class exercise, qw will gain hands-on experience on using appropriate R methods to plot analytical maps.
+In this in-class exercise, we will gain hands-on experience on using appropriate R methods to plot analytical maps.
 
 # 2 Getting Started
 
+## 2.1 Loading Packages
 
+In this exercise, we will be using the following packages:
+
++-----------------------------------------------------------+-----------------------------------------------------------------------------------+
+| Package                                                   | Description                                                                       |
++===========================================================+===================================================================================+
+| [**tmap**](https://cran.r-project.org/web/packages/tmap/) | For choropleth mapping.                                                           |
++-----------------------------------------------------------+-----------------------------------------------------------------------------------+
+| [**tidyverse**](https://www.tidyverse.org/)               | [**readr**](https://readr.tidyverse.org/)**:** For importing delimited text file. |
+|                                                           |                                                                                   |
+|                                                           | [**tidyr**](https://tidyr.tidyverse.org/)**:** For tidying data.                  |
+|                                                           |                                                                                   |
+|                                                           | [**dplyr**](https://dplyr.tidyverse.org/): For data wrangling.                    |
++-----------------------------------------------------------+-----------------------------------------------------------------------------------+
+| [**sf**](https://cran.r-project.org/web/packages/sf/)     | For handling geospatial data.                                                     |
++-----------------------------------------------------------+-----------------------------------------------------------------------------------+
+| [**knitr**](https://yihui.org/knitr/)                     | For html tables                                                                   |
++-----------------------------------------------------------+-----------------------------------------------------------------------------------+
+
+: {tbl-colwidths="\[30,70\]"}
+
+```{r}
+pacman::p_load(sf, tmap, tidyverse)
+```
+
+## 2.2 Importing Data
+
+For the purpose of this hands-on exercise, a prepared data set called *NGA_wp.rds* will be used. The data set is a polygon feature data.frame providing information on water point of Nigeria at the LGA level.
+
+```{r}
+NGA_wp <- read_rds("data/rds/NGA_wp.rds")
+```
+
++--------------+-------------+--------------------------------------------------+---------------+
+| Function     | Package     | Description                                      | Output        |
++==============+=============+==================================================+===============+
+| `read_rds()` | **readr**   | Import *NGA_wp.rds* into R \| ***R object*** \|  |               |
++--------------+-------------+--------------------------------------------------+---------------+
+
+: {tbl-colwidths="\[10,10,60,20\]"}
+
+## 2.3 Checking the Data
+
+```{r}
+list(head(NGA_wp, 5))
+
+```
+
+# 3 Choropleth Mapping to visualise distribution of non-functional water points
+
+```{r}
+tmap_mode("plot")
+
+p1 <- tm_shape(NGA_wp)+
+  tm_fill("total_wp",
+          n= 10,
+          style = "equal",
+          palette = "Purples") +
+  tm_borders(lwd = 0.1,
+             alpha = 0.5) +  
+  tm_layout(main.title = "Distribution of total  water point by LGAs",
+            main.title.size = 1,
+            main.title.position = "center",
+            legend.position = c("right", "bottom"),
+            legend.height = .45,
+            legend.width = .2,
+            frame = FALSE,
+            bg.color = "#f5f5f5")
+
+p2 <- tm_shape(NGA_wp)+
+  tm_fill("wp_functional",
+          n=10,
+          style="equal",
+          palette ="Blues") +
+  tm_borders(lwd = 0.1,
+             alpha = 0.5) +  
+  tm_layout(main.title = "Distribution of functional water point by LGAs",
+            main.title.size = 1,
+            main.title.position = "center",
+            legend.position = c("right", "bottom"),
+            legend.height = .4,
+            legend.width = .2,
+            frame = FALSE,
+            bg.color = "#f5f5f5")
+
+tmap_arrange(p1, p2, nrow =1, ncol =2)
+```
+
+# 4 Choropleth Maps for Rates
+
+In much of our readings we have now seen the importance to map rates rather than counts of things, and that is for the simple reason that water points are not equally distributed in space. That means that if we do not account for how many water points are somewhere, we end up mapping total water point size rather than our topic of interest.
+
+## 4.1 Deriving Proportion of Functional Water Points and Non-Functional Water Points
+
+We will tabulate the proportion of functional water points and the proportion of non-functional water points in each LGA. In the following code chunk, `mutate()` from **dplyr** package is used to derive two fields, namely *pct_functional* and *pct_nonfunctional*.
+
+```{r}
+NGA_wp <- NGA_wp %>%
+  mutate(pct_functional = wp_functional/total_wp) %>%
+  mutate(pct_nonfunctional = wp_nonfunctional/total_wp)
+```
+
+## 4.2 Plotting map of rate
+
+```{r}
+tm_shape(NGA_wp) +
+  tm_fill("pct_functional",
+          n = 10,
+          style = "equal",
+          palette = "Blues",
+          legend.hist = TRUE) +
+  tm_borders(lwd = 0.1,
+             alpha = .5) +
+  tm_layout(main.title = "Rate map of functional water point by LGAs",
+            main.title.size = 1,
+            main.title.position = "center",          
+            legend.outside = TRUE,
+            frame = FALSE,
+            bg.color = "#f5f5f5"
+            )
+```
+
+# 8 Extreme Value Maps
+
+Extreme value maps are variations of common choropleth maps where the classification is designed to highlight extreme values at the lower and upper end of the scale, with the goal of identifying outliers. These maps were developed in the spirit of spatializing EDA, i.e., adding spatial features to commonly used approaches in non-spatial EDA (Anselin 1994).
+
+## 8.1 Percentile Map
+
+The percentile map is a special type of quantile map with six specific categories: 0-1%,1-10%, 10-50%,50-90%,90-99%, and 99-100%. The corresponding breakpoints can be derived by means of the base R quantile command, passing an explicit vector of cumulative probabilities as c(0,.01,.1,.5,.9,.99,1). Note that the begin and endpoint need to be included.
+
+## 8.2 Box Map
 
 # 7 Reference
 

@@ -1,5 +1,6 @@
 ---
 title: "Hands-on Exercise 7b: Visualising Geospatial Point Data"
+date: "20 Feb 2024"
 date-modified: "last-modified"
 editor: visual
 toc-depth: 4
