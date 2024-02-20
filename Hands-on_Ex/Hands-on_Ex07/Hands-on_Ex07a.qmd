@@ -17,7 +17,7 @@ format:
     code-line-numbers: false
 ---
 
-![](images/placeholder.PNG){fig-align="center"}
+![](images/interactivemap.gif){fig-align="center"}
 
 # 1 Overview
 
@@ -285,8 +285,8 @@ tm_shape(mpsz_pop2020)+
 
 Things to learn from `tm_polygons()`:
 
--   The default interval binning used to draw the choropleth map is called “pretty”.
--   The default colour scheme used is YlOrRd of ColorBrewer. 
+-   The default interval binning used to draw the choropleth map is called "pretty".
+-   The default colour scheme used is YlOrRd of ColorBrewer.
 -   By default, Missing value will be shaded in grey.
 
 ### 5.2.3 Drawing a choropleth map using `tm_fill()` and `tm_border()`
@@ -294,6 +294,7 @@ Things to learn from `tm_polygons()`:
 `tm_polygons()` is a wraper of `tm_fill()` and `tm_border()`. `tm_fill()` shades the polygons by using the default colour scheme and `tm_borders()` adds the borders of the shapefile onto the choropleth map.
 
 ```{r}
+
 fill <- tm_shape(mpsz_pop2020)+
   tm_fill("DEPENDENCY") +
   
@@ -307,7 +308,7 @@ border <- tm_shape(mpsz_pop2020)+
   tm_layout(bg.color = "#f5f5f5",
             frame= FALSE)
 
-tmap_arrange(fill, border)
+tmap_arrange(fill, border, nrow =1)
 ```
 
 Notice that light-gray border lines have been added on the choropleth map when `tm_borders()` is used.
@@ -318,7 +319,7 @@ Beside alpha argument, there are three other arguments for `tm_borders()`, they 
 
 -   col = border colour,
 -   lwd = border line width. The default is 1, and
--   lty = border line type. The default is “solid”.
+-   lty = border line type. The default is "solid".
 
 ## 5.3 Data Classification Methods of tmap
 
@@ -331,6 +332,7 @@ To define a data classification method, the style argument of `tm_fill()` or `tm
 ### 5.3.1 Plotting choropleth maps with built-in classification methods
 
 #### 5.3.1.1 Different Classification Methods
+
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
@@ -494,13 +496,11 @@ Now, we will plot the choropleth map by using the code chunk below.
             bg.color = "#f5f5f5")
 ```
 
-
 ## 5.4 Colour Scheme
 
 tmap supports colour ramps either defined by the user or a set of predefined colour ramps from the RColorBrewer package.
 
-:::panel-tabset
-
+::: panel-tabset
 ## Using ColourBrewer palette
 
 To change the colour, we assign the preferred colour to palette argument of tm_fill() as shown in the code chunk below.
@@ -519,7 +519,7 @@ tm_shape(mpsz_pop2020)+
 
 ## Reverse Colours
 
-To reverse the colour shading, add a “-” prefix.
+To reverse the colour shading, add a "-" prefix.
 
 ```{r}
 tm_shape(mpsz_pop2020)+
@@ -532,7 +532,6 @@ tm_shape(mpsz_pop2020)+
             bg.color = "#f5f5f5"
   )
 ```
-
 :::
 
 ## 5.5 Map Layouts
@@ -620,12 +619,12 @@ In tmap, small multiple maps can be plotted in three ways:
 -   by defining a group-by variable in `tm_facets()`, and
 -   by creating multiple stand-alone maps with `tmap_arrange()`.
 
-### 5.6.1  By assigning multiple values to at least one of the aesthetic arguments
+### 5.6.1 By assigning multiple values to at least one of the aesthetic arguments
 
 In this example, small multiple choropleth maps are created by defining `ncols` in `tm_fill()`.
 
 ```{r}
-tm_shape(mpsz_pop2020)+
+multival <- tm_shape(mpsz_pop2020)+
   tm_fill(c("YOUNG", "AGED"),
           style = "equal", 
           palette = "Blues") +
@@ -636,24 +635,69 @@ tm_shape(mpsz_pop2020)+
             frame = FALSE,
             bg.color = "#f5f5f5") +
   tm_borders(alpha = 0.5) +
-  tmap_style("white")
+  tmap_style("white") 
+
+tmap_arrange(multival, asp =1, nrow = 1)
 ```
 
-In this example, small multiple choropleth maps are created by assigning multiple values to at least one of the aesthetic arguments
+In this example, small multiple choropleth maps are created by assigning multiple values to at least one of the aesthetic arguments.
 
 ```{r}
-tm_shape(mpsz_pop2020)+ 
+multival2 <- tm_shape(mpsz_pop2020)+ 
   tm_polygons(c("DEPENDENCY","AGED"),
           style = c("equal", "quantile"), 
           palette = list("Blues","Greens")) +
   tm_layout(legend.position = c("right", "bottom"),
             frame = FALSE,
             bg.color = "#f5f5f5")
+
+tmap_arrange(multival2, asp =1, nrow = 1)
 ```
 
-### 5.6.2 By defining a group-by variable in `tm_facets()`
+### 5.6.2 Fun features I learnt from ISSS624 Geospatial Analytics :)
 
 ```{r}
+tmap_mode("view")
+tmap_options(check.and.fix = TRUE)
+
+tm_basemap("OpenStreetMap") +
+tm_shape(mpsz_pop2020)+ 
+  tm_fill(c("DEPENDENCY","AGED"),
+          palette = list("Blues", "Purples"),
+          alpha = 0.7,
+          style="cont",
+          id = "SUBZONE_N",
+          popup.vars=c("Planning Area: " = "PA",
+                       "Subzone" = "SUBZONE_N",
+                       "No. of Aged" = "AGED",
+                       "Dependency Ratio" = "DEPENDENCY")) +
+  #tm_scale_bar(width= 0.15) +
+  tm_layout(
+    title = c("Dependency Ratio", "Number of Aged"))+
+  tm_view(view.legend.position = c("right", "bottom"))+
+  tm_facets(sync = TRUE,
+           ncol = 2)
+
+
+```
+
+::: {.nursebox .nurse data-latex="nurse"}
+**Fun Stuff!**
+
+-   `tm_basemap(OpenStreetMap)`: Helps plot different types of the background maps. Default CartoDB.Positron, CartoDB.DarkMatter, OpenStreetMap, Esri.WorldImagery, OpenTopoMap see [here](http://leaflet-extras.github.io/leaflet-providers/preview/) for available map types
+-   `alpha`: Can be used to adjust oapacity of fills (regions), enabling users to still peek through the basemap.
+-   `style = "cont"`: Three continuous methods exist in tmap: `cont`, `order`, and `log10`. The `cont` style creates a smooth, linear gradient. In other words, the change in values is proportionally related to the change in colours.
+-   `id`: Maps the variable shown when an area is hovered upon.
+-   `popup.vars`: Popup on click which allows for more information to be included.
+-   `facet` and `sync`: Navigation in view mode (zooming and panning) is synchronized between facets.
+-   `tm_view()`: Options for interactive tmap viewer.
+:::
+
+### 5.6.3 By defining a group-by variable in `tm_facets()`
+
+```{r}
+tmap_mode("plot")
+
 tm_shape(mpsz_pop2020) +
   tm_fill("DEPENDENCY",
           style = "quantile",
@@ -670,7 +714,46 @@ tm_shape(mpsz_pop2020) +
   tm_borders(alpha = 0.5)
 ```
 
-### 5.6.3 By creating multiple stand-alone maps with `tmap_arrange()`
+### 5.6.4 Animated tmaps 
+
+One problem with the faceted maps is that with more values of a variable (e.g. time), more maps are created, which quickly clutters our vision. We can solve this by using animated maps.
+
+To create an animated map:
+
+Step 1: Create a set of separate maps by using the `along` argument of the function `tm_facets()`, the same function that we just used to create faceted maps.
+
+Step 2: Combine those separate maps and save the result as a GIF file using the function `tmap_animation()`.
+
+Some important arguments of `tmap_animation()`:
+
+-   `delay`: specify how many milliseconds should elapse between each image.
+
+-   `loop`: specify whether the GIF is an endless loop or ends after a certain number of rounds. Default is TRUE.
+
+```{r}
+#| eval: false 
+
+m1 <- tm_shape(mpsz_pop2020) +
+  tm_fill("DEPENDENCY",
+          style = "quantile",
+          palette = "Blues",
+          thres.poly = 0) + 
+  tm_layout(legend.show = FALSE,
+            title.position = c("center", "center"), 
+            title.size = 20,
+            frame = FALSE,
+            bg.color = "#f5f5f5") +
+  tm_borders(alpha = 0.5) +
+  tm_facets(along="REGION_N")
+
+tmap_animation(m1, filename="images/m1.gif", width=800, delay=40)
+
+  
+```
+
+![](images/m1.gif){fig-align="center"}
+
+### 5.6.4 By creating multiple stand-alone maps with `tmap_arrange()`
 
 ```{r}
 youngmap <- tm_shape(mpsz_pop2020)+ 
@@ -689,7 +772,6 @@ agedmap <- tm_shape(mpsz_pop2020)+
 
 tmap_arrange(youngmap, agedmap, asp=1, ncol=2)
 ```
-
 
 ## 5.7 Mapping Spatial Object Meeting a Selection Criterion
 
@@ -712,7 +794,8 @@ tm_shape(mpsz_pop2020[mpsz_pop2020$REGION_N=="CENTRAL REGION", ])+
   tm_borders(alpha = 0.5)
 ```
 
-
 # 6 Reference
 
 -   Kam, T.S. (2023). [Choropleth Mapping with R](https://r4va.netlify.app/chap21).
+
+I hope you had fun recapping Geospatial content with me\~\~!
