@@ -17,7 +17,7 @@ format:
     code-line-numbers: false
 ---
 
-![](images/interactivemap.gif){fig-align="center"}
+![](images/m1.gif){fig-align="center"}
 
 # 1 Overview
 
@@ -308,7 +308,7 @@ border <- tm_shape(mpsz_pop2020)+
   tm_layout(bg.color = "#f5f5f5",
             frame= FALSE)
 
-tmap_arrange(fill, border, nrow =1)
+tmap_arrange(fill, border, nrow =1, ncol =2)
 ```
 
 Notice that light-gray border lines have been added on the choropleth map when `tm_borders()` is used.
@@ -637,7 +637,7 @@ multival <- tm_shape(mpsz_pop2020)+
   tm_borders(alpha = 0.5) +
   tmap_style("white") 
 
-tmap_arrange(multival, asp =1, nrow = 1)
+tmap_arrange(multival, nrow = 1, ncol = 1)
 ```
 
 In this example, small multiple choropleth maps are created by assigning multiple values to at least one of the aesthetic arguments.
@@ -651,7 +651,7 @@ multival2 <- tm_shape(mpsz_pop2020)+
             frame = FALSE,
             bg.color = "#f5f5f5")
 
-tmap_arrange(multival2, asp =1, nrow = 1)
+tmap_arrange(multival2, nrow = 1,  ncol=1)
 ```
 
 ### 5.6.2 Fun features I learnt from ISSS624 Geospatial Analytics :)
@@ -665,7 +665,7 @@ tm_shape(mpsz_pop2020)+
   tm_fill(c("DEPENDENCY","AGED"),
           palette = list("Blues", "Purples"),
           alpha = 0.7,
-          style="cont",
+          style="jenks",
           id = "SUBZONE_N",
           popup.vars=c("Planning Area: " = "PA",
                        "Subzone" = "SUBZONE_N",
@@ -714,7 +714,7 @@ tm_shape(mpsz_pop2020) +
   tm_borders(alpha = 0.5)
 ```
 
-### 5.6.4 Animated tmaps 
+### 5.6.4 Animated tmaps
 
 One problem with the faceted maps is that with more values of a variable (e.g. time), more maps are created, which quickly clutters our vision. We can solve this by using animated maps.
 
@@ -753,7 +753,7 @@ tmap_animation(m1, filename="images/m1.gif", width=800, delay=40)
 
 ![](images/m1.gif){fig-align="center"}
 
-### 5.6.4 By creating multiple stand-alone maps with `tmap_arrange()`
+### 5.6.5 By creating multiple stand-alone maps with `tmap_arrange()`
 
 ```{r}
 youngmap <- tm_shape(mpsz_pop2020)+ 
@@ -770,7 +770,7 @@ agedmap <- tm_shape(mpsz_pop2020)+
   tm_layout(frame = FALSE,
             bg.color = "#f5f5f5")
 
-tmap_arrange(youngmap, agedmap, asp=1, ncol=2)
+tmap_arrange(youngmap, agedmap, ncol=2, nrow=1)
 ```
 
 ## 5.7 Mapping Spatial Object Meeting a Selection Criterion

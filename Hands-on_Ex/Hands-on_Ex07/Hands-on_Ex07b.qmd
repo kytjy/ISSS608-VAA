@@ -1,0 +1,197 @@
+---
+title: "Hands-on Exercise 7b: Visualising Geospatial Point Data"
+date-modified: "last-modified"
+editor: visual
+toc-depth: 4
+execute:
+  freeze: true #never re-render during project render
+  echo: true #if false, displays charts without codes
+  eval: true #if false, displays codes without charts
+  warning: false #dont display if there are any warnings
+format: 
+  html:
+    code-fold: false
+    code-overflow: scroll
+    code-summary: "Show the code"
+    code-line-numbers: false
+---
+
+![](images/interactive.gif){fig-align="center"}
+
+# 1 Overview
+
+Proportional symbol maps (also known as graduate symbol maps) are a class of maps that use the visual variable of size to represent differences in the magnitude of a discrete, abruptly changing phenomenon, e.g. counts of people. Like choropleth maps, you can create classed or unclassed versions of these maps. The classed ones are known as range-graded or graduated symbols, and the unclassed are called proportional symbols, where the area of the symbols are proportional to the values of the attribute being mapped. In this hands-on exercise, we learn how to create a proportional symbol map showing the number of wins by Singapore Pools' outlets using **tmap**.
+
+# 2 Getting Started
+
+In this exercise, we will be using the following packages:
+
++-----------------------------------------------------------+-----------------------------------------------------------------------------------+
+| Package                                                   | Description                                                                       |
++===========================================================+===================================================================================+
+| [**tmap**](https://cran.r-project.org/web/packages/tmap/) | For choropleth mapping.                                                           |
++-----------------------------------------------------------+-----------------------------------------------------------------------------------+
+| [**tidyverse**](https://www.tidyverse.org/)               | [**readr**](https://readr.tidyverse.org/)**:** For importing delimited text file. |
+|                                                           |                                                                                   |
+|                                                           | [**tidyr**](https://tidyr.tidyverse.org/)**:** For tidying data.                  |
+|                                                           |                                                                                   |
+|                                                           | [**dplyr**](https://dplyr.tidyverse.org/): For data wrangling.                    |
++-----------------------------------------------------------+-----------------------------------------------------------------------------------+
+| [**sf**](https://cran.r-project.org/web/packages/sf/)     | For handling geospatial data.                                                     |
++-----------------------------------------------------------+-----------------------------------------------------------------------------------+
+| [**knitr**](https://yihui.org/knitr/)                     | For html tables                                                                   |
++-----------------------------------------------------------+-----------------------------------------------------------------------------------+
+
+: {tbl-colwidths="\[30,70\]"}
+
+```{r}
+pacman::p_load(sf, tmap, tidyverse)
+```
+
+# 3 Geospatial Data Wrangling
+
+## 3.1 The Data
+
+The data set use for this hands-on exercise is called *SGPools_svy21*. The data is in csv file format.
+
+It consists of seven columns. The XCOORD and YCOORD columns are the x-coordinates and y-coordinates of SingPools outlets and branches. They are in [Singapore SVY21 Projected Coordinates System](https://www.sla.gov.sg/sirent/CoordinateSystems.aspx).
+
+## 3.2 Data Import and Preparation
+
++--------------+-------------+-----------------------------------+-------------------------+
+| Function     | Package     | Description                       | Output                  |
++==============+=============+===================================+=========================+
+| `read_csv()` | **readr**   | Import *SGPools_svy21.csv* into R | ***Tibble*** data frame |
++--------------+-------------+-----------------------------------+-------------------------+
+
+: {tbl-colwidths="\[10,10,60,20\]"}
+
+```{r}
+sgpools <- read_csv("data/aspatial/SGPools_svy21.csv")
+```
+
+Let's examine if the datafile has been imported correctly:
+
+```{r}
+#| echo: false
+
+list(head(sgpools, 5))
+```
+
+## 3.3 Creating a sf data frame from an aspatial data frame
+
++--------------+----------+----------------------------------------------------------------+----------------+
+| Function     | Package  | Description                                                    | Output         |
++==============+==========+================================================================+================+
+| `st_as_sf()` | **sf**   | Converts *sgpools* data frame into a simple feature data frame | Simple feature |
++--------------+----------+----------------------------------------------------------------+----------------+
+
+: {tbl-colwidths="\[10,10,60,20\]"}
+
+```{r}
+sgpools_sf <- st_as_sf(sgpools, 
+                       coords = c("XCOORD", "YCOORD"),
+                       crs= 3414)
+
+list(sgpools_sf)
+```
+
+Things to learn from the arguments above:
+
+-   The *coords* argument requires you to provide the column name of the x-coordinates first then followed by the column name of the y-coordinates.
+
+-   The *crs* argument required you to provide the coordinates system in epsg format. [EPSG: 3414](https://epsg.io/3414) is Singapore SVY21 Projected Coordinate System. You can search for other country\'s epsg code by refering to [epsg.io](https://epsg.io/).
+
+Quick Comparison of the 2 datasets:
+
+```{r}
+#| echo: false
+
+t1 <- head(sgpools,3)
+t2 <- head(sgpools_sf,3)
+
+knitr::kable((list(t1, t2)))
+```
+
+# 4 Drawing Proportional Symbol Map
+
+To create an interactive proportional symbol map in R, the view mode of tmap will be used.
+
+The code chunk below will turn on the interactive mode of tmap.
+
+```{r}
+tmap_mode("view")
+
+```
+
+## 4.1 Interactive Point Symbol Map
+
+```{r}
+tm_basemap("OpenStreetMap") +
+tm_shape(sgpools_sf)+
+tm_bubbles(col = "salmon",
+           size = 1,
+           border.col = "black",
+           border.lwd = 1,
+           alpha = 0.7)
+```
+
+## 4.2 **Proportional Symbols**
+
+To draw a proportional symbol map, we need to assign a numerical variable to the size visual attribute. The code chunks below show that the variable *Gp1Gp2Winnings* is assigned to size visual attribute.
+
+```{r}
+tm_basemap("OpenStreetMap") +
+tm_shape(sgpools_sf)+
+tm_bubbles(col = "salmon",
+           size = "Gp1Gp2 Winnings",
+           border.col = "black",
+           border.lwd = 1,
+           alpha = 0.7)
+```
+
+## 4.3 Qualitative Colours
+
+A continuous variable is mapped to size while a categorical variable is mapped to colour.
+
+```{r}
+tm_basemap("OpenStreetMap") +
+tm_shape(sgpools_sf)+
+tm_bubbles(col = "OUTLET TYPE", 
+          size = "Gp1Gp2 Winnings",
+          border.col = "black",
+          border.lwd = 1,
+          alpha = 0.7)
+```
+
+## 4.4 Coordinated Facet
+
+The argument sync in `tm_facets()` can be used to produce multiple maps with synchronised zoom and pan settings.
+
+```{r}
+tm_basemap("OpenStreetMap") +
+tm_shape(sgpools_sf) +
+  tm_bubbles(col = "OUTLET TYPE", 
+          size = "Gp1Gp2 Winnings",
+          border.col = "black",
+          border.lwd = 1,
+          id = "Name",
+          popup.vars=c("Name: " = "NAME",
+                       "Address: " = "ADDRESS",
+                       "Winnings: " = "Gp1Gp2 Winnings")
+          ) +
+  tm_facets(by= "OUTLET TYPE",
+            nrow = 1,
+            sync = TRUE)
+```
+
+Switch **tmap**’s Viewer back to plot mode to revert settings back to default. 
+
+```{r}
+tmap_mode("plot")
+```
+
+
+# 7 Reference
+
+-   Kam, T.S. (2023). [Visualising Geospatial Point Data](https://r4va.netlify.app/chap22).

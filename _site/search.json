@@ -1356,5 +1356,61 @@
     "title": "Hands-on Exercise 7a: Choropleth Mapping with R",
     "section": "",
     "text": "In this chapter, you will learn how to plot functional and truthful choropleth maps in R by using the tmap package."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#the-data",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#the-data",
+    "title": "Hands-on Exercise 7b: Visualising Geospatial Point Data",
+    "section": "3.1 The Data",
+    "text": "3.1 The Data\nThe data set use for this hands-on exercise is called SGPools_svy21. The data is in csv file format.\nIt consists of seven columns. The XCOORD and YCOORD columns are the x-coordinates and y-coordinates of SingPools outlets and branches. They are in Singapore SVY21 Projected Coordinates System."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#data-import-and-preparation",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#data-import-and-preparation",
+    "title": "Hands-on Exercise 7b: Visualising Geospatial Point Data",
+    "section": "3.2 Data Import and Preparation",
+    "text": "3.2 Data Import and Preparation\n\n\n\n\n\n\n\n\n\nFunction\nPackage\nDescription\nOutput\n\n\n\n\nread_csv()\nreadr\nImport SGPools_svy21.csv into R\nTibble data frame\n\n\n\n\nsgpools &lt;- read_csv(\"data/aspatial/SGPools_svy21.csv\")\n\nLet’s examine if the datafile has been imported correctly:\n\n\n[[1]]\n# A tibble: 5 × 7\n  NAME            ADDRESS POSTCODE XCOORD YCOORD `OUTLET TYPE` `Gp1Gp2 Winnings`\n  &lt;chr&gt;           &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                     &lt;dbl&gt;\n1 Livewire (Mari… 2 Bayf…    18972 30842. 29599. Branch                        5\n2 Livewire (Reso… 26 Sen…    98138 26704. 26526. Branch                       11\n3 SportsBuzz (Kr… Lotus …   738078 20118. 44888. Branch                        0\n4 SportsBuzz (Po… 1 Sele…   188306 29777. 31382. Branch                       44\n5 Prime Serangoo… Blk 54…   552542 32239. 39519. Branch                        0"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#creating-a-sf-data-frame-from-an-aspatial-data-frame",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#creating-a-sf-data-frame-from-an-aspatial-data-frame",
+    "title": "Hands-on Exercise 7b: Visualising Geospatial Point Data",
+    "section": "3.3 Creating a sf data frame from an aspatial data frame",
+    "text": "3.3 Creating a sf data frame from an aspatial data frame\n\n\n\n\n\n\n\n\n\nFunction\nPackage\nDescription\nOutput\n\n\n\n\nst_as_sf()\nsf\nConverts sgpools data frame into a simple feature data frame\nSimple feature\n\n\n\n\nsgpools_sf &lt;- st_as_sf(sgpools, \n                       coords = c(\"XCOORD\", \"YCOORD\"),\n                       crs= 3414)\n\nlist(sgpools_sf)\n\n[[1]]\nSimple feature collection with 306 features and 5 fields\nGeometry type: POINT\nDimension:     XY\nBounding box:  xmin: 7844.194 ymin: 26525.7 xmax: 45176.57 ymax: 47987.13\nProjected CRS: SVY21 / Singapore TM\n# A tibble: 306 × 6\n   NAME                         ADDRESS POSTCODE `OUTLET TYPE` `Gp1Gp2 Winnings`\n * &lt;chr&gt;                        &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;                     &lt;dbl&gt;\n 1 Livewire (Marina Bay Sands)  2 Bayf…    18972 Branch                        5\n 2 Livewire (Resorts World Sen… 26 Sen…    98138 Branch                       11\n 3 SportsBuzz (Kranji)          Lotus …   738078 Branch                        0\n 4 SportsBuzz (PoMo)            1 Sele…   188306 Branch                       44\n 5 Prime Serangoon North        Blk 54…   552542 Branch                        0\n 6 Singapore Pools Woodlands C… 1A Woo…   731001 Branch                        3\n 7 Singapore Pools 64 Circuit … Blk 64…   370064 Branch                       17\n 8 Singapore Pools 88 Circuit … Blk 88…   370088 Branch                       16\n 9 Singapore Pools Anchorvale … Blk 30…   540308 Branch                       21\n10 Singapore Pools Ang Mo Kio … Blk 20…   560202 Branch                       25\n# ℹ 296 more rows\n# ℹ 1 more variable: geometry &lt;POINT [m]&gt;\n\n\nThings to learn from the arguments above:\n\nThe coords argument requires you to provide the column name of the x-coordinates first then followed by the column name of the y-coordinates.\nThe crs argument required you to provide the coordinates system in epsg format. EPSG: 3414 is Singapore SVY21 Projected Coordinate System. You can search for other country's epsg code by refering to epsg.io.\n\nQuick Comparison of the 2 datasets:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNAME\nADDRESS\nPOSTCODE\nXCOORD\nYCOORD\nOUTLET TYPE\nGp1Gp2 Winnings\n\n\n\n\nLivewire (Marina Bay Sands)\n2 Bayfront Avenue, #01-01 The Shoppes at Marina Bay Sands Singapore 018972\n18972\n30841.56\n29598.56\nBranch\n5\n\n\nLivewire (Resorts World Sentosa)\n26 Sentosa Gateway #B1-208 Singapore 098138\n98138\n26703.87\n26525.70\nBranch\n11\n\n\nSportsBuzz (Kranji)\nLotus Lounge, Level 2, 1 Turf Club Avenue Singapore Racecourse Singapore 738078\n738078\n20117.93\n44888.06\nBranch\n0\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNAME\nADDRESS\nPOSTCODE\nOUTLET TYPE\nGp1Gp2 Winnings\ngeometry\n\n\n\n\nLivewire (Marina Bay Sands)\n2 Bayfront Avenue, #01-01 The Shoppes at Marina Bay Sands Singapore 018972\n18972\nBranch\n5\nPOINT (30841.56 29598.56)\n\n\nLivewire (Resorts World Sentosa)\n26 Sentosa Gateway #B1-208 Singapore 098138\n98138\nBranch\n11\nPOINT (26703.87 26525.7)\n\n\nSportsBuzz (Kranji)\nLotus Lounge, Level 2, 1 Turf Club Avenue Singapore Racecourse Singapore 738078\n738078\nBranch\n0\nPOINT (20117.93 44888.06)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#interactive-point-symbol-map",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#interactive-point-symbol-map",
+    "title": "Hands-on Exercise 7b: Visualising Geospatial Point Data",
+    "section": "4.1 Interactive Point Symbol Map",
+    "text": "4.1 Interactive Point Symbol Map\n\ntm_basemap(\"OpenStreetMap\") +\ntm_shape(sgpools_sf)+\ntm_bubbles(col = \"salmon\",\n           size = 1,\n           border.col = \"black\",\n           border.lwd = 1,\n           alpha = 0.7)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#proportional-symbols",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#proportional-symbols",
+    "title": "Hands-on Exercise 7b: Visualising Geospatial Point Data",
+    "section": "4.2 Proportional Symbols",
+    "text": "4.2 Proportional Symbols\nTo draw a proportional symbol map, we need to assign a numerical variable to the size visual attribute. The code chunks below show that the variable Gp1Gp2Winnings is assigned to size visual attribute.\n\ntm_basemap(\"OpenStreetMap\") +\ntm_shape(sgpools_sf)+\ntm_bubbles(col = \"salmon\",\n           size = \"Gp1Gp2 Winnings\",\n           border.col = \"black\",\n           border.lwd = 1,\n           alpha = 0.7)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#qualitative-colours",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#qualitative-colours",
+    "title": "Hands-on Exercise 7b: Visualising Geospatial Point Data",
+    "section": "4.3 Qualitative Colours",
+    "text": "4.3 Qualitative Colours\nA continuous variable is mapped to size while a categorical variable is mapped to colour.\n\ntm_basemap(\"OpenStreetMap\") +\ntm_shape(sgpools_sf)+\ntm_bubbles(col = \"OUTLET TYPE\", \n          size = \"Gp1Gp2 Winnings\",\n          border.col = \"black\",\n          border.lwd = 1,\n          alpha = 0.7)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#coordinated-facet",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07b.html#coordinated-facet",
+    "title": "Hands-on Exercise 7b: Visualising Geospatial Point Data",
+    "section": "4.4 Coordinated Facet",
+    "text": "4.4 Coordinated Facet\nThe argument sync in tm_facets() can be used to produce multiple maps with synchronised zoom and pan settings.\n\ntm_basemap(\"OpenStreetMap\") +\ntm_shape(sgpools_sf) +\n  tm_bubbles(col = \"OUTLET TYPE\", \n          size = \"Gp1Gp2 Winnings\",\n          border.col = \"black\",\n          border.lwd = 1,\n          id = \"Name\",\n          popup.vars=c(\"Name: \" = \"NAME\",\n                       \"Address: \" = \"ADDRESS\",\n                       \"Winnings: \" = \"Gp1Gp2 Winnings\")\n          ) +\n  tm_facets(by= \"OUTLET TYPE\",\n            nrow = 1,\n            sync = TRUE)\n\n\n\n\n\n\n\n\n\n\n\n\n\nSwitch tmap’s Viewer back to plot mode to revert settings back to default.\n\ntmap_mode(\"plot\")"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07c.html",
+    "href": "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07c.html",
+    "title": "Hands-on Exercise 7c: Analytical Mapping",
+    "section": "",
+    "text": "1 Overview\nIn this in-class exercise, qw will gain hands-on experience on using appropriate R methods to plot analytical maps.\n\n\n2 Getting Started\n\n\n7 Reference\n\nKam, T.S. (2023). Analytical Mapping."
   }
 ]
