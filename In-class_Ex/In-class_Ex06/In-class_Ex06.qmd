@@ -1,0 +1,171 @@
+---
+title: "In-class Exercise 6: Horizon Graph"
+date: "24 Feb 2024"
+date-modified: "last-modified"
+author: "Prof. Kam's #1 Fan!" 
+editor: visual
+toc-depth: 4
+execute:
+  freeze: true #never re-render during project render
+  echo: true #if false, displays charts without codes
+  eval: true #if false, displays codes without charts
+  warning: false #dont display if there are any warnings
+  message: false
+format: 
+  html:
+    code-fold: false
+    code-overflow: scroll
+    code-summary: "Show the code"
+    code-line-numbers: false
+---
+
+![](images/horiplot.PNG){fig-align="center"}
+
+# 1 Overview
+
+Building horizon plot with ggHoriPlot!
+
+
+# Step 1: Getting Started
+
+:::panel-tabset
+
+## Loading Libraries
+
+```{r}
+pacman::p_load(ggHoriPlot, 
+               ggthemes,
+               tidyverse)
+```
+
+## Importing Data
+
+For the purpose of this hands-on exercise, [Average Retail Prices Of Selected Consumer Items](https://tablebuilder.singstat.gov.sg/table/TS/M212891) will be used.
+
+```{r}
+averp <- read_csv("data/AVERP.csv") %>%
+  mutate(`Date` = dmy(`Date`))
+```
+
+:::
+
+
+# Step 2: Summary Statistics
+
+Run summary statistics to determine `origin` and `horizonscale`.
+
+```{r}
+summary(averp$Values)
+```
+
+
+# Step 3: Plotting the Horizon Graph
+
+:::panel-tabset
+
+## Origin = Midpoint
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+#| fig-width: 12
+#| fig-height: 10
+
+averp %>% 
+  filter(Date >= "2018-01-01") %>%
+  ggplot() +
+  geom_horizon(aes(x = Date, y=Values), 
+               origin = "midpoint", 
+               horizonscale = 6,
+               show.legend = TRUE)+
+  facet_grid(`Consumer Items`~.) +   #<< Each row is a facet by Consumer Item
+    theme_few() +
+  scale_fill_hcl(palette = 'RdBu') +
+  theme(panel.spacing.y=unit(0, "lines"), strip.text.y = element_text(
+    size = 5, angle = 0, hjust = 0),
+    legend.position = 'Bottom',
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size=7),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_blank(),
+    plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    panel.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    legend.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    strip.background =element_rect(fill="#f5f5f5")
+    ) +
+    scale_x_date(expand=c(0,0), date_breaks = "3 month", date_labels = "%b%y") +
+  ggtitle('Average Retail Prices of Selected Consumer Items (Jan 2018 to Dec 2022)')
+```
+
+## Origin = "Min"
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+#| fig-width: 12
+#| fig-height: 10
+averp %>% 
+  filter(Date >= "2018-01-01") %>%
+  ggplot() +
+  geom_horizon(aes(x = Date, y=Values), 
+               origin = "min", 
+               horizonscale = 6,
+               show.legend = TRUE)+
+  facet_grid(`Consumer Items`~.) +   #<< Each row is a facet by Consumer Item
+    theme_few() +
+  scale_fill_hcl(palette = 'RdBu') +
+  theme(panel.spacing.y=unit(0, "lines"), strip.text.y = element_text(
+    size = 5, angle = 0, hjust = 0),
+    legend.position = 'Bottom',
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size=7),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_blank(),
+    plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    panel.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    legend.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    strip.background =element_rect(fill="#f5f5f5")
+    ) +
+    scale_x_date(expand=c(0,0), date_breaks = "3 month", date_labels = "%b%y") +
+  ggtitle('Average Retail Prices of Selected Consumer Items (Jan 2018 to Dec 2022)')
+```
+## Horizon Scale = 10
+
+```{r}
+#| fig-width: 12
+#| fig-height: 10
+averp %>% 
+  filter(Date >= "2018-01-01") %>%
+  ggplot() +
+  geom_horizon(aes(x = Date, y=Values), 
+               origin = "midpoint", 
+               horizonscale = 10,
+               show.legend = TRUE)+
+  facet_grid(`Consumer Items`~.) +   #<< Each row is a facet by Consumer Item
+    theme_few() +
+  scale_fill_hcl(palette = 'RdBu') +
+  theme(panel.spacing.y=unit(0, "lines"), strip.text.y = element_text(
+    size = 5, angle = 0, hjust = 0),
+    legend.position = 'Bottom',
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size=7),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    panel.border = element_blank(),
+    plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    panel.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    legend.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    strip.background =element_rect(fill="#f5f5f5")
+    ) +
+    scale_x_date(expand=c(0,0), date_breaks = "3 month", date_labels = "%b%y") +
+  ggtitle('Average Retail Prices of Selected Consumer Items (Jan 2018 to Dec 2022)')
+```
+:::
+

@@ -59,21 +59,9 @@ website:
         menu: 
           - text: 1. Now You See It
             href: In-class_Ex/In-class_Ex01/In-class_Ex01.html
-          - text: In-Class Exercise 2
-            href: In-class_Ex/In-class_Ex02/In-class_Ex02.html
-          - text: In-Class Exercise 3
-            href: In-class_Ex/In-class_Ex03/In-class_Ex03.html
-          - text: In-Class Exercise 4
-            href: In-class_Ex/In-class_Ex04/In-class_Ex04.html
-          - text: In-Class Exercise 5
-            href: In-class_Ex/In-class_Ex05/In-class_Ex05.html   
-          - text: In-Class Exercise 6
+          - text: 2. Horizon Plot
             href: In-class_Ex/In-class_Ex05/In-class_Ex06.html  
-          - text: In-Class Exercise 7
-            href: In-class_Ex/In-class_Ex05/In-class_Ex07.html  
-          - text: In-Class Exercise 8
-            href: In-class_Ex/In-class_Ex05/In-class_Ex08.html  
- 
+
       - text: "Take-home Exercises"
         menu: 
           - text: Take-home Exercise 1 - Investigating Student Performance
