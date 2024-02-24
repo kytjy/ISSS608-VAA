@@ -73,7 +73,7 @@
   background-size: auto 62px;
 }
 
-.kambox {
+.pkbox {
   padding: 1.5em 2.5em 1.5em 6.5em;
   margin-bottom: 10px;
   border: 1.5px dotted #dfb2e9;
@@ -81,10 +81,10 @@
   background:  #ede3fe  5px center/3em no-repeat;
 }
 
-.kam {
-  background-image: url("Images/profkam.png");
+.pk {
+  background-image: url("Images/pk.png");
   background-position: left;
   background-position-x: 1rem;
   background-position-y: 1rem;
-  background-size: auto 62px;
+  background-size: auto 45px;
 }

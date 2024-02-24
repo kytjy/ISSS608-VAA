@@ -25,11 +25,9 @@ format:
 
 Building horizon plot with ggHoriPlot!
 
-
 # Step 1: Getting Started
 
-:::panel-tabset
-
+::: panel-tabset
 ## Loading Libraries
 
 ```{r}
@@ -46,9 +44,7 @@ For the purpose of this hands-on exercise, [Average Retail Prices Of Selected Co
 averp <- read_csv("data/AVERP.csv") %>%
   mutate(`Date` = dmy(`Date`))
 ```
-
 :::
-
 
 # Step 2: Summary Statistics
 
@@ -58,11 +54,9 @@ Run summary statistics to determine `origin` and `horizonscale`.
 summary(averp$Values)
 ```
 
-
 # Step 3: Plotting the Horizon Graph
 
-:::panel-tabset
-
+::: panel-tabset
 ## Origin = Midpoint
 
 ```{r}
@@ -135,6 +129,7 @@ averp %>%
     scale_x_date(expand=c(0,0), date_breaks = "3 month", date_labels = "%b%y") +
   ggtitle('Average Retail Prices of Selected Consumer Items (Jan 2018 to Dec 2022)')
 ```
+
 ## Horizon Scale = 10
 
 ```{r}
@@ -168,4 +163,3 @@ averp %>%
   ggtitle('Average Retail Prices of Selected Consumer Items (Jan 2018 to Dec 2022)')
 ```
 :::
-

@@ -63,7 +63,7 @@ The following code chunk uses `p_load()` of [**pacman**](https://rpubs.com/aksha
 
 ```{r}
 pacman::p_load(tidyverse, lubridate, janitor, fs,
-               knitr, kableExtra, dt, 
+               knitr, kableExtra, DT, 
                plotly, ggiraph,
                ggridges, gganimate, patchwork)
 ```
@@ -1138,6 +1138,143 @@ plot_ly(meanchange,
 
 :::
 
+### Post-Feedback Edits
+
+::: {.pkbox .pk data-latex="pk"}
+
+**Hi Prof Kam!**
+
+Updates to code used for visualisation:
+
+-   Instead of using the black border to "highlight" the selection, `opts_hover_inv(css = "opacity:0.25;"),` and `opts_hover(css = "stroke-width:0.5;")` are used instead. This ensures the unselected cells are in much lower opacity in contrast to the cell bar/tile of interest.
+-   `scale_fill_gradient2` is used to set mid point of the colour gradient scale, here I used median of the mean temperature. 
+
+:::
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+midpt <- median(change_changi$mean_temperature_c[change_changi$month=="Dec"], na.rm = TRUE)
+
+# Tooltip style
+tooltip_css <- "background-color:black; font-style:bold; color:#f5f5f5;" 
+
+change <- 
+  ggplot(change_changi[change_changi$month=="Dec",], 
+       aes(x = day,
+           y = change, 
+           fill = pos,
+           data_id = date,
+           tooltip = paste("Station: ", station, "<br>",
+                        "Date: ", date, "<br>",
+                        "Mean temp: ", mean_temperature_c, "°C", "<br>",
+                        "Change: ", round(change,1), "°C"))) +
+  geom_col_interactive(position = "identity",
+           colour = "#f5f5f5",
+           size = 0.25,
+           hover_nearest= TRUE
+           ) +
+  scale_fill_manual(
+                    values = c("#294d7f", "#9d214b"), 
+                    guide = FALSE) +
+  facet_wrap(~ year, ncol = 1, strip.position="right") +
+  scale_y_continuous(breaks = seq(-2,2, by = 2),
+                     labels = ~ paste0(.x, "°"))+
+  scale_x_continuous(breaks = seq(2,31, by = 5))+
+   labs(title ="Day-on-Day Change",
+    x = "Day in  June",
+    y = NULL
+  ) +  
+  theme(
+  strip.text.y = element_blank(),
+  plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
+  axis.title.x = element_text(size = 8),
+  axis.title.y = element_text(hjust=1, angle=0, size = 8),
+  axis.ticks.x = element_blank(),
+  axis.text = element_text(size = 6),
+  plot.background = element_rect(fill = "#f5f5f5", color = "#f5f5f5"),
+  panel.background = element_rect(fill = "#f5f5f5", color = "grey60"),
+  panel.grid.major = element_blank(), 
+  panel.grid.minor = element_blank()
+  )
+
+
+
+# Tile Plot as Heatmap
+hm <-
+  ggplot(
+    change_changi[change_changi$month=="Dec",],
+    aes(x = day, 
+        y = year) # Reverse order to align with bar plot
+  ) +
+  
+  # Interactive tile plots
+  geom_tile_interactive(
+    aes(fill = mean_temperature_c,
+        data_id = date,
+        tooltip = paste("Station: ", station, "<br>",
+                        "Date: ", date, "<br>",
+                        "Mean temp: ", mean_temperature_c, "°C", "<br>",
+                        "Change: ", round(change,1), "°C")))+
+  
+  # Specify gradient colors for divergent scale 
+  scale_fill_gradient2(
+    low = "#bfa96d",
+    mid = "#b37953",
+    high = "#9d214b",
+    midpoint = midpt,
+    space = "Lab",
+    na.value = "grey50",
+    aesthetics = "fill",
+    guide = guide_colorbar(
+    title = "Temp (°C)", 
+    title.position = "left", 
+    title.vjust = 1,
+    barheight = 1,
+    barwidth = 5)
+  ) +  
+ labs(
+    title="Daily Mean Temperature",
+    x = "Day in December",
+    y = NULL
+  ) +
+  theme(
+    legend.position = "bottom",
+    legend.direction = "horizontal",
+    #axis.line.x = element_blank(),
+    panel.grid.major = element_blank(),
+    plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
+    axis.title.x = element_text(size = 8),
+    axis.ticks.x = element_blank(),
+    axis.ticks.y = element_blank(),
+    axis.title.y = element_text(hjust=1, angle=0, size = 10, ),
+    axis.text.y = element_text(size = 8, face = "bold"),
+    axis.text.x = element_text(size = 6),
+    plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    panel.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    legend.title = element_text(size = 6, face = "bold"),
+    legend.text = element_text(size = 6),
+    legend.background = element_rect(fill="#f5f5f5",colour="#f5f5f5")
+    )+ 
+  scale_y_discrete(position = "right",
+                   limits = rev)+
+  scale_x_continuous(breaks = seq(1,31, by = 5))
+
+
+
+# Combine both barplot and heatmap to form a coordinated-linked visualisation
+ggiraph::girafe(code = print(hm + change),
+                width_svg = 6,
+                height_svg = 6*0.7,
+                options = list(opts_tooltip(css = tooltip_css),
+                               opts_hover_inv(css = "opacity:0.25;"),
+                               opts_hover(css = "stroke-width:0.5;"),
+                               opts_zoom(min = 1, max = 3)))
+```
+
+
+
 ## 4.5 Feeling hot, more often?
 
 In this section, we investigate the occurrence of extreme heat by identifying "very warm days," defined as days when the daily maximum temperature exceeds 34°C by the MSS.
@@ -1301,6 +1438,156 @@ ggiraph::girafe(code = print(bp + bar),
 -   The lower proportion of extreme heat events in 2023 aligns with our earlier analysis indicating a potential slowdown in temperature increases. This suggests a deviation from the previously observed upward trend in temperatures.
   
 :::
+
+### Post-Feedback Edits
+
+::: {.pkbox .pk data-latex="pk"}
+
+**Hi Prof Kam!**
+
+Changes made:
+
+-   Dataset-wise, the only change was creating a *desc2* variable to concatenate the month and year without the station. This is used to update the `data_id`.
+
+-   Updates to code used for visualisation:
+    -   `facet_wrap()` to split the visualisation by Station.
+    -   We also add `scales = "free_y/x"` to `facet_wrap` so that each chart’s y axis is calculated independently.
+    -   [`reorder_within()`](https://rdrr.io/cran/tidytext/man/reorder_within.html) of **tidytext** package is used to reorder the boxplots within each facet. Wasn't expecting ordering within a facet to be a problem until now so this function is a lifesaver! 
+        -   The function takes minimally 3 arguments: category (aka the variables we are reordering), count variable (the value which we are reordering by), and facet variable.
+    -     `scale_y_reordered()` makes sure that the order set in `reorder_within()` is respected.
+
+:::
+
+```{r}
+warmdays2 <- dailytemp %>% 
+  mutate(warmday = ifelse(maximum_temperature_c >= 34, 1, 0)) %>% 
+  group_by(station, year, month) %>% 
+  summarise(
+    totaldays = n(),
+    wdays = sum(warmday == 1),
+    pct_warmdays = (sum(warmday)/n())*100) %>% 
+  mutate(desc2 = paste0(month, " ", year),
+         desc = paste0(station, " in ", month, " ", year)) %>% 
+  filter(pct_warmdays != 0)
+
+dailytemp2 <- dailytemp %>% 
+  mutate(desc2 = paste0(month, " ", year))
+
+
+```
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+pacman::p_load(tidytext)
+
+bar2 <- ggplot(warmdays2,
+              aes(x = reorder(desc2, -pct_warmdays),
+                  y = pct_warmdays,
+                  fill = month)
+              ) +
+  geom_bar_interactive(stat = "identity",
+           alpha = 0.5,
+           aes(data_id = desc,
+               tooltip = paste0(
+                 "Station: ", station,
+                 "\nYear: ", year,
+                 "\nMonth: ", month,
+                 "\nTotal Days Recorded: ", totaldays,
+                 "\nWarm Days:", wdays,
+                 "\n% of Warm Days Experienced: ", round(pct_warmdays,2), "%"
+               ))
+           ) +
+  facet_wrap(~ station, nrow = 2, strip.position="right", scales = "free_x")+ 
+  scale_fill_manual(values = c("#a79271", "#4d6575")) +
+  scale_y_continuous(labels = ~ paste0(.x, "%"))+  
+  scale_x_discrete(labels = scales::label_wrap(6)) +
+  labs(x = "",
+      y = "",
+      title="% of Very Warm Days (≥ 34°C)",
+      fill = "Month") +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    plot.title = element_text(face = "bold", size = 10, hjust = 0.5),  
+    panel.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    panel.grid = element_blank(),
+    legend.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    axis.line.y = element_line(linewidth = 0.2),
+    axis.ticks.y = element_line(linewidth = 0.2),
+    axis.text  = element_text(angle=0, vjust=0.5, size=5),
+    strip.text.y = element_text(face = "bold")
+    ) 
+
+
+# Plot boxplot
+bp2 <-
+  ggplot(dailytemp2, 
+  aes(x = maximum_temperature_c,
+      y = reorder_within(desc2, 
+                  by = maximum_temperature_c,
+                  within = station,
+                  FUN = median),
+      fill = month
+      )) +
+  geom_boxplot_interactive(
+               outlier.shape = NA,
+               alpha = 0.5,
+               aes(data_id = desc,
+                   tooltip = tooltip_bp
+                   )
+                   ) +
+  geom_jitter_interactive(aes(data_id = desc,
+                              color = month,
+                              tooltip = paste0(
+                                "Station: ", station,
+                                "\nDate: ", date,
+                                "\nMaximum Temp: ", maximum_temperature_c, "°C"
+                              )), 
+                              position = position_dodge2(width = 0.75), 
+                              size = 0.75,
+                              alpha = 0.55,
+                              show_guide = FALSE)+
+    scale_fill_manual(values = c("#a79271", "#4d6575"))+
+    scale_color_manual(values = c("#a79271", "#4d6575"))+
+  scale_x_continuous(labels = ~ paste0(.x, "°"))+  
+  scale_y_reordered()+    
+  facet_wrap(~ station, nrow = 2, strip.position="right", scales = "free_y")+  
+  labs(
+      title="Distribution of Max. Temperatures",
+      fill = "Month") +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    plot.title = element_text(face = "bold", size = 10, hjust = 0.5),  
+    panel.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    panel.grid = element_blank(),
+    legend.title = element_text(size = 5, face = "bold"),
+    legend.text = element_text(size = 6),
+    legend.background = element_rect(fill="#f5f5f5",colour="#f5f5f5"),
+    axis.line.x = element_line(linewidth = 0.2),
+    axis.ticks.x = element_line(linewidth = 0.2),
+    axis.text  = element_text(size=5),
+    axis.title = element_blank(),
+    legend.margin=margin(0,0,0,0),
+    #legend.box.margin=margin(-10,-10,-10,-10)
+    strip.text.y = element_blank()
+    )   
+
+ggiraph::girafe(code = print(bp2 + bar2),
+                width_svg = 6,
+                height_svg = 6*0.7,
+                options = list(opts_tooltip(css = tooltip_css),
+                               opts_hover(css="fill: #d1c2de;"),
+                               opts_zoom(min = 1, 
+                                         max = 5))) 
+```
+
+
 
 # 5 The heat is on
 
