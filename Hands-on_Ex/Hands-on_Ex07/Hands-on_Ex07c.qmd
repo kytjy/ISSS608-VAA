@@ -17,7 +17,7 @@ format:
     code-line-numbers: false
 ---
 
-![](images/placeholder.png){fig-align="center"}
+![](images/functions.png){fig-align="center"}
 
 # 1 Overview
 
@@ -59,11 +59,11 @@ For the purpose of this hands-on exercise, a prepared data set called *NGA_wp.rd
 NGA_wp <- read_rds("data/rds/NGA_wp.rds")
 ```
 
-+--------------+-------------+--------------------------------------------------+---------------+
-| Function     | Package     | Description                                      | Output        |
-+==============+=============+==================================================+===============+
-| `read_rds()` | **readr**   | Import *NGA_wp.rds* into R \| ***R object*** \|  |               |
-+--------------+-------------+--------------------------------------------------+---------------+
++--------------+-----------+--------------------------------+-----------+
+| Function     | Package   | Description                    | Output    |
++==============+===========+================================+===========+
+| `read_rds()` | **readr** | Import *NGA_wp.rds* into R     | R object  |
++--------------+-----------+--------------------------------+-----------+
 
 : {tbl-colwidths="\[10,10,60,20\]"}
 
@@ -123,7 +123,7 @@ In much of our readings we have now seen the importance to map rates rather than
 We will tabulate the proportion of functional water points and the proportion of non-functional water points in each LGA. In the following code chunk, `mutate()` from **dplyr** package is used to derive two fields, namely *pct_functional* and *pct_nonfunctional*.
 
 ```{r}
-NGA_wp <- NGA_wp %>%
+NGA_wp2 <- NGA_wp %>%
   mutate(pct_functional = wp_functional/total_wp) %>%
   mutate(pct_nonfunctional = wp_nonfunctional/total_wp)
 ```
@@ -131,7 +131,7 @@ NGA_wp <- NGA_wp %>%
 ## 4.2 Plotting map of rate
 
 ```{r}
-tm_shape(NGA_wp) +
+tm_shape(NGA_wp2) +
   tm_fill("pct_functional",
           n = 10,
           style = "equal",
@@ -144,7 +144,9 @@ tm_shape(NGA_wp) +
             main.title.position = "center",          
             legend.outside = TRUE,
             frame = FALSE,
-            bg.color = "#f5f5f5"
+            bg.color = "#f5f5f5",
+            legend.text.size = 1,
+            legend.hist.width = 0.7
             )
 ```
 
@@ -154,9 +156,191 @@ Extreme value maps are variations of common choropleth maps where the classifica
 
 ## 8.1 Percentile Map
 
-The percentile map is a special type of quantile map with six specific categories: 0-1%,1-10%, 10-50%,50-90%,90-99%, and 99-100%. The corresponding breakpoints can be derived by means of the base R quantile command, passing an explicit vector of cumulative probabilities as c(0,.01,.1,.5,.9,.99,1). Note that the begin and endpoint need to be included.
+The percentile map is a special type of quantile map with six specific categories: 0-1%, 1-10%, 10-50%, 50-90%, 90-99%, and 99-100%. The corresponding breakpoints can be derived by means of the base R quantile command, passing an explicit vector of cumulative probabilities as c(0, .01, .1, .5, .9, .99, 1). ***Note that the begin and endpoint need to be included.***
+
+### 8.1.1 Data Preparation
+
+**Step 1: Exclude records with NA** 
+
+```{r}
+NGA_wp3 <- NGA_wp2 %>%
+  drop_na()
+```
+
+**Step 2: Creating customised classification and extracting values**
+
+```{r}
+percent <- c(0,.01,.1,.5,.9,.99,1)
+var <- NGA_wp3["pct_functional"] %>%
+  st_set_geometry(NULL) #<< Drops geometry field
+quantile(var[,1], percent)
+```
+
+### 8.1.2 Creating the get.var function
+
+```{r}
+get.var <- function(vname,df) {
+  v <- df[vname] %>% 
+    st_set_geometry(NULL)
+  v <- unname(v[,1])
+  return(v)
+}
+```
+
+Firstly, we will write an R function as shown below to extract a variable (i.e. *wp_nonfunctional*) as a vector out of an sf data.frame.
+
+-   arguments:
+    -   vname: variable name (as character, in quotes)
+    -   df: name of sf data frame
+-   returns:
+    -   v: vector with values (without a column name)
+
+### 8.1.3 A percentile mapping function
+
+Next, we will write a percentile mapping function by using the code chunk below.
+
+```{r}
+percentmap <- function(vnam, df, legtitle=NA, mtitle="Percentile Map"){
+  percent <- c(0,.01,.1,.5,.9,.99,1)
+  var <- get.var(vnam, df)
+  bperc <- quantile(var, percent)
+  tm_shape(df) +
+  tm_polygons() +
+  tm_shape(df) +
+     tm_fill(vnam,
+             title=legtitle,
+             breaks=bperc,
+             palette="Blues",
+          labels=c("< 1%", "1% - 10%", "10% - 50%", "50% - 90%", "90% - 99%", "> 99%"))  +
+  tm_borders() +
+  tm_layout(main.title = mtitle, 
+            title.position = c("right","bottom"),
+            main.title.size = 1,
+            main.title.position = "center",       
+            frame = FALSE,
+            bg.color = "#f5f5f5",)
+}
+```
+
+### 8.1.4 The End Product
+
+```{r}
+percentmap("total_wp", NGA_wp3)
+```
+
+### 8.1.5 Comparison of maps with and without dropping NAs
+
+```{r}
+tmap_arrange(percentmap("total_wp", NGA_wp3),
+             percentmap("total_wp", NGA_wp2), 
+             nrow =1, 
+             ncol =2)
+```
 
 ## 8.2 Box Map
+
+In essence, a box map is an augmented quartile map, with an additional lower and upper category. When there are lower outliers, then the starting point for the breaks is the minimum value, and the second break is the lower fence. In contrast, when there are no lower outliers, then the starting point for the breaks will be the lower fence, and the second break is the minimum value (there will be no observations that fall in the interval between the lower fence and the minimum value).
+
+-   Displaying summary statistics on a choropleth map by using the basic principles of boxplot.
+
+-   To create a box map, a custom breaks specification will be used. However, there is a complication. The break points for the box map vary depending on whether lower or upper outliers are present.
+
+![](images/bp.png){fig-align="center" width="447"}
+
+### 8.2.1 Creating the boxbreaks function
+
+The code chunk below is an R function that creating break points for a box map.
+
+-   arguments:
+    -   v: vector with observations
+    -   mult: multiplier for IQR (default 1.5)
+-   returns:
+    -   bb: vector with 7 break points compute quartile and fences
+
+```{r}
+boxbreaks <- function(v,mult=1.5) {
+  qv <- unname(quantile(v))
+  iqr <- qv[4] - qv[2]
+  upfence <- qv[4] + mult * iqr #<< Q3 + 1.5*IQR = Left end of whister
+  lofence <- qv[2] - mult * iqr #<< Q1 - 1.5*IQR = Right end of the whisker
+  
+  # initialize break points vector
+  bb <- vector(mode="numeric",length=7)
+  # logic for lower and upper fences
+  if (lofence < qv[1]) {  # no lower outliers
+    bb[1] <- lofence
+    bb[2] <- floor(qv[1])
+  } else {
+    bb[2] <- lofence
+    bb[1] <- qv[1]
+  }
+  if (upfence > qv[5]) { # no upper outliers
+    bb[7] <- upfence
+    bb[6] <- ceiling(qv[5])
+  } else {
+    bb[6] <- upfence
+    bb[7] <- qv[5]
+  }
+  bb[3:5] <- qv[2:4]
+  return(bb)
+}
+```
+
+### 8.2.2 Creating the get.var function
+
+```{r}
+get.var <- function(vname,df) {
+  v <- df[vname] %>% st_set_geometry(NULL)
+  v <- unname(v[,1])
+  return(v)
+}
+```
+
+```{r}
+var <- get.var("wp_nonfunctional", NGA_wp3) 
+boxbreaks(var)
+```
+
+### 8.2.3 The boxmap function
+
+```{r}
+boxmap <- function(vnam, df, 
+                   legtitle=NA,
+                   mtitle="Box Map",
+                   mult=1.5){
+  var <- get.var(vnam,df)
+  bb <- boxbreaks(var)
+  tm_shape(df) +
+    tm_polygons() +
+  tm_shape(df) +
+     tm_fill(vnam,title=legtitle,
+             breaks=bb,
+             palette="Blues",
+          labels = c("lower outlier", 
+                     "< 25%", 
+                     "25% - 50%", 
+                     "50% - 75%",
+                     "> 75%", 
+                     "upper outlier"))  +
+  tm_borders() +
+  tm_layout(main.title = mtitle, 
+            title.position = c("left","top"),
+            main.title.size = 1,
+            main.title.position = "center",       
+            frame = FALSE,
+            bg.color = "#f5f5f5",
+            legend.title.size = 0.8)
+}
+
+
+```
+
+### 8.2.4 The End Product
+
+```{r}
+tmap_mode("plot")
+boxmap("wp_nonfunctional", NGA_wp3)
+```
 
 # 7 Reference
 
