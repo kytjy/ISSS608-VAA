@@ -1,0 +1,50 @@
+---
+title: "Take-home Exercise 4: Prototyping Modules for Shiny Application"
+date: "18 Feb 2024"
+date-modified: "last-modified"
+editor: visual
+toc-depth: 4
+execute:
+  freeze: true #never re-render during project render
+  echo: true #if false, displays charts without codes
+  eval: true #if false, displays codes without charts
+  warning: false #dont display if there are any warnings
+format: 
+  html:
+    code-fold: false
+    code-overflow: scroll
+    code-summary: "Show the code"
+    code-line-numbers: false
+---
+
+```{mermaid}
+%%| fig-width: 8
+%%| echo: false
+
+flowchart TD
+    A[Building Explanatory Model] -->B[Feature Engineering]
+    B -.->B1(Multicollinearity, Variable Selection, Variable Transformation, Principal Compponent Analysis)
+    B-->C[Form: Regression Analysis]
+    C -->D[Fit: Model Assessment]
+    D -.->D1(R-Sq, Adjusted R2, RMSE)    
+    D -->E[Fit: Model Comparison]
+```
+
+
+```{r}
+pacman::p_load(tidyverse, ggplot, lmtest, modelr, broom, vegan, recipes, DALEX)
+```
+
+
+# Collinearity
+
+# Model Diagnostics
+
+
+## Model Assumptions
+
+## Checking Assumptions
+
+# Model Building
+
+# Model Assessment
