@@ -17,6 +17,18 @@ format:
     code-line-numbers: false
 ---
 
+Load in the csv file following minor data cleaning and wrangling documented [here]().
+
+```{r}
+stu <- read_csv("data/stu_SG_rcd.csv")
+stu_encode <- read_csv("data/stu_SG_encode.csv")
+```
+
+```{r}
+
+```
+
+
 ```{mermaid}
 %%| fig-width: 8
 %%| echo: false
@@ -30,16 +42,41 @@ flowchart TD
     D -->E[Fit: Model Comparison]
 ```
 
-
 ```{r}
-pacman::p_load(tidyverse, ggplot, lmtest, modelr, broom, vegan, recipes, DALEX)
+pacman::p_load(tidyverse, ggplot2, lmtest, modelr, broom, vegan, recipes, DALEX, stargazer, corrplot)
 ```
+
+
 
 
 # Collinearity
 
-# Model Diagnostics
 
+
+```{r}
+par(bg = "#f5f5f5")
+
+# Compute correlation matrix of student responses
+stu.cor <- 
+stu.sig = cor.mtest(stu, conf.level= .95) #<< 
+
+corrplot(stu,
+         method = "number",
+         type = "lower",
+         diag = FALSE,
+         tl.col = "black",
+         tl.srt = 90,
+         p.mat = 0.05,
+         sig.level = stu.sig$p, #<<
+         tl.cex = 0.6,
+         bg="#f5f5f5")
+```
+
+
+
+
+
+# Model Diagnostics
 
 ## Model Assumptions
 
