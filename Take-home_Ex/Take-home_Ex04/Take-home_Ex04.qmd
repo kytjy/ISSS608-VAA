@@ -17,7 +17,24 @@ format:
     code-line-numbers: false
 ---
 
-Load in the csv file following minor data cleaning and wrangling documented [here]().
+# 1 Overview
+
+# 2 Loading Data and Packages
+
+::: panel-tabset
+## Packages
+
+```{r}
+pacman::p_load(tidyverse, ggplot2, patchwork, plotly, gtsummary,
+               lmtest, broom, vegan, recipes, DALEX, stargazer, corrplot,  
+               modelr, randomForest, rpart, rpart.plot, caret,
+               performance, ggstatsplot,
+               MASS)
+```
+
+## The PISA Survey Students Questionnaire
+
+Load in the csv file following minor data cleaning and wrangling documented [here](https://projectpisa.netlify.app/phase1/dataprep).
 
 ```{r}
 stu <- read_csv("data/stu_SG_rcd.csv")
@@ -25,63 +42,282 @@ stu_encode <- read_csv("data/stu_SG_encode.csv")
 ```
 
 ```{r}
-
+#| eval: false
+glimpse(stu_encode)
 ```
-
+:::
 
 ```{mermaid}
 %%| fig-width: 8
 %%| echo: false
 
 flowchart TD
-    A[Building Explanatory Model] -->B[Feature Engineering]
-    B -.->B1(Multicollinearity, Variable Selection, Variable Transformation, Principal Compponent Analysis)
-    B-->C[Form: Regression Analysis]
-    C -->D[Fit: Model Assessment]
-    D -.->D1(R-Sq, Adjusted R2, RMSE)    
-    D -->E[Fit: Model Comparison]
+    A[Building Explanatory Model]-->B[1. Feature Engineering - Multicollinearity, Variable Selection]
+    B-->C[2. Model Building]
+    C-->C1[2a. Multiple Linear Regression]
+    C--> C2[2b. Random Forest]
+    C1-.->F[Model Diagnostic, Assumption Checking]
+    F-.->E
+    C2 -->E[3. Variable Importance]
+    E-->D[4. Model Assessment]
+```
+
+# 3 Multicollinearity
+
+Regression analysis requires numerical variables. To include categorical variables in a regression model, we will need to perform *dummy coding*.
+
+In the code chunk below, we use [`recode()`]() to create dummy variables for *SchoolType*, *Aircon*, and *Helper* variables from our dataset. The remaining variables in our dataset are already in numerical datatype.
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+cols <- c('SchoolType', 'Aircon', 'Helper')
+
+stu_encode <- stu_encode %>% 
+  mutate(SchoolType = recode(SchoolType,
+                             "SGP01" = 1,
+                             "SGP03" = 2),
+         Aircon = recode(Aircon,
+                         "7020001" = 1,
+                         "7020002" = 2),
+         Helper = recode(Helper,
+                         "7020001" = 1,
+                         "7020002" = 2))
+```
+
+`cor()` calculates correlation coefficients, the function needs two inputs: the x-coordinates and the y-coordinates. Te argument `use = "complete.obs"` excludes missing values from the calculation of the correlation coefficient. Altogether, the code chunk below returns the correlation coefficient for each pair of survey participants who had valid responses for each question we have narrowed down to.
+
+```{r}
+stu.cor <- cor(stu_encode[, 1:22], #<< cor(dataset()[,input$variables], checkbox for variable selection
+               use = "pairwise.complete.obs", #<< input$corUse, allow user to choose "complete.obs", "na.or.complete"
+               method = "pearson") #<< input$corMethod for selection of other methods like Kendall's Tau or Spearman's Rho
+
+```
+
+`formals()` function returns the argument list of the function specified. This can be used in the sidebar to display the options for user selection.
+
+```{r}
+eval(formals(cor)$method)
 ```
 
 ```{r}
-pacman::p_load(tidyverse, ggplot2, lmtest, modelr, broom, vegan, recipes, DALEX, stargazer, corrplot)
-```
+#| fig-width: 14
+#| fig-asp: 0.7
 
-
-
-
-# Collinearity
-
-
-
-```{r}
 par(bg = "#f5f5f5")
 
-# Compute correlation matrix of student responses
-stu.cor <- 
-stu.sig = cor.mtest(stu, conf.level= .95) #<< 
+stu.sig = cor.mtest(stu.cor, 
+                    conf.level= .95) #<< input$sigLevel for user to choose confidence levels
 
-corrplot(stu,
-         method = "number",
+## CORRPLOT ##
+#~~ ui: mainPanel(plotOutput("corrplot")) ~~#
+#~~ server: output$corrplot <- renderPlot({...}) ~~#
+
+corrplot(stu.cor,
+         method = "number", #<< input$corMethod for other alternatives like number, colour, ellipse
          type = "lower",
          diag = FALSE,
-         tl.col = "black",
-         tl.srt = 90,
-         p.mat = 0.05,
-         sig.level = stu.sig$p, #<<
-         tl.cex = 0.6,
-         bg="#f5f5f5")
+         tl.col = "#7C6D62",
+         tl.srt = 45,
+         p.mat = stu.sig$p, #<< if(input$sigTest) stu.sig$p else NULL
+         sig.level = 0.05, #<< ?? Check with Prof Kam if this should be derived?
+         tl.cex = 0.8,
+         number.cex = 0.8,
+         cl.cex = 0.8,
+         cl.ratio = 0.1,
+         bg="#f5f5f5") #<< To change according to Shiny page's background
 ```
 
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
+| Function               | Feature                                                                                                                              | UI                                                                                                                                       | Server                                                        |
++========================+======================================================================================================================================+==========================================================================================================================================+===============================================================+
+| **stu.cor**            | Checkbox for variable selection; [**sortable**](https://rstudio.github.io/sortable/) package allows drag-and-drop to order variables | Within ***sidebarPanel***():                                                                                                             | stu_bm \<- eventReactive(input\$bm_action,\                   |
+|                        |                                                                                                                                      |                                                                                                                                          | {stu_encode %\>%\                                             |
+|                        |                                                                                                                                      | [***sortableCheckboxGroupInput***](https://yang-tang.github.io/shinyjqui/reference/sortableCheckboxGroupInput.html)(\                    | select(input\$bm_vars)})                                      |
+|                        |                                                                                                                                      | inputId = "bm_vars",\                                                                                                                    |                                                               |
+|                        |                                                                                                                                      | label = "Variables to show:",\                                                                                                           | cor(stu_bm, use = `input$corUse`, method = `input$corMethod`) |
+|                        |                                                                                                                                      | choices = colnames(*stu_encode*\[,1:22\]),\                                                                                              |                                                               |
+|                        |                                                                                                                                      | selected = input\$variables\                                                                                                             |                                                               |
+|                        |                                                                                                                                      | )                                                                                                                                        |                                                               |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
+|                        | Treatment of NA values                                                                                                               | Within mainPanel() \> tabsetPanel() \> ***tabPanel***("Collinearity", column(3, \[\]), column(9, plotOutput("corrPlot", height = 400))): | `input$corUse`                                                |
+|                        |                                                                                                                                      |                                                                                                                                          |                                                               |
+|                        |                                                                                                                                      | ***selectInput***(\                                                                                                                      |                                                               |
+|                        |                                                                                                                                      | inputID = "corUse",\                                                                                                                     |                                                               |
+|                        |                                                                                                                                      | label = "Handling NA Values",\                                                                                                           |                                                               |
+|                        |                                                                                                                                      | choices = c("everything", "all.obs", "complete.obs", "na.or.complete", "pairwise.complete.obs")                                          |                                                               |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
+|                        | Correlation Method                                                                                                                   | Within tabsetPanel()():                                                                                                                  | `input$corMethod`                                             |
+|                        |                                                                                                                                      |                                                                                                                                          |                                                               |
+|                        |                                                                                                                                      | ***selectInput***(\                                                                                                                      |                                                               |
+|                        |                                                                                                                                      | inputID = "corMethod",\                                                                                                                  |                                                               |
+|                        |                                                                                                                                      | label = "Correlation Method",\                                                                                                           |                                                               |
+|                        |                                                                                                                                      | choices = eval(formals(cor)\$method)                                                                                                     |                                                               |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
+| **cor.mtest**          | To indicate if user wants to show statistical significance; if *yes*, allow option to set confidence level.                          | Within tabsetPanel()():                                                                                                                  | `input$confLevel`                                             |
+|                        |                                                                                                                                      |                                                                                                                                          |                                                               |
+|                        |                                                                                                                                      | ***checkboxInput***("sigTest", "Show Significance Test?"),                                                                               |                                                               |
+|                        |                                                                                                                                      |                                                                                                                                          |                                                               |
+|                        |                                                                                                                                      | *\~Only show option to select significance level if Significance Test is select\~*\                                                      |                                                               |
+|                        |                                                                                                                                      | conditionalPanel("input.sigTest", numericInput("sigLevel", "Significance Level",\                                                        |                                                               |
+|                        |                                                                                                                                      | value = 0.05,\                                                                                                                           |                                                               |
+|                        |                                                                                                                                      | min = 0,\                                                                                                                                |                                                               |
+|                        |                                                                                                                                      | max = 1,\                                                                                                                                |                                                               |
+|                        |                                                                                                                                      | step = 0.01))                                                                                                                            |                                                               |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
+| **corrplot**           | Plot display method                                                                                                                  | Within tabsetPanel():                                                                                                                    | `input$corMethod`                                             |
+|                        |                                                                                                                                      |                                                                                                                                          |                                                               |
+|                        |                                                                                                                                      | ***selectInput***("plotMethod", "Plot Method", list("mixed", all = eval(formals(corrplot)\$method)), "number")                           |                                                               |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
+| **Build model button** | Build model button once selection is complete.                                                                                       | actionButton(inputId = "bm_action\_", label = "Build Model")                                                                             |                                                               |
++------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
 
+: {tbl-colwidths="\[15,30,45,10\]"}
 
+# 4 Model Building
 
+```{r}
+# Set the seed before splitting the data
+set.seed(1234)
 
-# Model Diagnostics
+# Remove missing cases from our dataset
+stu_small <- na.omit(stu_encode)
 
-## Model Assumptions
+# Split the data into training and test
+index <- createDataPartition(stu_small$Math, p = 0.8, list = FALSE) #<< User should be able to pick subject of interest here
+train_stu <- stu_small[index, ]
+test_stu  <- stu_small[-index, ]
+```
 
-## Checking Assumptions
+### Multiple Linear Regression
 
-# Model Building
+```{r}
+stu_lm <- lm(Math ~ Loneliness + ClassroomSafety + TeacherSupport + Gender + Homework_Math + Homework_Reading + Homework_Science + SchoolType+ ParentsEducation + Immigration + HomeLanguage + Sibling + Aircon + Helper + Vehicle + Books + Exercise + OwnRoom + FamilyCommitment + Preference_Math + Preference_Reading + Preference_Science, 
+             data = stu_small)
 
-# Model Assessment
+summary(stu_lm)
+```
+
+```{r}
+stu_lm_diag <- augment(stu_lm)
+```
+
+### Random Forest
+
+```{r}
+set.seed(1234)
+stu_rf <- randomForest(Math ~ Loneliness + ClassroomSafety + TeacherSupport + Gender + Homework_Math + Homework_Reading + Homework_Science + SchoolType+ ParentsEducation + Immigration + HomeLanguage + Sibling + Aircon + Helper + Vehicle + Books + Exercise + OwnRoom + FamilyCommitment + Preference_Math + Preference_Reading + Preference_Science, #<< User to select variables 
+                       data = train_stu,
+                       importance = TRUE,
+                       ntree = 500)
+```
+
+```{r}
+print(stu_rf)
+```
+
++------------+--------------------+------------------------------+------------+
+| Function   | Feature            | UI                           | Server     |
++============+====================+==============================+============+
+|            | Select subject     | Within ***sidebarPanel***(): |            |
++------------+--------------------+------------------------------+------------+
+|            | Select variables   |                              |            |
++------------+--------------------+------------------------------+------------+
+|            | Partition size     |                              |            |
++------------+--------------------+------------------------------+------------+
+|            | No. of trees       |                              |            |
++------------+--------------------+------------------------------+------------+
+|            |                    |                              |            |
++------------+--------------------+------------------------------+------------+
+
+# 5 Model Diagnostics
+
+We will focus on three plots to check if assumptions of multiple linear model are met:
+
+1.  **Residuals vs. fitted values plot:** This plot serves mainly to check the linearity, although lack of homoscedasticity or independence can also be detected. For linearity, we expect the line (a non-linear fit of the mean of the residuals) to be almost flat. This means that the trend of Y-values is linear with respect to the variables. Heteroskedasticity can be detected also in the form of irregular vertical dispersion around the red line. The dependence between residuals can be detected (harder) in the form of non randomly spread residuals.
+
+2.  **QQ-plot:** In linear regression, residuals should be normally distributed. This can be checked using so-called Q-Q plots (quantile-quantile plot) to compare the shapes of distributions. This plot shows the quantiles of the studentized residuals versus fitted values. Usually, dots should fall along the reference line. If there is some deviation (mostly at the tails), this indicates that the model doesn't predict the outcome well for the range that shows larger deviations from the reference line.
+
+3.  **Scale-location plot:** Serves for checking the homoscedasticity. To meet this assumption, the variance of the residuals across different values of variables is similar and does not notably increase or decrease. Hence, the desired pattern would be that dots spread equally above and below a roughly straight, horizontal line and show no apparent deviation.
+
+```{r}
+#| fig-width: 14
+#| fig-asp: 0.5
+
+## MLR DIAGNOSTIC PLOTS ##
+#~~ ui: mainPanel(plotOutput("diagplot")) ~~#
+#~~ server: output$diagplot <- renderPlot({...}) ~~#
+
+par(bg = "#f5f5f5")
+
+par(mfrow=c(1,3))
+plot(stu_lm, 1, pch = 19, col = rgb(0, 0, 0, 0.15))
+plot(stu_lm, 2, pch = 19, col = rgb(0, 0, 0, 0.15))
+plot(stu_lm, 3, pch = 19, col = rgb(0, 0, 0, 0.15))
+```
+
++------------------+-----------------------------------------------------------------+----------------------------------------------------+--------------------------------------------------------------------------------------------------------+
+| Function         | Feature                                                         | UI                                                 | Server                                                                                                 |
++==================+=================================================================+====================================================+========================================================================================================+
+| **plot(stu_lm)** | Plots to be updated when response and explanatory variables and | Within mainPanel():                                | This has to be wrapped in `reactive({ })` as it is reacting to inputs (when user clicks 'Build Model'. |
+|                  |                                                                 |                                                    |                                                                                                        |
+|                  |                                                                 | div(plotOutput("diagplots", width=600, height=320) | lm_diagplot \<- eventReactive(input\$bm_action\_, { *plot(...)\                                        |
+|                  |                                                                 |                                                    | *})                                                                                                    |
+|                  |                                                                 |                                                    |                                                                                                        |
+|                  |                                                                 |                                                    | output\$diagplots \<- renderPlot({lm_diagplot()\                                                       |
+|                  |                                                                 |                                                    | })                                                                                                     |
++------------------+-----------------------------------------------------------------+----------------------------------------------------+--------------------------------------------------------------------------------------------------------+
+
+: {tbl-colwidths="\[15,30,45,10\]"}
+
+# 6 Variable Selection / Importance
+
+## Multiple Linear Regression
+
+AIC is Akaike\'s Information Criterion, and estimates the out-of-sample prediction error and relative quality of a statistical model. A higher number indicates more information lost. Lower numbers for AIC = higher quality models.
+
+BIC is the Bayesian Information Criterion, which like AIC, penalizes models for the number of parameters to reduce overfitting. BIC also considers the number of observations in the data, which AIC does not. Lower values of BIC are better, and BIC is generally always higher than AIC, but absolute values do not matter, only relative values when comparing models on the same dataset for the same outcome. If we improve the model (with useful predictor variables), the BIC should go down.
+
+Model selection also involves a search procedure:
+
+-   "backward": start with all possible variables in the model, then consider how deleting a single predictor will affect a chosen metric.
+-   "forward": starts with a model using no variables, and adds variables sequentially until it finds a good model or reaches the full model with all the variables.
+-   "backward/forward" (default) and "forward/backward": combination of the above. Stepwise search checks going both backwards and forwards at every step. It considers the addition of any variable not currently in the model, as well as the removal of any variable currently in the model.
+
+```{r}
+stepAIC(stu_lm, 
+         direction = "backward",
+         criterion = "AIC")
+```
+
+## Random Forest
+
+```{r}
+importance(stu_rf) %>% 
+  as.data.frame() %>% 
+  mutate(Predictors = row.names(.))
+#  arrange(desc(MeanDecreaseGini))
+```
+
+```{r}
+varImpPlot(stu_rf,
+           main = "Importance of Variables for XX Performance")
+```
+
+# 7 Model Assessment
+
+Multiple Linear Regression
+
+```{r}
+
+```
+
+Random Forest
+
+### **Visualising of predicted vs. observed responses**
+
+```{r}
+##Fit test data into the model that has been built
+test_stu$rf_fit <- predict(stu_rf, test_stu)
+```

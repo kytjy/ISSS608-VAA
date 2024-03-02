@@ -280,14 +280,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#collinearity" id="toc-collinearity" class="nav-link active" data-scroll-target="#collinearity">Collinearity</a></li>
-  <li><a href="#model-diagnostics" id="toc-model-diagnostics" class="nav-link" data-scroll-target="#model-diagnostics">Model Diagnostics</a>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">1 Overview</a></li>
+  <li><a href="#loading-data-and-packages" id="toc-loading-data-and-packages" class="nav-link" data-scroll-target="#loading-data-and-packages">2 Loading Data and Packages</a></li>
+  <li><a href="#multicollinearity" id="toc-multicollinearity" class="nav-link" data-scroll-target="#multicollinearity">3 Multicollinearity</a></li>
+  <li><a href="#model-building" id="toc-model-building" class="nav-link" data-scroll-target="#model-building">4 Model Building</a>
   <ul>
-  <li><a href="#model-assumptions" id="toc-model-assumptions" class="nav-link" data-scroll-target="#model-assumptions">Model Assumptions</a></li>
-  <li><a href="#checking-assumptions" id="toc-checking-assumptions" class="nav-link" data-scroll-target="#checking-assumptions">Checking Assumptions</a></li>
+  <li><a href="#multiple-linear-regression" id="toc-multiple-linear-regression" class="nav-link" data-scroll-target="#multiple-linear-regression">Multiple Linear Regression</a></li>
+  <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest">Random Forest</a></li>
   </ul></li>
-  <li><a href="#model-building" id="toc-model-building" class="nav-link" data-scroll-target="#model-building">Model Building</a></li>
-  <li><a href="#model-assessment" id="toc-model-assessment" class="nav-link" data-scroll-target="#model-assessment">Model Assessment</a></li>
+  <li><a href="#model-diagnostics" id="toc-model-diagnostics" class="nav-link" data-scroll-target="#model-diagnostics">5 Model Diagnostics</a></li>
+  <li><a href="#variable-selection-importance" id="toc-variable-selection-importance" class="nav-link" data-scroll-target="#variable-selection-importance">6 Variable Selection / Importance</a>
+  <ul>
+  <li><a href="#multiple-linear-regression-1" id="toc-multiple-linear-regression-1" class="nav-link" data-scroll-target="#multiple-linear-regression-1">Multiple Linear Regression</a></li>
+  <li><a href="#random-forest-1" id="toc-random-forest-1" class="nav-link" data-scroll-target="#random-forest-1">Random Forest</a></li>
+  </ul></li>
+  <li><a href="#model-assessment" id="toc-model-assessment" class="nav-link" data-scroll-target="#model-assessment">7 Model Assessment</a>
+  <ul>
+  <li><a href="#visualising-of-predicted-vs.-observed-responses" id="toc-visualising-of-predicted-vs.-observed-responses" class="nav-link" data-scroll-target="#visualising-of-predicted-vs.-observed-responses"><strong>Visualising of predicted vs.&nbsp;observed responses</strong></a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -314,7 +324,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">February 29, 2024</p>
+      <p class="date-modified">March 3, 2024</p>
     </div>
   </div>
     
@@ -323,44 +333,537 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<section id="overview" class="level1">
+<h1>1 Overview</h1>
+</section>
+<section id="loading-data-and-packages" class="level1">
+<h1>2 Loading Data and Packages</h1>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Packages</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">The PISA Survey Students Questionnaire</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, ggplot2, patchwork, plotly, gtsummary,</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               lmtest, broom, vegan, recipes, DALEX, stargazer, corrplot,  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               modelr, randomForest, rpart, rpart.plot, caret,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               performance, ggstatsplot,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               MASS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Load in the csv file following minor data cleaning and wrangling documented <a href="https://projectpisa.netlify.app/phase1/dataprep">here</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>stu <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/stu_SG_rcd.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>stu_encode <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/stu_SG_encode.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(stu_encode)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
 <div class="cell" data-fig-width="8">
 <div class="cell-output-display">
 <div>
 <div>
 <pre class="mermaid mermaid-js">flowchart TD
-    A[Building Explanatory Model] --&gt;B[Feature Engineering]
-    B -.-&gt;B1(Multicollinearity, Variable Selection, Variable Transformation, Principal Compponent Analysis)
-    B--&gt;C[Form: Regression Analysis]
-    C --&gt;D[Fit: Model Assessment]
-    D -.-&gt;D1(R-Sq, Adjusted R2, RMSE)    
-    D --&gt;E[Fit: Model Comparison]
+    A[Building Explanatory Model]--&gt;B[1. Feature Engineering - Multicollinearity, Variable Selection]
+    B--&gt;C[2. Model Building]
+    C--&gt;C1[2a. Multiple Linear Regression]
+    C--&gt; C2[2b. Random Forest]
+    C1-.-&gt;F[Model Diagnostic, Assumption Checking]
+    F-.-&gt;E
+    C2 --&gt;E[3. Variable Importance]
+    E--&gt;D[4. Model Assessment]
 </pre>
 </div>
 </div>
 </div>
 </div>
+</section>
+<section id="multicollinearity" class="level1">
+<h1>3 Multicollinearity</h1>
+<p>Regression analysis requires numerical variables. To include categorical variables in a regression model, we will need to perform <em>dummy coding</em>.</p>
+<p>In the code chunk below, we use <a href=""><code>recode()</code></a> to create dummy variables for <em>SchoolType</em>, <em>Aircon</em>, and <em>Helper</em> variables from our dataset. The remaining variables in our dataset are already in numerical datatype.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, ggplot, lmtest, modelr, broom, vegan, recipes, DALEX)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'SchoolType'</span>, <span class="st">'Aircon'</span>, <span class="st">'Helper'</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>stu_encode <span class="ot">&lt;-</span> stu_encode <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SchoolType =</span> <span class="fu">recode</span>(SchoolType,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"SGP01"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"SGP03"</span> <span class="ot">=</span> <span class="dv">2</span>),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">Aircon =</span> <span class="fu">recode</span>(Aircon,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"7020001"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"7020002"</span> <span class="ot">=</span> <span class="dv">2</span>),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">Helper =</span> <span class="fu">recode</span>(Helper,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"7020001"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                         <span class="st">"7020002"</span> <span class="ot">=</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
-<section id="collinearity" class="level1">
-<h1>Collinearity</h1>
-</section>
-<section id="model-diagnostics" class="level1">
-<h1>Model Diagnostics</h1>
-<section id="model-assumptions" class="level2">
-<h2 class="anchored" data-anchor-id="model-assumptions">Model Assumptions</h2>
-</section>
-<section id="checking-assumptions" class="level2">
-<h2 class="anchored" data-anchor-id="checking-assumptions">Checking Assumptions</h2>
-</section>
+<p><code>cor()</code> calculates correlation coefficients, the function needs two inputs: the x-coordinates and the y-coordinates. Te argument <code>use = "complete.obs"</code> excludes missing values from the calculation of the correlation coefficient. Altogether, the code chunk below returns the correlation coefficient for each pair of survey participants who had valid responses for each question we have narrowed down to.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>stu.cor <span class="ot">&lt;-</span> <span class="fu">cor</span>(stu_encode[, <span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>], <span class="co">#&lt;&lt; cor(dataset()[,input$variables], checkbox for variable selection</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">use =</span> <span class="st">"pairwise.complete.obs"</span>, <span class="co">#&lt;&lt; input$corUse, allow user to choose "complete.obs", "na.or.complete"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"pearson"</span>) <span class="co">#&lt;&lt; input$corMethod for selection of other methods like Kendall's Tau or Spearman's Rho</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>formals()</code> function returns the argument list of the function specified. This can be used in the sidebar to display the options for user selection.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(<span class="fu">formals</span>(cor)<span class="sc">$</span>method)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "pearson"  "kendall"  "spearman"</code></pre>
+</div>
+</div>
+<div class="cell" data-fig.asp="0.7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#f5f5f5"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>stu.sig <span class="ot">=</span> <span class="fu">cor.mtest</span>(stu.cor, </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">conf.level=</span> .<span class="dv">95</span>) <span class="co">#&lt;&lt; input$sigLevel for user to choose confidence levels</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="do">## CORRPLOT ##</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#~~ ui: mainPanel(plotOutput("corrplot")) ~~#</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#~~ server: output$corrplot &lt;- renderPlot({...}) ~~#</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(stu.cor,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">method =</span> <span class="st">"number"</span>, <span class="co">#&lt;&lt; input$corMethod for other alternatives like number, colour, ellipse</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">type =</span> <span class="st">"lower"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">diag =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">tl.col =</span> <span class="st">"#7C6D62"</span>,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">tl.srt =</span> <span class="dv">45</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">p.mat =</span> stu.sig<span class="sc">$</span>p, <span class="co">#&lt;&lt; if(input$sigTest) stu.sig$p else NULL</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">sig.level =</span> <span class="fl">0.05</span>, <span class="co">#&lt;&lt; ?? Check with Prof Kam if this should be derived?</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">tl.cex =</span> <span class="fl">0.8</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">number.cex =</span> <span class="fl">0.8</span>,</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">cl.cex =</span> <span class="fl">0.8</span>,</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">cl.ratio =</span> <span class="fl">0.1</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">bg=</span><span class="st">"#f5f5f5"</span>) <span class="co">#&lt;&lt; To change according to Shiny page's background</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="1344"></p>
+</div>
+</div>
+<table class="table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 30%">
+<col style="width: 45%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Feature</th>
+<th>UI</th>
+<th>Server</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>stu.cor</strong></td>
+<td>Checkbox for variable selection; <a href="https://rstudio.github.io/sortable/"><strong>sortable</strong></a> package allows drag-and-drop to order variables</td>
+<td><p>Within <strong><em>sidebarPanel</em></strong>():</p>
+<p><a href="https://yang-tang.github.io/shinyjqui/reference/sortableCheckboxGroupInput.html"><strong><em>sortableCheckboxGroupInput</em></strong></a>(<br>
+inputId = “bm_vars”,<br>
+label = “Variables to show:”,<br>
+choices = colnames(<em>stu_encode</em>[,1:22]),<br>
+selected = input$variables<br>
+)</p></td>
+<td><p>stu_bm &lt;- eventReactive(input$bm_action,<br>
+{stu_encode %&gt;%<br>
+select(input$bm_vars)})</p>
+<p>cor(stu_bm, use = <code>input$corUse</code>, method = <code>input$corMethod</code>)</p></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Treatment of NA values</td>
+<td><p>Within mainPanel() &gt; tabsetPanel() &gt; <strong><em>tabPanel</em></strong>(“Collinearity”, column(3, []), column(9, plotOutput(“corrPlot”, height = 400))):</p>
+<p><strong><em>selectInput</em></strong>(<br>
+inputID = “corUse”,<br>
+label = “Handling NA Values”,<br>
+choices = c(“everything”, “all.obs”, “complete.obs”, “na.or.complete”, “pairwise.complete.obs”)</p></td>
+<td><code>input$corUse</code></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Correlation Method</td>
+<td><p>Within tabsetPanel()():</p>
+<p><strong><em>selectInput</em></strong>(<br>
+inputID = “corMethod”,<br>
+label = “Correlation Method”,<br>
+choices = eval(formals(cor)$method)</p></td>
+<td><code>input$corMethod</code></td>
+</tr>
+<tr class="even">
+<td><strong>cor.mtest</strong></td>
+<td>To indicate if user wants to show statistical significance; if <em>yes</em>, allow option to set confidence level.</td>
+<td><p>Within tabsetPanel()():</p>
+<p><strong><em>checkboxInput</em></strong>(“sigTest”, “Show Significance Test?”),</p>
+<p><em>~Only show option to select significance level if Significance Test is select~</em><br>
+conditionalPanel(“input.sigTest”, numericInput(“sigLevel”, “Significance Level”,<br>
+value = 0.05,<br>
+min = 0,<br>
+max = 1,<br>
+step = 0.01))</p></td>
+<td><code>input$confLevel</code></td>
+</tr>
+<tr class="odd">
+<td><strong>corrplot</strong></td>
+<td>Plot display method</td>
+<td><p>Within tabsetPanel():</p>
+<p><strong><em>selectInput</em></strong>(“plotMethod”, “Plot Method”, list(“mixed”, all = eval(formals(corrplot)$method)), “number”)</p></td>
+<td><code>input$corMethod</code></td>
+</tr>
+<tr class="even">
+<td><strong>Build model button</strong></td>
+<td>Build model button once selection is complete.</td>
+<td>actionButton(inputId = “bm_action_”, label = “Build Model”)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="model-building" class="level1">
-<h1>Model Building</h1>
+<h1>4 Model Building</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the seed before splitting the data</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove missing cases from our dataset</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>stu_small <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(stu_encode)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into training and test</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(stu_small<span class="sc">$</span>Math, <span class="at">p =</span> <span class="fl">0.8</span>, <span class="at">list =</span> <span class="cn">FALSE</span>) <span class="co">#&lt;&lt; User should be able to pick subject of interest here</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>train_stu <span class="ot">&lt;-</span> stu_small[index, ]</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>test_stu  <span class="ot">&lt;-</span> stu_small[<span class="sc">-</span>index, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="multiple-linear-regression" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-linear-regression">Multiple Linear Regression</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>stu_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(Math <span class="sc">~</span> Loneliness <span class="sc">+</span> ClassroomSafety <span class="sc">+</span> TeacherSupport <span class="sc">+</span> Gender <span class="sc">+</span> Homework_Math <span class="sc">+</span> Homework_Reading <span class="sc">+</span> Homework_Science <span class="sc">+</span> SchoolType<span class="sc">+</span> ParentsEducation <span class="sc">+</span> Immigration <span class="sc">+</span> HomeLanguage <span class="sc">+</span> Sibling <span class="sc">+</span> Aircon <span class="sc">+</span> Helper <span class="sc">+</span> Vehicle <span class="sc">+</span> Books <span class="sc">+</span> Exercise <span class="sc">+</span> OwnRoom <span class="sc">+</span> FamilyCommitment <span class="sc">+</span> Preference_Math <span class="sc">+</span> Preference_Reading <span class="sc">+</span> Preference_Science, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> stu_small)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(stu_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Math ~ Loneliness + ClassroomSafety + TeacherSupport + 
+    Gender + Homework_Math + Homework_Reading + Homework_Science + 
+    SchoolType + ParentsEducation + Immigration + HomeLanguage + 
+    Sibling + Aircon + Helper + Vehicle + Books + Exercise + 
+    OwnRoom + FamilyCommitment + Preference_Math + Preference_Reading + 
+    Preference_Science, data = stu_small)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-322.58  -49.41    3.09   54.11  260.89 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)        509.0117    15.1526  33.592  &lt; 2e-16 ***
+Loneliness          -3.6995     1.4695  -2.518 0.011848 *  
+ClassroomSafety    -14.9976     1.8398  -8.152 4.47e-16 ***
+TeacherSupport      -8.3303     1.5042  -5.538 3.21e-08 ***
+Gender              20.4592     2.2907   8.931  &lt; 2e-16 ***
+Homework_Math        3.8044     1.4109   2.696 0.007031 ** 
+Homework_Reading   -14.9990     1.4046 -10.679  &lt; 2e-16 ***
+Homework_Science    12.7368     1.4632   8.705  &lt; 2e-16 ***
+SchoolType          -8.4630     4.7140  -1.795 0.072669 .  
+ParentsEducation     5.0622     0.6426   7.878 4.04e-15 ***
+Immigration          9.2691     1.6819   5.511 3.74e-08 ***
+HomeLanguage       -17.3413     2.5166  -6.891 6.22e-12 ***
+Sibling            -10.4245     1.2637  -8.249  &lt; 2e-16 ***
+Aircon             -23.0220     3.5083  -6.562 5.83e-11 ***
+Helper               3.4232     2.7393   1.250 0.211481    
+Vehicle              6.4617     1.7155   3.767 0.000167 ***
+Books               18.2678     0.8626  21.177  &lt; 2e-16 ***
+Exercise            -6.3527     0.3994 -15.906  &lt; 2e-16 ***
+OwnRoom              2.9358     2.3569   1.246 0.212972    
+FamilyCommitment    -3.6592     0.3468 -10.551  &lt; 2e-16 ***
+Preference_Math     17.3924     1.2288  14.154  &lt; 2e-16 ***
+Preference_Reading -15.9895     1.3348 -11.979  &lt; 2e-16 ***
+Preference_Science  13.1695     1.3444   9.796  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 77.35 on 5135 degrees of freedom
+Multiple R-squared:  0.3859,    Adjusted R-squared:  0.3832 
+F-statistic: 146.7 on 22 and 5135 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>stu_lm_diag <span class="ot">&lt;-</span> <span class="fu">augment</span>(stu_lm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="random-forest" class="level3">
+<h3 class="anchored" data-anchor-id="random-forest">Random Forest</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>stu_rf <span class="ot">&lt;-</span> <span class="fu">randomForest</span>(Math <span class="sc">~</span> Loneliness <span class="sc">+</span> ClassroomSafety <span class="sc">+</span> TeacherSupport <span class="sc">+</span> Gender <span class="sc">+</span> Homework_Math <span class="sc">+</span> Homework_Reading <span class="sc">+</span> Homework_Science <span class="sc">+</span> SchoolType<span class="sc">+</span> ParentsEducation <span class="sc">+</span> Immigration <span class="sc">+</span> HomeLanguage <span class="sc">+</span> Sibling <span class="sc">+</span> Aircon <span class="sc">+</span> Helper <span class="sc">+</span> Vehicle <span class="sc">+</span> Books <span class="sc">+</span> Exercise <span class="sc">+</span> OwnRoom <span class="sc">+</span> FamilyCommitment <span class="sc">+</span> Preference_Math <span class="sc">+</span> Preference_Reading <span class="sc">+</span> Preference_Science, <span class="co">#&lt;&lt; User to select variables </span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">data =</span> train_stu,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">ntree =</span> <span class="dv">500</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(stu_rf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+ randomForest(formula = Math ~ Loneliness + ClassroomSafety +      TeacherSupport + Gender + Homework_Math + Homework_Reading +      Homework_Science + SchoolType + ParentsEducation + Immigration +      HomeLanguage + Sibling + Aircon + Helper + Vehicle + Books +      Exercise + OwnRoom + FamilyCommitment + Preference_Math +      Preference_Reading + Preference_Science, data = train_stu,      importance = TRUE, ntree = 500) 
+               Type of random forest: regression
+                     Number of trees: 500
+No. of variables tried at each split: 7
+
+          Mean of squared residuals: 5971.14
+                    % Var explained: 38.85</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="model-diagnostics" class="level1">
+<h1>5 Model Diagnostics</h1>
+<p>We will focus on three plots to check if assumptions of multiple linear model are met:</p>
+<ol type="1">
+<li><p><strong>Residuals vs.&nbsp;fitted values plot:</strong> This plot serves mainly to check the linearity, although lack of homoscedasticity or independence can also be detected. For linearity, we expect the line (a non-linear fit of the mean of the residuals) to be almost flat. This means that the trend of Y-values is linear with respect to the variables. Heteroskedasticity can be detected also in the form of irregular vertical dispersion around the red line. The dependence between residuals can be detected (harder) in the form of non randomly spread residuals.</p></li>
+<li><p><strong>QQ-plot:</strong> In linear regression, residuals should be normally distributed. This can be checked using so-called Q-Q plots (quantile-quantile plot) to compare the shapes of distributions. This plot shows the quantiles of the studentized residuals versus fitted values. Usually, dots should fall along the reference line. If there is some deviation (mostly at the tails), this indicates that the model doesn’t predict the outcome well for the range that shows larger deviations from the reference line.</p></li>
+<li><p><strong>Scale-location plot:</strong> Serves for checking the homoscedasticity. To meet this assumption, the variance of the residuals across different values of variables is similar and does not notably increase or decrease. Hence, the desired pattern would be that dots spread equally above and below a roughly straight, horizontal line and show no apparent deviation.</p></li>
+</ol>
+<div class="cell" data-fig.asp="0.5">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="do">## MLR DIAGNOSTIC PLOTS ##</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#~~ ui: mainPanel(plotOutput("diagplot")) ~~#</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#~~ server: output$diagplot &lt;- renderPlot({...}) ~~#</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#f5f5f5"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(stu_lm, <span class="dv">1</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.15</span>))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(stu_lm, <span class="dv">2</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.15</span>))</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(stu_lm, <span class="dv">3</span>, <span class="at">pch =</span> <span class="dv">19</span>, <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.15</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="1344"></p>
+</div>
+</div>
+<table class="table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 30%">
+<col style="width: 45%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Feature</th>
+<th>UI</th>
+<th>Server</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>plot(stu_lm)</strong></td>
+<td>Plots to be updated when response and explanatory variables and</td>
+<td><p>Within mainPanel():</p>
+<p>div(plotOutput(“diagplots”, width=600, height=320)</p></td>
+<td><p>This has to be wrapped in&nbsp;<code>reactive({ })</code>&nbsp;as it is reacting to inputs (when user clicks ‘Build Model’.</p>
+<p>lm_diagplot &lt;- eventReactive(input$bm_action_, { <em>plot(…)<br>
+</em>})</p>
+<p>output$diagplots &lt;- renderPlot({lm_diagplot()<br>
+})</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="variable-selection-importance" class="level1">
+<h1>6 Variable Selection / Importance</h1>
+<section id="multiple-linear-regression-1" class="level2">
+<h2 class="anchored" data-anchor-id="multiple-linear-regression-1">Multiple Linear Regression</h2>
+<p>AIC is Akaike's Information Criterion, and estimates the out-of-sample prediction error and relative quality of a statistical model. A higher number indicates more information lost. Lower numbers for AIC = higher quality models.</p>
+<p>BIC is the Bayesian Information Criterion, which like AIC, penalizes models for the number of parameters to reduce overfitting. BIC also considers the number of observations in the data, which AIC does not. Lower values of BIC are better, and BIC is generally always higher than AIC, but absolute values do not matter, only relative values when comparing models on the same dataset for the same outcome. If we improve the model (with useful predictor variables), the BIC should go down.</p>
+<p>Model selection also involves a search procedure:</p>
+<ul>
+<li>“backward”: start with all possible variables in the model, then consider how deleting a single predictor will affect a chosen metric.</li>
+<li>“forward”: starts with a model using no variables, and adds variables sequentially until it finds a good model or reaches the full model with all the variables.</li>
+<li>“backward/forward” (default) and “forward/backward”: combination of the above. Stepwise search checks going both backwards and forwards at every step. It considers the addition of any variable not currently in the model, as well as the removal of any variable currently in the model.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stepAIC</span>(stu_lm, </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">direction =</span> <span class="st">"backward"</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">criterion =</span> <span class="st">"AIC"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Start:  AIC=44880.36
+Math ~ Loneliness + ClassroomSafety + TeacherSupport + Gender + 
+    Homework_Math + Homework_Reading + Homework_Science + SchoolType + 
+    ParentsEducation + Immigration + HomeLanguage + Sibling + 
+    Aircon + Helper + Vehicle + Books + Exercise + OwnRoom + 
+    FamilyCommitment + Preference_Math + Preference_Reading + 
+    Preference_Science
+
+                     Df Sum of Sq      RSS   AIC
+- OwnRoom             1      9282 30731671 44880
+- Helper              1      9343 30731732 44880
+&lt;none&gt;                            30722388 44880
+- SchoolType          1     19283 30741672 44882
+- Loneliness          1     37920 30760308 44885
+- Homework_Math       1     43500 30765889 44886
+- Vehicle             1     84880 30807269 44893
+- Immigration         1    181710 30904099 44909
+- TeacherSupport      1    183490 30905878 44909
+- Aircon              1    257635 30980023 44921
+- HomeLanguage        1    284076 31006465 44926
+- ParentsEducation    1    371276 31093665 44940
+- ClassroomSafety     1    397576 31119964 44945
+- Sibling             1    407160 31129549 44946
+- Homework_Science    1    453330 31175719 44954
+- Gender              1    477252 31199641 44958
+- Preference_Science  1    574089 31296478 44974
+- FamilyCommitment    1    665983 31388371 44989
+- Homework_Reading    1    682258 31404647 44992
+- Preference_Reading  1    858465 31580853 45021
+- Preference_Math     1   1198548 31920936 45076
+- Exercise            1   1513638 32236027 45126
+- Books               1   2683245 33405634 45310
+
+Step:  AIC=44879.92
+Math ~ Loneliness + ClassroomSafety + TeacherSupport + Gender + 
+    Homework_Math + Homework_Reading + Homework_Science + SchoolType + 
+    ParentsEducation + Immigration + HomeLanguage + Sibling + 
+    Aircon + Helper + Vehicle + Books + Exercise + FamilyCommitment + 
+    Preference_Math + Preference_Reading + Preference_Science
+
+                     Df Sum of Sq      RSS   AIC
+- Helper              1      9265 30740936 44879
+&lt;none&gt;                            30731671 44880
+- SchoolType          1     21103 30752774 44881
+- Loneliness          1     38593 30770264 44884
+- Homework_Math       1     42615 30774286 44885
+- Vehicle             1     82466 30814137 44892
+- Immigration         1    179556 30911227 44908
+- TeacherSupport      1    183476 30915146 44909
+- Aircon              1    251421 30983092 44920
+- HomeLanguage        1    283110 31014781 44925
+- ParentsEducation    1    364220 31095891 44939
+- ClassroomSafety     1    396905 31128576 44944
+- Sibling             1    400240 31131911 44945
+- Homework_Science    1    455540 31187210 44954
+- Gender              1    472484 31204155 44957
+- Preference_Science  1    574292 31305963 44973
+- FamilyCommitment    1    663688 31395359 44988
+- Homework_Reading    1    677629 31409300 44990
+- Preference_Reading  1    863910 31595581 45021
+- Preference_Math     1   1207662 31939333 45077
+- Exercise            1   1531047 32262718 45129
+- Books               1   2674782 33406453 45308
+
+Step:  AIC=44879.47
+Math ~ Loneliness + ClassroomSafety + TeacherSupport + Gender + 
+    Homework_Math + Homework_Reading + Homework_Science + SchoolType + 
+    ParentsEducation + Immigration + HomeLanguage + Sibling + 
+    Aircon + Vehicle + Books + Exercise + FamilyCommitment + 
+    Preference_Math + Preference_Reading + Preference_Science
+
+                     Df Sum of Sq      RSS   AIC
+&lt;none&gt;                            30740936 44879
+- SchoolType          1     25344 30766280 44882
+- Loneliness          1     37800 30778736 44884
+- Homework_Math       1     43263 30784199 44885
+- Vehicle             1     74453 30815389 44890
+- Immigration         1    178295 30919231 44907
+- TeacherSupport      1    184093 30925028 44908
+- Aircon              1    248305 30989241 44919
+- HomeLanguage        1    275394 31016329 44923
+- ParentsEducation    1    358396 31099332 44937
+- ClassroomSafety     1    395013 31135949 44943
+- Sibling             1    410008 31150944 44946
+- Homework_Science    1    454756 31195692 44953
+- Gender              1    474582 31215518 44956
+- Preference_Science  1    577032 31317968 44973
+- FamilyCommitment    1    655392 31396328 44986
+- Homework_Reading    1    678243 31419179 44990
+- Preference_Reading  1    864239 31605175 45020
+- Preference_Math     1   1203343 31944279 45076
+- Exercise            1   1561054 32301989 45133
+- Books               1   2666995 33407931 45307</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Math ~ Loneliness + ClassroomSafety + TeacherSupport + 
+    Gender + Homework_Math + Homework_Reading + Homework_Science + 
+    SchoolType + ParentsEducation + Immigration + HomeLanguage + 
+    Sibling + Aircon + Vehicle + Books + Exercise + FamilyCommitment + 
+    Preference_Math + Preference_Reading + Preference_Science, 
+    data = stu_small)
+
+Coefficients:
+       (Intercept)          Loneliness     ClassroomSafety      TeacherSupport  
+           520.917              -3.692             -14.947              -8.344  
+            Gender       Homework_Math    Homework_Reading    Homework_Science  
+            20.381               3.793             -14.946              12.755  
+        SchoolType    ParentsEducation         Immigration        HomeLanguage  
+            -9.600               4.948               9.177             -16.975  
+           Sibling              Aircon             Vehicle               Books  
+           -10.170             -22.513               5.904              18.135  
+          Exercise    FamilyCommitment     Preference_Math  Preference_Reading  
+            -6.420              -3.585              17.411             -16.037  
+Preference_Science  
+            13.201  </code></pre>
+</div>
+</div>
+</section>
+<section id="random-forest-1" class="level2">
+<h2 class="anchored" data-anchor-id="random-forest-1">Random Forest</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">importance</span>(stu_rf) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Predictors =</span> <span class="fu">row.names</span>(.))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     %IncMSE IncNodePurity         Predictors
+Loneliness          5.260097     1239011.6         Loneliness
+ClassroomSafety    13.074213     1156032.9    ClassroomSafety
+TeacherSupport     13.005633     1344898.9     TeacherSupport
+Gender             15.578473      815874.8             Gender
+Homework_Math      18.682030     1512559.6      Homework_Math
+Homework_Reading   16.382087     1377442.7   Homework_Reading
+Homework_Science   25.507506     1860976.6   Homework_Science
+SchoolType          8.426632      228003.4         SchoolType
+ParentsEducation   35.525893     3729782.4   ParentsEducation
+Immigration        11.126208      854888.5        Immigration
+HomeLanguage        9.278671      716390.3       HomeLanguage
+Sibling            20.426484     2185691.4            Sibling
+Aircon             12.062797      595441.7             Aircon
+Helper              4.176590      526694.7             Helper
+Vehicle             7.646888     1033191.8            Vehicle
+Books              64.494828     5005317.9              Books
+Exercise           36.824743     3333302.9           Exercise
+OwnRoom             1.921358      588349.5            OwnRoom
+FamilyCommitment   23.821047     2974882.7   FamilyCommitment
+Preference_Math    40.541268     2470577.3    Preference_Math
+Preference_Reading 18.330060     1687210.9 Preference_Reading
+Preference_Science 25.206954     1846598.4 Preference_Science</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  arrange(desc(MeanDecreaseGini))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">varImpPlot</span>(stu_rf,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">main =</span> <span class="st">"Importance of Variables for XX Performance"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
 </section>
 <section id="model-assessment" class="level1">
-<h1>Model Assessment</h1>
+<h1>7 Model Assessment</h1>
+<p>Multiple Linear Regression</p>
+<p>Random Forest</p>
+<section id="visualising-of-predicted-vs.-observed-responses" class="level3">
+<h3 class="anchored" data-anchor-id="visualising-of-predicted-vs.-observed-responses"><strong>Visualising of predicted vs.&nbsp;observed responses</strong></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="do">##Fit test data into the model that has been built</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>test_stu<span class="sc">$</span>rf_fit <span class="ot">&lt;-</span> <span class="fu">predict</span>(stu_rf, test_stu)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
