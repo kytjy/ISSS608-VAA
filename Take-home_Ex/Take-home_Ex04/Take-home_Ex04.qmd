@@ -19,22 +19,29 @@ format:
 
 # 1 Overview
 
+International large-scale assessments, such as PISA, provide structured and static data. With the goal of exploring which factors have a higher relevance in predicting student performance, this post proposes the use of multiple linear regression and random forest approach to detect and analyse factors linked to academic performance.
+
+Specifically, this post details the steps, packages, prototypes, including the detailed breakdown of codes used for UI and Server in R Shiny as part of the model building module in preparation for the final Shiny app. 
+
 # 2 Loading Data and Packages
 
-::: panel-tabset
-## Packages
+## 2.1 Packages
 
 ```{r}
-pacman::p_load(tidyverse, ggplot2, patchwork, plotly, gtsummary,
-               lmtest, broom, vegan, recipes, DALEX, stargazer, corrplot,  
+pacman::p_load(tidyverse, #<< For data wrangling
+               ggplot2, patchwork, plotly, urbnthemes, # For plots
+               htmltools, reactable, #<< For dynamic tables
+               corrplot, # For corrplot
+               lmtest, # For regression analysis
                modelr, randomForest, rpart, rpart.plot, caret,
                performance, ggstatsplot,
-               MASS)
+               MASS,
+               broom, vegan, recipes, DALEX, stargazer)
 ```
 
-## The PISA Survey Students Questionnaire
+## 2.2 The PISA Survey Students Questionnaire
 
-Load in the csv file following minor data cleaning and wrangling documented [here](https://projectpisa.netlify.app/phase1/dataprep).
+The code chunk below loads \]our dataset into R environment, in the form of a csv file created following minor data cleaning and wrangling documented [here](https://projectpisa.netlify.app/phase1/dataprep).
 
 ```{r}
 stu <- read_csv("data/stu_SG_rcd.csv")
@@ -42,10 +49,11 @@ stu_encode <- read_csv("data/stu_SG_encode.csv")
 ```
 
 ```{r}
-#| eval: false
+#| echo: false
 glimpse(stu_encode)
 ```
-:::
+
+The flowchart below details the features for this model building module. 
 
 ```{mermaid}
 %%| fig-width: 8
@@ -54,12 +62,17 @@ glimpse(stu_encode)
 flowchart TD
     A[Building Explanatory Model]-->B[1. Feature Engineering - Multicollinearity, Variable Selection]
     B-->C[2. Model Building]
-    C-->C1[2a. Multiple Linear Regression]
-    C--> C2[2b. Random Forest]
-    C1-.->F[Model Diagnostic, Assumption Checking]
-    F-.->E
-    C2 -->E[3. Variable Importance]
-    E-->D[4. Model Assessment]
+    C-.->C1[2a. Multiple Linear Regression]
+    C-.-> C2[2b. Random Forest]
+    C1-.->F[3. Model Diagnostic, Assumption Checking]
+    C2-.->F
+    F -->E[4. Model Assessment]
+    E-->D[5. Variable Importance]
+```
+
+```{r}
+#| echo: false
+set_urbn_defaults(style = "print")
 ```
 
 # 3 Multicollinearity
@@ -71,6 +84,8 @@ In the code chunk below, we use [`recode()`]() to create dummy variables for *Sc
 ```{r}
 #| code-fold: true
 #| code-summary: "Show the code"
+
+# Data for correlation matrix
 
 cols <- c('SchoolType', 'Aircon', 'Helper')
 
@@ -86,7 +101,7 @@ stu_encode <- stu_encode %>%
                          "7020002" = 2))
 ```
 
-`cor()` calculates correlation coefficients, the function needs two inputs: the x-coordinates and the y-coordinates. Te argument `use = "complete.obs"` excludes missing values from the calculation of the correlation coefficient. Altogether, the code chunk below returns the correlation coefficient for each pair of survey participants who had valid responses for each question we have narrowed down to.
+`cor()` calculates correlation coefficients, the function needs two inputs: the x-coordinates and the y-coordinates. The argument `use = "complete.obs"` excludes missing values from the calculation of the correlation coefficient. Altogether, the code chunk below returns the correlation coefficient for each pair of survey participants who had valid responses for each question we have narrowed down to.
 
 ```{r}
 stu.cor <- cor(stu_encode[, 1:22], #<< cor(dataset()[,input$variables], checkbox for variable selection
@@ -148,14 +163,14 @@ corrplot(stu.cor,
 |                        |                                                                                                                                      | label = "Handling NA Values",\                                                                                                           |                                                               |
 |                        |                                                                                                                                      | choices = c("everything", "all.obs", "complete.obs", "na.or.complete", "pairwise.complete.obs")                                          |                                                               |
 +------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
-|                        | Correlation Method                                                                                                                   | Within tabsetPanel()():                                                                                                                  | `input$corMethod`                                             |
+|                        | Correlation Method                                                                                                                   | Within tabsetPanel():                                                                                                                    | `input$corMethod`                                             |
 |                        |                                                                                                                                      |                                                                                                                                          |                                                               |
 |                        |                                                                                                                                      | ***selectInput***(\                                                                                                                      |                                                               |
 |                        |                                                                                                                                      | inputID = "corMethod",\                                                                                                                  |                                                               |
 |                        |                                                                                                                                      | label = "Correlation Method",\                                                                                                           |                                                               |
 |                        |                                                                                                                                      | choices = eval(formals(cor)\$method)                                                                                                     |                                                               |
 +------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
-| **cor.mtest**          | To indicate if user wants to show statistical significance; if *yes*, allow option to set confidence level.                          | Within tabsetPanel()():                                                                                                                  | `input$confLevel`                                             |
+| **cor.mtest**          | To indicate if user wants to show statistical significance; if *yes*, allow option to set confidence level.                          | Within tabsetPanel():                                                                                                                    | `input$confLevel`                                             |
 |                        |                                                                                                                                      |                                                                                                                                          |                                                               |
 |                        |                                                                                                                                      | ***checkboxInput***("sigTest", "Show Significance Test?"),                                                                               |                                                               |
 |                        |                                                                                                                                      |                                                                                                                                          |                                                               |
@@ -170,44 +185,61 @@ corrplot(stu.cor,
 |                        |                                                                                                                                      |                                                                                                                                          |                                                               |
 |                        |                                                                                                                                      | ***selectInput***("plotMethod", "Plot Method", list("mixed", all = eval(formals(corrplot)\$method)), "number")                           |                                                               |
 +------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
-| **Build model button** | Build model button once selection is complete.                                                                                       | actionButton(inputId = "bm_action\_", label = "Build Model")                                                                             |                                                               |
+| **Build model button** | Build model button once selection is complete.                                                                                       | ***actionButton***(inputId = "bm_action", label = "Click to start building")                                                             |                                                               |
 +------------------------+--------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+
 
-: {tbl-colwidths="\[15,30,45,10\]"}
+: {tbl-colwidths="\[10,20,35,35\]"}
 
 # 4 Model Building
-
-```{r}
-# Set the seed before splitting the data
-set.seed(1234)
-
-# Remove missing cases from our dataset
-stu_small <- na.omit(stu_encode)
-
-# Split the data into training and test
-index <- createDataPartition(stu_small$Math, p = 0.8, list = FALSE) #<< User should be able to pick subject of interest here
-train_stu <- stu_small[index, ]
-test_stu  <- stu_small[-index, ]
-```
 
 ### Multiple Linear Regression
 
 ```{r}
-stu_lm <- lm(Math ~ Loneliness + ClassroomSafety + TeacherSupport + Gender + Homework_Math + Homework_Reading + Homework_Science + SchoolType+ ParentsEducation + Immigration + HomeLanguage + Sibling + Aircon + Helper + Vehicle + Books + Exercise + OwnRoom + FamilyCommitment + Preference_Math + Preference_Reading + Preference_Science, 
-             data = stu_small)
+## Data for Multiple Linear Regression ##
 
-summary(stu_lm)
+
 ```
 
 ```{r}
-stu_lm_diag <- augment(stu_lm)
+#stu_lm <- lm(Math ~ 
+#               Loneliness + ClassroomSafety + TeacherSupport + Gender + Homework_Math + Homework_Reading + Homework_Science + SchoolType+ ParentsEducation + Immigration + HomeLanguage + Sibling + Aircon + Helper + Vehicle + Books + Exercise + OwnRoom + FamilyCommitment + Preference_Math + Preference_Reading + Preference_Science, 
+#             data = stu_small)
+
+#summary(stu_lm)
 ```
 
-### Random Forest
+```{r}
+#stu_lm_diag <- augment(stu_lm)
+```
+
+### Random Forest & Tunable Hyperparameters
 
 ```{r}
+## Data for Random Forest ##
+
+# Set the seed before splitting the data
 set.seed(1234)
-stu_rf <- randomForest(Math ~ Loneliness + ClassroomSafety + TeacherSupport + Gender + Homework_Math + Homework_Reading + Homework_Science + SchoolType+ ParentsEducation + Immigration + HomeLanguage + Sibling + Aircon + Helper + Vehicle + Books + Exercise + OwnRoom + FamilyCommitment + Preference_Math + Preference_Reading + Preference_Science, #<< User to select variables 
+
+# Remove missing cases & convert variables to factor datatype our dataset
+stu_rcd_small <- stu %>% 
+  na.omit() %>% 
+  mutate(across(1:22, as.factor))
+
+# Select columns based on user preference
+stu_rcd_small <- stu_rcd_small %>% 
+  dplyr::select(c(1:22, "Math")) #<< User should be able to pick subject & vars of interest here
+
+# Split the data into training and test
+index <- createDataPartition(stu_rcd_small$Math, #<< input$bm_target
+                             p = 0.8, #<< input$rf_partition
+                             list = FALSE) 
+
+train_stu <- stu_rcd_small[index, ]
+test_stu  <- stu_rcd_small[-index, ]
+```
+
+```{r}
+stu_rf <- randomForest(Math ~., #<< input$bm_target ~.
                        data = train_stu,
                        importance = TRUE,
                        ntree = 500)
@@ -217,21 +249,101 @@ stu_rf <- randomForest(Math ~ Loneliness + ClassroomSafety + TeacherSupport + Ge
 print(stu_rf)
 ```
 
-+------------+--------------------+------------------------------+------------+
-| Function   | Feature            | UI                           | Server     |
-+============+====================+==============================+============+
-|            | Select subject     | Within ***sidebarPanel***(): |            |
-+------------+--------------------+------------------------------+------------+
-|            | Select variables   |                              |            |
-+------------+--------------------+------------------------------+------------+
-|            | Partition size     |                              |            |
-+------------+--------------------+------------------------------+------------+
-|            | No. of trees       |                              |            |
-+------------+--------------------+------------------------------+------------+
-|            |                    |                              |            |
-+------------+--------------------+------------------------------+------------+
++------------+---------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------+
+| Function   | Feature                                                                                                                                     | UI                                                                                       | Server                                                    |
++============+=============================================================================================================================================+==========================================================================================+===========================================================+
+| **stu_rf** | Select subject, variables *(synchronised with variable selection for correlation matrix in Section 3),* partition size, and number of trees | Within ***sidebarPanel***():                                                             | stu_rf_dataset \<- eventReactive(\                        |
+|            |                                                                                                                                             |                                                                                          | input\$bm_action, {\                                      |
+|            |                                                                                                                                             | selectInput(\                                                                            | stu_rcd_small\[, c(input\$bm_vars \| input\$bm_target)\]\ |
+|            |                                                                                                                                             | inputId = "bm_target", \                                                                 | })                                                        |
+|            |                                                                                                                                             | label = "Subject",\                                                                      |                                                           |
+|            |                                                                                                                                             | choices = c("Math", "Reading", "Science")                                                | stu_rfmb_index \<- eventReactive(\                        |
+|            |                                                                                                                                             |                                                                                          | input\$bm_action, {\                                      |
+|            |                                                                                                                                             | Within ***mainPanel***() \> tabsetPanel() \> ***sliderInput***(\                         | createDataPartition(\                                     |
+|            |                                                                                                                                             | inputId = "rf_partition",\                                                               | stu_rf_dataset()*\[, input\$bm_target\]*,\                |
+|            |                                                                                                                                             | label = "Train-Test Partition Ratio:",\                                                  | p = input\$rf_partition,\                                 |
+|            |                                                                                                                                             | min = 0.5,\                                                                              | list = FALSE)\                                            |
+|            |                                                                                                                                             | max = 0.95,\                                                                             | })                                                        |
+|            |                                                                                                                                             | value = c(0.8)))                                                                         |                                                           |
+|            |                                                                                                                                             |                                                                                          | stu_rf_train \<- eventReactive(\                          |
+|            |                                                                                                                                             | Within ***mainPanel***() \> tabsetPanel() \> ***numericInput***(inputId = "rf_treenum",\ | input\$bm_action, {\                                      |
+|            |                                                                                                                                             | label = "Number of Trees (Pick between 3 to 500):",\                                     | stu_rf_dataset()\[stu_rfmb_index(),\]\                    |
+|            |                                                                                                                                             | min = 5,\                                                                                | })                                                        |
+|            |                                                                                                                                             | max = 500,\                                                                              |                                                           |
+|            |                                                                                                                                             | value = 50)),                                                                            | stu_rf_test \<- eventReactive(\                           |
+|            |                                                                                                                                             |                                                                                          | input\$bm_action, {\                                      |
+|            |                                                                                                                                             |                                                                                          | stu_rf_dataset()\[-stu_rfmb_index(),\]\                   |
+|            |                                                                                                                                             |                                                                                          | })                                                        |
+|            |                                                                                                                                             |                                                                                          |                                                           |
+|            |                                                                                                                                             |                                                                                          | stu_rf \<- eventReactive(\                                |
+|            |                                                                                                                                             |                                                                                          | input\$bm_action, {\                                      |
+|            |                                                                                                                                             |                                                                                          | randomForest(input\$bm_target \~.,\                       |
+|            |                                                                                                                                             |                                                                                          | data = stu_rf_train ,\                                    |
+|            |                                                                                                                                             |                                                                                          | importance = TRUE,\                                       |
+|            |                                                                                                                                             |                                                                                          | ntree = input\$rf_treenum)})                              |
++------------+---------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------+
 
-# 5 Model Diagnostics
+: {tbl-colwidths="\[10,20,35,35\]"}
+
+# 5 Model Assessment
+
+## Multiple Linear Regression
+
+```{r}
+
+```
+
+### Random Forest - RMSE
+
+Root mean square error (RMSE) is used to estimate how well our random forest was able to predict our test set outcomes.
+
+```{r}
+predict_rf <- bind_cols(
+   Actual = test_stu$Math, 
+   Predicted = predict(stu_rf, newdata = test_stu),
+   Residuals = predict(stu_rf, newdata = test_stu) - test_stu$Math
+)
+
+predict_rf_rmse <- RMSE(pred = predict_rf$Predicted, obs = predict_rf$Actual)
+predict_rf_rmse
+```
+
++---------------+--------------------------------------------------------------------------------------------------------------------+---------------------------------------------+-----------------------------------------------------------------+
+| Function      | Feature                                                                                                            | UI                                          | Server                                                          |
++===============+====================================================================================================================+=============================================+=================================================================+
+| **predict()** | Model to be updated when response and explanatory variables are selected and 'Build Model' is clicked.             | \-                                          | [Calculate RMSE]{.underline}                                    |
+|               |                                                                                                                    |                                             |                                                                 |
+|               |                                                                                                                    |                                             | predict_rf \<- eventReactive(\                                  |
+|               |                                                                                                                    |                                             | input\$bm_action, {\                                            |
+|               |                                                                                                                    |                                             | bind_cols(\                                                     |
+|               |                                                                                                                    |                                             | Actual = stu_rf_test*()\$input\$bm_target*,\                    |
+|               |                                                                                                                    |                                             | Predicted = predict(*stu_rf()*,\                                |
+|               |                                                                                                                    |                                             | newdata = *stu_rf_test()*), Residuals = predict(*stu_rf()*,\    |
+|               |                                                                                                                    |                                             | newdata = *stu_rf_test()* - *stu_rf_test()\$input\$bm_target*)\ |
+|               |                                                                                                                    |                                             | })                                                              |
+|               |                                                                                                                    |                                             |                                                                 |
+|               |                                                                                                                    |                                             | predict_rf_rmse \<- eventReactive(\                             |
+|               |                                                                                                                    |                                             | input\$bm_action, { caret::RMSE(\                               |
+|               |                                                                                                                    |                                             | pred = *predict_rf()\$Predicted*,\                              |
+|               |                                                                                                                    |                                             | obs = *predict_rf()\$Actual*)\                                  |
+|               |                                                                                                                    |                                             | })                                                              |
++---------------+--------------------------------------------------------------------------------------------------------------------+---------------------------------------------+-----------------------------------------------------------------+
+| **RMSE()**    | Metrics displayed to be updated when response and explanatory variables are selected and 'Build Model' is clicked. | Within mainPanel():                         | [Display RMSE]{.underline}                                      |
+|               |                                                                                                                    |                                             |                                                                 |
+|               |                                                                                                                    | fluidRow( div(\                             | rf_display_RMSE = function(){\                                  |
+|               |                                                                                                                    | ***valueBoxOutput***("rf_rmse", width = 4)) | output\$rf_rmse = ***renderValueBox***(\                        |
+|               |                                                                                                                    |                                             | valueBox(\                                                      |
+|               |                                                                                                                    |                                             | value = *predict_rf_rmse()*)\                                   |
+|               |                                                                                                                    |                                             | )}                                                              |
+|               |                                                                                                                    |                                             |                                                                 |
+|               |                                                                                                                    |                                             | observeEvent(input\$bm_action, *rf_display_RMSE()*)             |
++---------------+--------------------------------------------------------------------------------------------------------------------+---------------------------------------------+-----------------------------------------------------------------+
+
+: {tbl-colwidths="\[10,20,35,35\]"}
+
+# 6 Model Diagnostics
+
+## Multiple Linear Regression
 
 We will focus on three plots to check if assumptions of multiple linear model are met:
 
@@ -252,30 +364,104 @@ We will focus on three plots to check if assumptions of multiple linear model ar
 par(bg = "#f5f5f5")
 
 par(mfrow=c(1,3))
-plot(stu_lm, 1, pch = 19, col = rgb(0, 0, 0, 0.15))
-plot(stu_lm, 2, pch = 19, col = rgb(0, 0, 0, 0.15))
-plot(stu_lm, 3, pch = 19, col = rgb(0, 0, 0, 0.15))
+#plot(stu_lm, 1, pch = 19, col = rgb(0, 0, 0, 0.15))
+#plot(stu_lm, 2, pch = 19, col = rgb(0, 0, 0, 0.15))
+#plot(stu_lm, 3, pch = 19, col = rgb(0, 0, 0, 0.15))
 ```
 
-+------------------+-----------------------------------------------------------------+----------------------------------------------------+--------------------------------------------------------------------------------------------------------+
-| Function         | Feature                                                         | UI                                                 | Server                                                                                                 |
-+==================+=================================================================+====================================================+========================================================================================================+
-| **plot(stu_lm)** | Plots to be updated when response and explanatory variables and | Within mainPanel():                                | This has to be wrapped in `reactive({ })` as it is reacting to inputs (when user clicks 'Build Model'. |
-|                  |                                                                 |                                                    |                                                                                                        |
-|                  |                                                                 | div(plotOutput("diagplots", width=600, height=320) | lm_diagplot \<- eventReactive(input\$bm_action\_, { *plot(...)\                                        |
-|                  |                                                                 |                                                    | *})                                                                                                    |
-|                  |                                                                 |                                                    |                                                                                                        |
-|                  |                                                                 |                                                    | output\$diagplots \<- renderPlot({lm_diagplot()\                                                       |
-|                  |                                                                 |                                                    | })                                                                                                     |
-+------------------+-----------------------------------------------------------------+----------------------------------------------------+--------------------------------------------------------------------------------------------------------+
++------------------+--------------------------------------------------------------------------------------------------------+---------------------+--------------------------------------------------------------------------------------------------------+
+| Function         | Feature                                                                                                | UI                  | Server                                                                                                 |
++==================+========================================================================================================+=====================+========================================================================================================+
+| **plot(stu_lm)** | Plots to be updated when response and explanatory variables are selected and 'Build Model' is clicked. | Within mainPanel(): | This has to be wrapped in `reactive({ })` as it is reacting to inputs (when user clicks 'Build Model'. |
+|                  |                                                                                                        |                     |                                                                                                        |
+|                  |                                                                                                        | div(\               | lm_diagplot \<- eventReactive(input\$bm_action\_, { *plot(...)\                                        |
+|                  |                                                                                                        | plotOutput(\        | *})                                                                                                    |
+|                  |                                                                                                        | "diagplots")        |                                                                                                        |
+|                  |                                                                                                        |                     | output\$diagplots \<- renderPlot({lm_diagplot()\                                                       |
+|                  |                                                                                                        |                     | })                                                                                                     |
++------------------+--------------------------------------------------------------------------------------------------------+---------------------+--------------------------------------------------------------------------------------------------------+
 
-: {tbl-colwidths="\[15,30,45,10\]"}
+: {tbl-colwidths="\[10,20,35,35\]"}
 
-# 6 Variable Selection / Importance
+## Random Forest
+
+```{r}
+
+rf_predvsactual <- 
+  predict_rf %>%
+   ggplot(aes(x = Actual, y = Predicted)) +
+   geom_point(alpha = 0.6, color = "#73b2c4") +
+   geom_smooth(method = "loess", formula = "y ~ x") +
+   geom_abline(intercept = 0, slope = 1, linetype = 2) +
+   labs(title = "Predicted vs Actual") +
+   theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+
+rf_residvsactual <- 
+  predict_rf %>%
+   ggplot(aes(x = Actual, y = Residuals)) +
+   geom_point(alpha = 0.6, color = "#73b2c4") +
+   geom_smooth(method = "loess", formula = "y ~ x") +
+   geom_hline(yintercept = 0, linetype = 2) +
+   labs(title = "Residuals vs Actual") +
+   theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+
+rf_residvsfitted <- 
+  predict_rf %>%
+   ggplot(aes(x = Predicted, y = Residuals)) +
+   geom_point(alpha = 0.6, color = "#73b2c4") +
+   geom_smooth(method = "loess", formula = "y ~ x") +
+   geom_hline(yintercept = 0, linetype = 2) +
+   labs(title = "Residuals vs Actual") +
+   theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+
+rf_predvsactual + rf_residvsactual + rf_residvsfitted
+```
+
+1.  **Predicted vs Actual:** This is a scatter plot that helps you visualize the performance of a regression model. The x-axis represents the actual values, and the y-axis represents the predicted values. Ideally, if the predictions are perfect, the points will lie along a straight line with a slope of 1.
+
+2.  **Residuals vs Observed:** Middle plot above shows a scatter plot of residuals (vertical axis) in function of the observed (horizontal axis) values of the dependent variable. For a "perfect" predictive model, we would expect the horizontal line at zero. For a "good" model, we would like to see a symmetric scatter of points around the horizontal line at zero, indicating random deviations of predictions from the observed values. The plot in shows that, for the large observed values of the dependent variable, the residuals are negative, while for small values they are posutive. This trend is clearly captured by the smoothed curve included in the graph. Thus, the plot suggests that the predictions are shifted towards the average.
+
+3.  **Residuals vs. fitted values plot:** Refer to MLR section for elaboration.
+
++------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------+----------------------------------+-------------------------------------------+
+| Function                                                         | Feature                                                                                                | UI                               | Server                                    |
++==================================================================+========================================================================================================+==================================+===========================================+
+| **Predicted vs Actual graphs and Residual plots using ggplot()** | Plots to be updated when response and explanatory variables are selected and 'Build Model' is clicked. | Within mainPanel():              | rf_plot_predvsactual \<- eventReactive(\  |
+|                                                                  |                                                                                                        |                                  | input\$bm_action\_, { \                   |
+|                                                                  |                                                                                                        | plotOutput("rf_predvsactual")\   | ggplot(data = *predict_rf, ...)\          |
+|                                                                  |                                                                                                        | \                                | *})                                       |
+|                                                                  |                                                                                                        | plotOutput("rf_residvsactual ")\ |                                           |
+|                                                                  |                                                                                                        | \                                | output\$rf_predvsactual \<-\              |
+|                                                                  |                                                                                                        | plotOutput("rf_residvsfitted ")\ | renderPlot({\                             |
+|                                                                  |                                                                                                        |                                  | rf_plot_predvsactual()\                   |
+|                                                                  |                                                                                                        |                                  | })                                        |
+|                                                                  |                                                                                                        |                                  |                                           |
+|                                                                  |                                                                                                        |                                  | rf_plot_residvsactual \<- eventReactive(\ |
+|                                                                  |                                                                                                        |                                  | input\$bm_action\_, { \                   |
+|                                                                  |                                                                                                        |                                  | ggplot(data = *predict_rf, ...)\          |
+|                                                                  |                                                                                                        |                                  | *})                                       |
+|                                                                  |                                                                                                        |                                  |                                           |
+|                                                                  |                                                                                                        |                                  | output\$rf_residvsactual \<-\             |
+|                                                                  |                                                                                                        |                                  | renderPlot({\                             |
+|                                                                  |                                                                                                        |                                  | rf_plot_residvsactual()\                  |
+|                                                                  |                                                                                                        |                                  | })                                        |
+|                                                                  |                                                                                                        |                                  |                                           |
+|                                                                  |                                                                                                        |                                  | rf_plot_residvsfitted \<- eventReactive(\ |
+|                                                                  |                                                                                                        |                                  | input\$bm_action\_, { \                   |
+|                                                                  |                                                                                                        |                                  | ggplot(data = *predict_rf, ...)\          |
+|                                                                  |                                                                                                        |                                  | *})                                       |
+|                                                                  |                                                                                                        |                                  |                                           |
+|                                                                  |                                                                                                        |                                  | output\$rf_residvsfitted \<-\             |
+|                                                                  |                                                                                                        |                                  | renderPlot({\                             |
+|                                                                  |                                                                                                        |                                  | rf_plot_residvsfitted ()\                 |
+|                                                                  |                                                                                                        |                                  | })                                        |
++------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------+----------------------------------+-------------------------------------------+
+
+# 7 Variable Selection / Importance
 
 ## Multiple Linear Regression
 
-AIC is Akaike\'s Information Criterion, and estimates the out-of-sample prediction error and relative quality of a statistical model. A higher number indicates more information lost. Lower numbers for AIC = higher quality models.
+AIC is Akaike's Information Criterion, and estimates the out-of-sample prediction error and relative quality of a statistical model. A higher number indicates more information lost. Lower numbers for AIC = higher quality models.
 
 BIC is the Bayesian Information Criterion, which like AIC, penalizes models for the number of parameters to reduce overfitting. BIC also considers the number of observations in the data, which AIC does not. Lower values of BIC are better, and BIC is generally always higher than AIC, but absolute values do not matter, only relative values when comparing models on the same dataset for the same outcome. If we improve the model (with useful predictor variables), the BIC should go down.
 
@@ -286,38 +472,65 @@ Model selection also involves a search procedure:
 -   "backward/forward" (default) and "forward/backward": combination of the above. Stepwise search checks going both backwards and forwards at every step. It considers the addition of any variable not currently in the model, as well as the removal of any variable currently in the model.
 
 ```{r}
-stepAIC(stu_lm, 
-         direction = "backward",
-         criterion = "AIC")
+#stepAIC(stu_lm, 
+#         direction = "backward",
+#         criterion = "AIC")
 ```
 
 ## Random Forest
 
 ```{r}
-importance(stu_rf) %>% 
+rf_varimp <- importance(stu_rf) %>% 
   as.data.frame() %>% 
-  mutate(Predictors = row.names(.))
-#  arrange(desc(MeanDecreaseGini))
+  rownames_to_column() %>% 
+  rename("Variable" = rowname) 
 ```
 
 ```{r}
-varImpPlot(stu_rf,
-           main = "Importance of Variables for XX Performance")
+bar_chart <- function(label, width = "100%", height = "1rem", fill = "#73b2c4", background = "#f5f5f5") {
+  bar <- div(style = list(background = fill, width = width, height = height))
+  chart <- div(style = list(flexGrow = 1, marginLeft = "0.5rem", background = "#f5f5f5"), bar)
+  div(style = list(display = "flex", alignItems = "center"), label, chart)
+}
+
+tab_varimp <- 
+  reactable(data = rf_varimp,
+         
+          columns = list(
+            `%IncMSE` = colDef(
+              name = "% Increase in Mean Square Error",
+              align = 'left',
+              cell = function (value) {
+                width <- paste0(value, "%")
+                bar_chart(round(value,2), width = width)
+              }),
+            IncNodePurity = colDef(
+              name = "Increase in Node Purity",
+              align = 'left',
+              cell = function (value) {
+                width <- paste0(value/ max(rf_varimp$IncNodePurity) *100, "%")
+                bar_chart(format(as.numeric(value), nsmall = 0, big.mark=","), width = width, fill = "#f27279", background = "#f5f5f5")
+              })            
+          ))
+
+tab_varimp
 ```
 
-# 7 Model Assessment
++----------------------------------------------------------------+--------------------------------------------------------------------------------------------------------+-------------------------------+-----------------------------------------------+
+| Function                                                       | Feature                                                                                                | UI                            | Server                                        |
++================================================================+========================================================================================================+===============================+===============================================+
+| **rf_varimp & [reactable](https://glin.github.io/reactable/)** | Plots to be updated when response and explanatory variables are selected and 'Build Model' is clicked. | Within ***sidebarPanel***():  | rf_varimp \<- eventReactive(\                 |
+|                                                                |                                                                                                        |                               | input\$rf_action\_, {\                        |
+|                                                                |                                                                                                        | reactableOutput("tab_varimp") | importance(stu_rf) %\>% as.data.frame() %\>%\ |
+|                                                                |                                                                                                        |                               | rownames_to_column() %\>%\                    |
+|                                                                |                                                                                                        |                               | rename("Variable" = rowname)\                 |
+|                                                                |                                                                                                        |                               | })                                            |
+|                                                                |                                                                                                        |                               |                                               |
+|                                                                |                                                                                                        |                               | output\$tab_varimp \<- renderReactable({\     |
+|                                                                |                                                                                                        |                               | reactable(...)\                               |
+|                                                                |                                                                                                        |                               | })                                            |
++----------------------------------------------------------------+--------------------------------------------------------------------------------------------------------+-------------------------------+-----------------------------------------------+
 
-Multiple Linear Regression
+: {tbl-colwidths="\[10,20,35,35\]"}
 
-```{r}
-
-```
-
-Random Forest
-
-### **Visualising of predicted vs. observed responses**
-
-```{r}
-##Fit test data into the model that has been built
-test_stu$rf_fit <- predict(stu_rf, test_stu)
-```
+# 8
