@@ -1,6 +1,6 @@
 ---
-title: "In-class Exercise 7: tmaps"
-date: "?? March 2024"
+title: "In-class Exercise 7: tmaps (WIP)"
+date: "09 Mar 2024"
 date-modified: "last-modified"
 editor: visual
 toc-depth: 4
@@ -17,10 +17,12 @@ format:
     code-line-numbers: false
 ---
 
+![](images/placeholder.PNG){fig-align="center"}
+
 # 1 Packages
 
 | Package                                              | Description                                                                                    |
-|------------|------------------------------------------------------------|
+|----------------|--------------------------------------------------------|
 | [**sf**](https://r-spatial.github.io/sf/)            | For spatial manipulation                                                                       |
 | [**terra**](https://github.com/rspatial/terra)       | Methods for spatial data analysis with vector (points, lines, polygons) and raster (grid) data |
 | [**gstat**](https://github.com/r-spatial/gstat)      | For spatial and spatio-temporal geostatistical modelling, prediction and simulation            |
@@ -40,10 +42,10 @@ rfstations <- read_csv("data/aspatial/RainfallStation.csv")
 
 Our latitude should be close to 0 from Singapore as we are near the equator.
 
-The bit of code below performs data import, data extraction and data manipulation altogether. 
+The bit of code below performs data import, data extraction and data manipulation altogether.
 
 ```{r}
-rfdata <-  read_csv("data/aspatial/DAILYDATA_202402.csv") %>% 
+rfdata <-  read_csv("data/aspatial/DAILYDATA_202402.csv")  %>% 
   select(c(1,5)) %>% 
   group_by(Station) %>% 
   summarise(MONTHSUM = sum(`Daily Rainfall Total (mm)`)) %>% 
@@ -62,6 +64,7 @@ The code chunk below performs a left join of the aspatial rainfall data with the
 rfdata <- rfdata %>% 
   left_join(rfstations)
 ```
+
 `crs = 4326` because data is in decimal degree, to tell sf that data is in WGS. Must be in **longitude, latitude**.
 
 ```{r}
@@ -78,7 +81,6 @@ Projection is transformed/converted using formula to different projection units.
 rfdata_sf %>%  kable()
 ```
 
-
 ```{r}
 mpsz2019 <- st_read(dsn = "data/geospatial", #destination
                     layer = "MPSZ-2019") %>% 
@@ -88,7 +90,6 @@ mpsz2019 <- st_read(dsn = "data/geospatial", #destination
 ```{r}
 mpsz2019 %>%kable()
 ```
-
 
 ```{r}
 tmap_options(check.and.fix = TRUE)
@@ -118,7 +119,7 @@ grid <- terra::rast(mps2019,
 xy <- terra::xyFromCell(grid,
                         1:ncell(grid))
 ```
- 
+
 ```{r}
 #| eval: false 
 
@@ -131,6 +132,3 @@ resp <- predict(res, coop)
 resp$x <- st_coordinates(resp)[,1]
 resp$y <- st_coordinates(resp)
 ```
-
-
-

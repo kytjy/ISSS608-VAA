@@ -1,6 +1,6 @@
 ---
 title: "Take-home Exercise 4: Prototyping Modules for Shiny Application"
-date: "?? Feb 2024"
+date: "09 Mar 2024"
 date-modified: "last-modified"
 editor: visual
 toc-depth: 4
@@ -17,6 +17,8 @@ format:
     code-line-numbers: false
 ---
 
+![](images/prototype.gif){fig-align="center"}
+
 # 1 Overview
 
 International large-scale assessments, such as PISA, provide structured and static data. With the goal of exploring which factors have a higher relevance in predicting student performance, this post proposes the use of multiple linear regression and random forest approach to detect and analyse factors linked to academic performance.
@@ -29,27 +31,25 @@ Specifically, this post details the steps, packages, prototypes, including the d
 
 The packages used as part of this exercise includes:
 
-+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
-| Package                                                                                                                                                           | Description                                                         |
-+===================================================================================================================================================================+=====================================================================+
-| [**tidyverse**](https://www.tidyverse.org/)                                                                                                                       | For data wrangling                                                  |
-+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
-| [**ggplot2**](https://ggplot2.tidyverse.org/)**, [patchwork](https://patchwork.data-imaginist.com/), urbnthemes**                                                 | For plots and setting a consistent theme throughout this exercise.  |
-+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
-| [**htmltools**](https://rstudio.github.io/htmltools/)**, [reactable](https://glin.github.io/reactable/), [gtsummary](https://www.danieldsjoberg.com/gtsummary/)** | For dynamic and static data tables                                  |
-+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
-| [**corrplot**](https://github.com/taiyun/corrplot)                                                                                                                | For correlation matrix                                              |
-+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
-| [**caret**](https://topepo.github.io/caret/)**, [tidymodels](https://www.tidymodels.org/)**                                                                       | For packages relating to modeling, regression, and machine learning |
-+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
-| [**performance**](https://easystats.github.io/performance/)                                                                                                       | For assessment of regression models performance                     |
-+-------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
+| Package                                                                                                                                                                                                                                                                                                                                                                                  | Description                                                         |
++==========================================================================================================================================================================================================================================================================================================================================================================================+=====================================================================+
+| [**tidyverse**](https://www.tidyverse.org/)                                                                                                                                                                                                                                                                                                                                              | For data wrangling                                                  |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
+| [**ggplot2**](https://ggplot2.tidyverse.org/)**, [patchwork](https://patchwork.data-imaginist.com/), [urbnthemes](https://urbaninstitute.github.io/urbnthemes/articles/introducing-urbnthemes.html)**                                                                                                                                                                                    | For creating plots                                                  |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
+| [**reactable**](https://glin.github.io/reactable/)                                                                                                                                                                                                                                                                                                                                       | For dynamic data tables                                             |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
+| [**ranger**](https://cran.r-project.org/web/packages/ranger/index.html), [**vip**](https://koalaverse.github.io/vip/articles/vip.html), [**rpart.plot**](https://cran.r-project.org/web/packages/rpart.plot/rpart.plot.pdf), [**caret**](https://topepo.github.io/caret/)**, [tidymodels](https://www.tidymodels.org/)**, [**gbm**](https://cran.r-project.org/web/packages/gbm/gbm.pdf) | For packages relating to modeling, regression, and machine learning |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
+| [**performance**](https://easystats.github.io/performance/)                                                                                                                                                                                                                                                                                                                              | For assessment of regression models performance                     |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
 
 ```{r}
 pacman::p_load(tidyverse, 
                ggplot2, patchwork, urbnthemes, 
-               gtsummary,
-               ranger, rpart.plot, caret, tidymodels, gbm, 
+               reactable,
+               ranger, vip, rpart.plot, caret, tidymodels, gbm, 
                performance)
 ```
 
@@ -66,7 +66,7 @@ stu <- read_csv("data/stu_SG_rcd.csv")
 glimpse(stu)
 ```
 
-# 3 Storyboard
+# 3 Outline
 
 The flowchart below details the features for this model building module.
 
@@ -80,15 +80,30 @@ flowchart TD
     C-.-> C3[Gradient Boosting]
     C1-.->F[3. Visual Model Diagnostics]
     C2-.->F
+    C3-.->F
     F -->E[4. Statistical Model Evaluation]
     E-->D[5. Variable Importance]
 ```
 
-## 3.1 Draft Designs
+## 3.1 Storyboard
 
-At the initial stage of the model building module, users would be able customise various options for building 3 predictive models. We perform a detailed walkthrough of the interactivity and customisation features, including descriptions of the SHINY UI and Server in Sections 5-7.
+At the initial stage of the model building module, users would be able customise various options for each of the 3 predictive models offered.
 
-In the subsequent parts of this section, we briefly outline the rationale behind visualisations and measurements.
+[**Decision Tree**]{.underline}
+
+![](images/dt.png){fig-align="center"}
+
+[**Random Forest**]{.underline}
+
+![](images/rf.png){fig-align="center"}
+
+[**Gradient Boosting**]{.underline}
+
+![](images/gb.png){fig-align="center"}
+
+Options for customisations are available on the left side of the app, these options are used to train the model. The right displays the performance of the model including model fit and variable importance, as well as the performance evaluation metrics using the model on the test data. We perform a detailed walkthrough of the interactivity and customisation features for each model, including descriptions of the SHINY UI and Server in Sections 5-7.
+
+But first, in the subsequent parts of this section, we briefly outline the rationale behind visualisations and measurements.
 
 ## 3.2 Visual Model Diagnostic
 
@@ -104,7 +119,7 @@ We can quantify the residuals by calculating a number of commonly used evaluatio
 
 -   Root Mean Square Error (RMSE): The square root of the MSE. This yields an absolute metric in the same unit as the response variable (in this case, scores). The smaller the value, the better the model (in a simplistic sense, it represents the average scores by which the predictions are wrong).
 
--   $R^2$: describes the strength of a model fit. In essence, this metric represents how much of the variance between predicted and actual label values the model is able to explain. The regular $R^2$ is a biased estimate of the amount of variability explained by the model when applied to model with more than one predictor. To get a better estimate, we use the $adjusted\ R^2$. The best fit is the one that maximises $R^2$ or $adjusted\ R^2$.
+-   $R^2$: describes the strength of a model fit. In essence, this metric represents how much of the variance between predicted and actual label values the model is able to explain.
 
 -   Mean Absolute Error (MAE): It is measured as the average absolute difference between the predicted values and the actual values and is used to assess the effectiveness of a regression model.
 
@@ -113,13 +128,7 @@ We can quantify the residuals by calculating a number of commonly used evaluatio
 set_urbn_defaults(style = "print")
 ```
 
-`formals()` function returns the argument list of the function specified. This can be used in the sidebar to display the options for user selection.
-
-```{r}
-eval(formals(cor)$method)
-```
-
-# 4 Prelude
+# 4 Model Building
 
 The general outline of a predictive analysis is as follows:
 
@@ -137,9 +146,7 @@ The general outline of a predictive analysis is as follows:
     -   `tuneGrid` which specifies the tuning parameters to train over
 -   Use chosen model to make predictions using `predict()`
 
-## 4.1 Data Preparation
-
-The goal of training the model is to find a function that performs some kind of calculation to the $x$ values (i.e. independent variables) that produces the result $y$ (i.e. dependent variable). We do this by applying a machine learning algorithm that tries to fit the $x$ values to a calculation that produces $y$ reasonably accurately for all of the cases in the training dataset.
+## 4.1 Data Preparation for Regression
 
 To train the model, we start with a data sample containing the independent/explanatory variables as well as known values for the subject scores. We'll then split this data sample into two subsets:
 
@@ -156,7 +163,7 @@ stu <- stu %>%
   mutate(across(1:22, as.factor))
 
 data <- stu %>% 
-  dplyr::select(c(1:22, "Math")) #<< input$var, input$bm_target to change according to user selection
+  dplyr::select(c(1:22, "Math")) #<< input$var, input$mb_target to change according to user selection
 ```
 
 ```{r}
@@ -164,7 +171,7 @@ data <- stu %>%
 set.seed(1234)
 
 # Split the data into training and test
-index <- createDataPartition(data$Math, #<< input$bm_target
+index <- createDataPartition(data$Math, #<< input$mb_target
                              p = 0.8, #<< input$rf_partition
                              list = FALSE) 
 
@@ -260,18 +267,18 @@ The boxes show the node predicted value (mean) and the proportion of observation
 |                    |                                                                                 | label = "K-fold:",\                                                            |                                                                             |
 |                    |                                                                                 | min = 3,\                                                                      | [For Cross Validation]{.underline}\                                         |
 |                    |                                                                                 | max = 50,\                                                                     | dt_resamplecv_kfoldnum \<- eventReactive(input\$mb_action, {\               |
-|                    |                                                                                 | value = 10))),                                                                 | trainControl(\                                                              |
+|                    |                                                                                 | value = 10)                                                                    | trainControl(\                                                              |
 |                    |                                                                                 |                                                                                | method = "cv",\                                                             |
 |                    |                                                                                 | numericInput(inputId = "dt_repeatkfold_number",\                               | number = input\$dt_cvkfold_number)\                                         |
 |                    |                                                                                 | label = "K-fold:",\                                                            | })                                                                          |
 |                    |                                                                                 | min = 3,\                                                                      |                                                                             |
 |                    |                                                                                 | max = 50,\                                                                     | [For Repeated Cross Validation\                                             |
-|                    |                                                                                 | value = 10))),                                                                 | ]{.underline}dt_resamplercv_kfoldnum \<- eventReactive(input\$mb_action, {\ |
+|                    |                                                                                 | value = 10)                                                                    | ]{.underline}dt_resamplercv_kfoldnum \<- eventReactive(input\$mb_action, {\ |
 |                    |                                                                                 |                                                                                | trainControl(\                                                              |
 |                    |                                                                                 | numericInput(inputId = "dt_repeatkfold_repeat", label = "Number of Repeats:",\ | method = "cv",\                                                             |
 |                    |                                                                                 | min = 3,\                                                                      | number = input\$dt_repeatkfold_number)\                                     |
 |                    |                                                                                 | max = 10,\                                                                     | })                                                                          |
-|                    |                                                                                 | value = 3))),                                                                  |                                                                             |
+|                    |                                                                                 | value = 3)                                                                     |                                                                             |
 |                    |                                                                                 |                                                                                | dt_repeatnum \<- eventReactive(\                                            |
 |                    |                                                                                 |                                                                                | input\$mb_action, {\                                                        |
 |                    |                                                                                 |                                                                                | trainControl(\                                                              |
@@ -283,7 +290,7 @@ The boxes show the node predicted value (mean) and the proportion of observation
 | **train()**        | Set initial tune length                                                         | numericInput(inputId = "dt_tunelength", label = "Set Initial Tune Length:",\   | dtmodel \<- eventReactive(\                                                 |
 |                    |                                                                                 | min = 2,\                                                                      | train(Math \~ .,\                                                           |
 |                    |                                                                                 | max = 10,\                                                                     | data = mb_traindata,\                                                       |
-|                    |                                                                                 | value = 4))),                                                                  | method = "rpart",\                                                          |
+|                    |                                                                                 | value = 4)                                                                     | method = "rpart",\                                                          |
 |                    |                                                                                 |                                                                                | tuneLength = input\$dt_tunelength\                                          |
 |                    |                                                                                 |                                                                                | trControl = dt_fitcontrol\                                                  |
 |                    |                                                                                 |                                                                                | )                                                                           |
@@ -337,10 +344,6 @@ dt_predvsactual + dt_residvsactual +
   plot_layout(widths=c(1,1))
 ```
 
-```{r}
-
-```
-
 +----------------------+----------------------------------------------------------------------------------------------+------------------------------------+--------------------------------------------------------------------+
 | Function             | Feature                                                                                      | UI                                 | Server                                                             |
 +======================+==============================================================================================+====================================+====================================================================+
@@ -360,7 +363,7 @@ dt_predvsactual + dt_residvsactual +
 +----------------------+----------------------------------------------------------------------------------------------+------------------------------------+--------------------------------------------------------------------+
 | **Diagnostic plots** | Refresh plots when selections are completed and 'Build Model' option is triggered.           | tabbox() \> tabPanel() \>\         | [Plot Predicted vs Actual\                                         |
 |                      |                                                                                              | plotOutput("dt_predvsactual\_")\   | ]{.underline}dt_predvsactual \<- eventReactive(\                   |
-|                      |                                                                                              | \                                  | input\$bm_action, {\                                               |
+|                      |                                                                                              | \                                  | input\$mb_action, {\                                               |
 |                      |                                                                                              | tabPanel() \>\                     | *ggplot(...)\                                                      |
 |                      |                                                                                              | plotOutput("dt_residvsactual\_")   | *})\                                                               |
 |                      |                                                                                              |                                    | \                                                                  |
@@ -401,12 +404,12 @@ dt_mae
 | **predict()** | Test data results to be updated when response and explanatory variables are selected and 'Build Model' is clicked. |                                             | [Calculate RMSE]{.underline}                                    |
 |               |                                                                                                                    |                                             |                                                                 |
 |               |                                                                                                                    |                                             | predict_dt \<- eventReactive(\                                  |
-|               |                                                                                                                    |                                             | input\$bm_action, {\                                            |
+|               |                                                                                                                    |                                             | input\$mb_action, {\                                            |
 |               |                                                                                                                    |                                             | bind_cols(\                                                     |
-|               |                                                                                                                    |                                             | Actual = stu_test_rf*()\$input\$bm_target*,\                    |
+|               |                                                                                                                    |                                             | Actual = stu_test_rf*()\$input\$mb_target*,\                    |
 |               |                                                                                                                    |                                             | Predicted = predict(*stu_rf()*,\                                |
 |               |                                                                                                                    |                                             | newdata = *stu_test_rf()*), Residuals = predict(*stu_rf()*,\    |
-|               |                                                                                                                    |                                             | newdata = *stu_test_rf()* - *stu_test_rf()\$input\$bm_target*)\ |
+|               |                                                                                                                    |                                             | newdata = *stu_test_rf()* - *stu_test_rf()\$input\$mb_target*)\ |
 |               |                                                                                                                    |                                             | })                                                              |
 |               |                                                                                                                    |                                             |                                                                 |
 |               |                                                                                                                    |                                             | predict_rf_rmse \<- eventReactive(\                             |
@@ -426,6 +429,8 @@ dt_mae
 |               |                                                                                                                    |                                             | observeEvent(input\$mb_action, *dt_display_RMSE()*)             |
 +---------------+--------------------------------------------------------------------------------------------------------------------+---------------------------------------------+-----------------------------------------------------------------+
 
+: {tbl-colwidths="\[10,20,35,35\]"}
+
 ## 5.4 Parameter Tuning
 
 ### 5.4.1 Complexity Parameter
@@ -439,25 +444,44 @@ dtmodel$bestTune
 ```
 
 ```{r}
+par(bg = "#f5f5f5")
+
 dt_cp_plot <- plot(dtmodel)
 dt_cp_plot
 ```
 
-+-----------------+---------------------------------------------------------------------------------+----------------------------+-------------------------------+
-| Function        | Feature                                                                         | UI                         | Server                        |
-+=================+=================================================================================+============================+===============================+
-| **rpart.plotO** | Show plots when selections are completed and 'Build Model' option is triggered. | plotOutput("dt_cp_plot\_") | dt_cp_plot\<- eventReactive(\ |
-|                 |                                                                                 |                            | input\$mb_action, {\          |
-|                 |                                                                                 |                            | *plot(dtmodel())\             |
-|                 |                                                                                 |                            | *})\                          |
-|                 |                                                                                 |                            | \                             |
-|                 |                                                                                 |                            | output\$dt_cp_plot\_\<-\      |
-|                 |                                                                                 |                            | renderPlot({\                 |
-|                 |                                                                                 |                            | dt_cp_plot()\                 |
-|                 |                                                                                 |                            | })                            |
-+-----------------+---------------------------------------------------------------------------------+----------------------------+-------------------------------+
++-----------------------+---------------------------------------------------------------------------------+---------------------------------------------------------+-----------------------------------------------------------------------+
+| Function              | Feature                                                                         | UI                                                      | Server                                                                |
++=======================+=================================================================================+=========================================================+=======================================================================+
+| **rpart.plotO**       | Show plots when selections are completed and 'Build Model' option is triggered. | plotOutput("dt_cp_plot\_")                              | dt_cp_plot\<- eventReactive(\                                         |
+|                       |                                                                                 |                                                         | input\$mb_action, {\                                                  |
+|                       |                                                                                 |                                                         | *plot(dtmodel())\                                                     |
+|                       |                                                                                 |                                                         | *})\                                                                  |
+|                       |                                                                                 |                                                         | \                                                                     |
+|                       |                                                                                 |                                                         | output\$dt_cp_plot\_\<-\                                              |
+|                       |                                                                                 |                                                         | renderPlot({\                                                         |
+|                       |                                                                                 |                                                         | dt_cp_plot()\                                                         |
+|                       |                                                                                 |                                                         | })                                                                    |
++-----------------------+---------------------------------------------------------------------------------+---------------------------------------------------------+-----------------------------------------------------------------------+
+| **dtmodel\$bestTune** | Display the best CP value                                                       | fluidRow(\                                              | [Calculate bestTune]{.underline}\                                     |
+|                       |                                                                                 | div(\                                                   | dt_bestTune \<- eventReactive(input\$mb_action, {*dtmode()\$bestTune\ |
+|                       |                                                                                 | ***valueBoxOutput***("dt_display_bestTune", width = 3)) | *})\                                                                  |
+|                       |                                                                                 |                                                         | \                                                                     |
+|                       |                                                                                 |                                                         | [Display bestTune]{.underline}\                                       |
+|                       |                                                                                 |                                                         | rf_display_bestTune = function(){\                                    |
+|                       |                                                                                 |                                                         | output\$dt_bestTune\_ = ***renderValueBox***(\                        |
+|                       |                                                                                 |                                                         | valueBox(\                                                            |
+|                       |                                                                                 |                                                         | value = *dt_bestTune()*)\                                             |
+|                       |                                                                                 |                                                         | )}                                                                    |
+|                       |                                                                                 |                                                         |                                                                       |
+|                       |                                                                                 |                                                         | observeEvent(input\$mb_action, *dt_display_bestTune()*)               |
++-----------------------+---------------------------------------------------------------------------------+---------------------------------------------------------+-----------------------------------------------------------------------+
+
+: {tbl-colwidths="\[10,20,35,35\]"}
 
 ### 5.4.2 Refreshing Results
+
+Rather than overwriting the previous results using the same set of codes, the pruned model uses a separate set of codes as the model below uses `tuneGrid` instead of the initial `tuneLength` for calibration.
 
 ```{r}
 set.seed(1234)
@@ -516,18 +540,18 @@ rf_fitcontrol <- trainControl(method = "cv", # input$rf_resamplingmethod
 
 This model has 3 tuning parameters:
 
--   `mtry`: Randomly Selected Predictors (type: integer)
--   `trees`: Trees (type: integer, default: 500L)
--   `min_n`: Minimal Node Size (type: integer)
+-   `mtry`: gives the number of variables randomly sampled at each split, defaulted as the (rounded-down) value of the square-root of the number of predictors
+-   `splitrule`: Splitting rule.
+-   `min_n`: Minimum node size. Controls the complexity of the trees. Smaller node size allows for deeper, more complex trees and smaller node results in shallower trees. This is another bias-vairnace tradeoff where deeper trees introduce more vairance (risk of overfitting) and shallower trees introduce more bias (risk of not fully capturing unique patterns and relationsips in the data).
 
 ```{r}
 
-## Model Parameters ##
+## Tuning Parameters ##
 
 tgrid <- expand.grid(
   mtry = sqrt(ncol(traindata)),
   splitrule = "variance", # input$rf_splitrule: "variance", "extratrees", "maxstat" or "beta" with default "variance" for regression
-  min.node.size = 5 # Default 5 for regression
+  min.node.size = 10 # input$rf_minnodesize: Default 5 for regression
 )
 ```
 
@@ -538,6 +562,7 @@ rfmodel <- train(form = Math ~ .,
                  trControl = rf_fitcontrol,
                  num.trees = 50, # input$treenum
                  importance = "permutation", # input$rf_varimpmode: none, impurity, permutation
+                 local.importance = TRUE,
                  tuneGrid = tgrid
                  )
 
@@ -552,18 +577,18 @@ rfmodel
 |                    |                                                        | label = "K-fold:",\                                                            |                                                                             |
 |                    |                                                        | min = 3,\                                                                      | [For Cross Validation]{.underline}\                                         |
 |                    |                                                        | max = 50,\                                                                     | rf_resamplecv_kfoldnum \<- eventReactive(input\$mb_action, {\               |
-|                    |                                                        | value = 10))),                                                                 | trainControl(\                                                              |
+|                    |                                                        | value = 10)                                                                    | trainControl(\                                                              |
 |                    |                                                        |                                                                                | method = "cv",\                                                             |
 |                    |                                                        | numericInput(inputId = "rf_repeatkfold_number",\                               | number = input\$rf_cvkfold_number)\                                         |
 |                    |                                                        | label = "K-fold:",\                                                            | })                                                                          |
 |                    |                                                        | min = 3,\                                                                      |                                                                             |
 |                    |                                                        | max = 50,\                                                                     | [For Repeated Cross Validation\                                             |
-|                    |                                                        | value = 10))),                                                                 | ]{.underline}rf_resamplercv_kfoldnum \<- eventReactive(input\$mb_action, {\ |
+|                    |                                                        | value = 10)                                                                    | ]{.underline}rf_resamplercv_kfoldnum \<- eventReactive(input\$mb_action, {\ |
 |                    |                                                        |                                                                                | trainControl(\                                                              |
 |                    |                                                        | numericInput(inputId = "rf_repeatkfold_repeat", label = "Number of Repeats:",\ | method = "cv",\                                                             |
 |                    |                                                        | min = 3,\                                                                      | number = input\$rf_repeatkfold_number)\                                     |
 |                    |                                                        | max = 10,\                                                                     | })                                                                          |
-|                    |                                                        | value = 3))),                                                                  |                                                                             |
+|                    |                                                        | value = 3)                                                                     |                                                                             |
 |                    |                                                        |                                                                                | rf_repeatnum \<- eventReactive(\                                            |
 |                    |                                                        |                                                                                | input\$mb_action, {\                                                        |
 |                    |                                                        |                                                                                | trainControl(\                                                              |
@@ -575,21 +600,28 @@ rfmodel
 | **expand.grid()**  | Select split rule                                      | selectInput(inputId = "rf_splitrule\_",\                                       | tgrid \<- eventReaction(input\$mb_action, {\                                |
 |                    |                                                        | label = "Select Split Rule:",\                                                 | expand.grid(\                                                               |
 |                    |                                                        | choices = c("Variance" = "variance",\                                          | mtry = sqrt(ncol(traindata)),\                                              |
-|                    |                                                        | "Extra Trees" = "extratrees",\                                                 | splitrule = "variance".\                                                    |
-|                    |                                                        | "Max Stat" = "maxstat")                                                        | min.node.size = 5)}                                                         |
+|                    |                                                        | "Extra Trees" = "extratrees",\                                                 | splitrule = *input\$rf_splitrule*.\                                         |
+|                    |                                                        | "Max Stat" = "maxstat")                                                        | min.node.size = *input\$rf_minnodesize*)}                                   |
+|                    |                                                        |                                                                                |                                                                             |
+|                    |                                                        | sliderInput(inputId = "rf_minnodesize", label = "Minimum Node Size:",\         |                                                                             |
+|                    |                                                        | min = 2,\                                                                      |                                                                             |
+|                    |                                                        | max = 50,\                                                                     |                                                                             |
+|                    |                                                        | value = 5),                                                                    |                                                                             |
 +--------------------+--------------------------------------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------------------------------+
-| **train()**        | Select number of trees and variable importance         | sliderInput(inputId = "rf_tree_range\_",\                                      | rfmodel \<- eventReactive(\                                                 |
-|                    |                                                        | label = "Range of Trees (keep range within 20):",\                             | input\$mb_action, {\                                                        |
+| **train()**        | Select number of trees and variable importance         | sliderInput(inputId = "rf_tree_num\_",\                                        | rfmodel \<- eventReactive(\                                                 |
+|                    |                                                        | label = "Number of Trees:",\                                                   | input\$mb_action, {\                                                        |
 |                    |                                                        | min = 5,\                                                                      | train(form = Math \~ .,\                                                    |
-|                    |                                                        | max = 100,\                                                                    | data = traindata(),\                                                        |
-|                    |                                                        | value = c(5,25)))                                                              | method = "ranger",\                                                         |
+|                    |                                                        | max = 500,\                                                                    | data = traindata(),\                                                        |
+|                    |                                                        | value = 50)                                                                    | method = "ranger",\                                                         |
 |                    |                                                        |                                                                                | trControl = fitcontrol(),\                                                  |
-|                    |                                                        | radioButtons(inputId = "rf_varimpmode\_",\                                     | num.trees = *input\$rf_tree_range,*\                                        |
-|                    |                                                        | label = "Feature Importance:",\                                                | importance =\                                                               |
+|                    |                                                        | radioButtons(inputId = "rf_varimpmode\_",\                                     | num.trees = *input\$rf_tree_num,*\                                          |
+|                    |                                                        | label = "Variable Importance Measure:",\                                       | importance =\                                                               |
 |                    |                                                        | choices = c("Gini Importance" = "impurity",\                                   | *input\$rf_varimpmode*,\                                                    |
 |                    |                                                        | "Permutation Importance" = "permutation"),selected = "impurity"))              | tuneGrid = *tgrid()*)\                                                      |
 |                    |                                                        |                                                                                | })                                                                          |
 +--------------------+--------------------------------------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+
+: {tbl-colwidths="\[10,20,35,35\]"}
 
 ## 6.2 Visual Model Diagnostic
 
@@ -644,17 +676,39 @@ rf_mae
 ## 6.4 Variable Importance
 
 ```{r}
-plot(varImp(rfmodel))
+vip::vip(rfmodel, num_features = 40, bar = FALSE)
+```
+
++------------------------+----------------------------------------------------------------------------------------------------+--------------------------------+-----------------------------------+
+| Function               | Feature                                                                                            | UI                             | Server                            |
++========================+====================================================================================================+================================+===================================+
+| **plot(vip(rfmodel))** | Show variable importance plot when selections are completed and 'Build Model' option is triggered. | plotOutput("rf_varimp_plot\_") | rf_varimp_plot\<- eventReactive(\ |
+|                        |                                                                                                    |                                | input\$mb_action, {\              |
+|                        |                                                                                                    |                                | *plot(vip(rfmodel()))\            |
+|                        |                                                                                                    |                                | *})\                              |
+|                        |                                                                                                    |                                | \                                 |
+|                        |                                                                                                    |                                | output\$rf_varimp_plot\_\<-\      |
+|                        |                                                                                                    |                                | renderPlot({\                     |
+|                        |                                                                                                    |                                | rf_varimp_plot\_()\               |
+|                        |                                                                                                    |                                | })                                |
++------------------------+----------------------------------------------------------------------------------------------------+--------------------------------+-----------------------------------+
+
+: {tbl-colwidths="\[10,20,35,35\]"}
+
+```{r}
+#| eval: false 
+#| echo: false
+
+rf_varimp <- importance(rfmodel) %>% 
+  as.data.frame() %>% 
+  rownames_to_column() %>% 
+  rename("Variable" = rowname) 
 ```
 
 ```{r}
-#rf_varimp <- importance(rfmodel) %>% 
-#  as.data.frame() %>% 
-#  rownames_to_column() %>% 
-#  rename("Variable" = rowname) 
-```
+#| eval: false 
+#| echo: false
 
-```{r}
 #bar_chart <- function(label, width = "100%", height = "1rem", fill = "#73b2c4", background = "#f5f5f5") {
 #  bar <- div(style = list(background = fill, width = width, height = height))
 #  chart <- div(style = list(flexGrow = 1, marginLeft = "0.5rem", background = "#f5f5f5"), bar)
@@ -684,23 +738,6 @@ plot(varImp(rfmodel))
 #tab_varimp
 ```
 
-+----------------------------------------------------------------+--------------------------------------------------------------------------------------------------------+-------------------------------+-----------------------------------------------+
-| Function                                                       | Feature                                                                                                | UI                            | Server                                        |
-+================================================================+========================================================================================================+===============================+===============================================+
-| **rf_varimp & [reactable](https://glin.github.io/reactable/)** | Plots to be updated when response and explanatory variables are selected and 'Build Model' is clicked. | Within ***sidebarPanel***():  | rf_varimp \<- eventReactive(\                 |
-|                                                                |                                                                                                        |                               | input\$rf_action\_, {\                        |
-|                                                                |                                                                                                        | reactableOutput("tab_varimp") | importance(stu_rf) %\>% as.data.frame() %\>%\ |
-|                                                                |                                                                                                        |                               | rownames_to_column() %\>%\                    |
-|                                                                |                                                                                                        |                               | rename("Variable" = rowname)\                 |
-|                                                                |                                                                                                        |                               | })                                            |
-|                                                                |                                                                                                        |                               |                                               |
-|                                                                |                                                                                                        |                               | output\$tab_varimp \<- renderReactable({\     |
-|                                                                |                                                                                                        |                               | reactable(...)\                               |
-|                                                                |                                                                                                        |                               | })                                            |
-+----------------------------------------------------------------+--------------------------------------------------------------------------------------------------------+-------------------------------+-----------------------------------------------+
-
-: {tbl-colwidths="\[10,20,35,35\]"}
-
 # 7 Gradient Boosting
 
 ## 7.1 The Model
@@ -714,19 +751,21 @@ gb_fitcontrol <- trainControl(method = "cv", # input$gb_resamplingmethod -
                            repeats = NA) # input$gb_repeats
 
 # Tuning Grid
-gbm_grid = expand.grid(interaction.depth = c(1:3),
-                       n.trees = (1:30) * 10,
-                       shrinkage = c(0.01,0.05,0.1),
-                       n.minobsinnode = 20)
+gbm_grid <- expand.grid(interaction.depth = c(1:3), 
+                       n.trees = (1:30) * 10, #input$gb_treenumrange
+                       shrinkage = c(0.01,0.05,0.1), #input$gb_shrinkage
+                       n.minobsinnode = 20) #input$gb_minnodesize
 ```
 
 `gbm` has the following tuneable hyperparameters:
 
 -   `n.trees`: number of boosting iterations
 
--   `nteraction.depth`: maximum tree depth
+-   `interaction.depth`: maximum tree depth
 
--   `shrinkage`: the learning rate or shrinkage parameter - `n.minobsinnode`: minimum terminal node size
+-   `shrinkage`: the learning rate or shrinkage parameter
+
+-   `n.minobsinnode`: minimum terminal node size
 
 ```{r}
 set.seed(1234)
@@ -735,13 +774,80 @@ gbmodel <- train(Math ~ .,
                  data = traindata,
                  trControl = gb_fitcontrol,
                  method = "gbm",
-                 tuneLength = 5,
+                 #tuneLength = 5,
                  verbose = FALSE,
                  tuneGrid = gbm_grid)
 
 gbmodel                 
                  
 ```
+
++--------------------+--------------------------------------------------------+-------------------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| Function           | Feature                                                | UI                                                                                  | Server                                                                      |
++====================+========================================================+=====================================================================================+=============================================================================+
+| **trainControl()** | Select resampling method, resampling count and repeat. | numericInput(inputId = "gb_cvkfold_number",\                                        | Within ***mainPanel***() \> tabsetPanel() \>                                |
+|                    |                                                        | label = "K-fold:",\                                                                 |                                                                             |
+|                    |                                                        | min = 3,\                                                                           | [For Cross Validation]{.underline}\                                         |
+|                    |                                                        | max = 50,\                                                                          | gb_resamplecv_kfoldnum \<- eventReactive(input\$mb_action, {\               |
+|                    |                                                        | value = 10),                                                                        | trainControl(\                                                              |
+|                    |                                                        |                                                                                     | method = "cv",\                                                             |
+|                    |                                                        | numericInput(inputId = "gb_repeatkfold_number",\                                    | number = input\$gb_cvkfold_number)\                                         |
+|                    |                                                        | label = "K-fold:",\                                                                 | })                                                                          |
+|                    |                                                        | min = 3,\                                                                           |                                                                             |
+|                    |                                                        | max = 50,\                                                                          | [For Repeated Cross Validation\                                             |
+|                    |                                                        | value = 10),                                                                        | ]{.underline}gb_resamplercv_kfoldnum \<- eventReactive(input\$mb_action, {\ |
+|                    |                                                        |                                                                                     | trainControl(\                                                              |
+|                    |                                                        | numericInput(inputId = "gb_repeatkfold_repeat", label = "Number of Trees:",\        | method = "cv",\                                                             |
+|                    |                                                        | min = 1,\                                                                           | number = input\$gb_repeatkfold_number)\                                     |
+|                    |                                                        | max = 300,\                                                                         | })                                                                          |
+|                    |                                                        | value = c(10, 30))                                                                  |                                                                             |
+|                    |                                                        |                                                                                     | gb_repeatnum \<- eventReactive(\                                            |
+|                    |                                                        |                                                                                     | input\$mb_action, {\                                                        |
+|                    |                                                        |                                                                                     | trainControl(\                                                              |
+|                    |                                                        |                                                                                     | method = "repeatedcv",\                                                     |
+|                    |                                                        |                                                                                     | number = input\$gb_repeatkfold_number,\                                     |
+|                    |                                                        |                                                                                     | repeats = input\$gb_repeatkfold_repeat)\                                    |
+|                    |                                                        |                                                                                     | })                                                                          |
++--------------------+--------------------------------------------------------+-------------------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| **expand.grid()**  | Select tuning parameters                               | [Slider with Range]{.underline}\                                                    | gb_tgrid \<- eventReaction(input\$mb_action, {\                             |
+|                    |                                                        | sliderInput(inputId = "*gb_interactiondepth\_*",\                                   | expand.grid(\                                                               |
+|                    |                                                        | label = "Number of Boosting Iterations:",\                                          | interaction.depth = *input\$gb_interactiondepth*,\                          |
+|                    |                                                        | min = 1,\                                                                           | n.trees = *input\$gb_treenumrange*,\                                        |
+|                    |                                                        | max = 5,\                                                                           | shrinkage = *input\$gb_shrinkage*,\                                         |
+|                    |                                                        | value = c(1:3)))                                                                    | min.node.size = i*nput\$gb_minnodesize*)}                                   |
+|                    |                                                        |                                                                                     |                                                                             |
+|                    |                                                        | sliderInput(inputId = "*gb_treenumrange\_*",\                                       |                                                                             |
+|                    |                                                        | label = "Number of Trees:",\                                                        |                                                                             |
+|                    |                                                        | min = 10,\                                                                          |                                                                             |
+|                    |                                                        | max = 500,\                                                                         |                                                                             |
+|                    |                                                        | value = c(10:30)))                                                                  |                                                                             |
+|                    |                                                        |                                                                                     |                                                                             |
+|                    |                                                        | [Slider with 1 Input\                                                               |                                                                             |
+|                    |                                                        | ]{.underline}sliderInput(inputId = "gb_minnodesize", label = "Minimum Node Size:",\ |                                                                             |
+|                    |                                                        | min = 2,\                                                                           |                                                                             |
+|                    |                                                        | max = 50,\                                                                          |                                                                             |
+|                    |                                                        | value = 5),                                                                         |                                                                             |
+|                    |                                                        |                                                                                     |                                                                             |
+|                    |                                                        | [Numeric Input]{.underline}\                                                        |                                                                             |
+|                    |                                                        | numericInput(inputId = "*gb_shrinkage\_*",\                                         |                                                                             |
+|                    |                                                        | label = "Learning Rate:",\                                                          |                                                                             |
+|                    |                                                        | min = 0,\                                                                           |                                                                             |
+|                    |                                                        | max = 1.0,\                                                                         |                                                                             |
+|                    |                                                        | value = 0.01)                                                                       |                                                                             |
++--------------------+--------------------------------------------------------+-------------------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+| **train()**        | Select initial tune length                             | numericInput(inputId = "*rf_tunelength*", label = "Set Initial Tune Length:",\      | rfmodel \<- eventReactive(\                                                 |
+|                    |                                                        | min = 2,\                                                                           | input\$mb_action, {\                                                        |
+|                    |                                                        | max = 10,\                                                                          | train(form = *input\$target*\~ .,\                                          |
+|                    |                                                        | value = 4)                                                                          | data = *traindata()*,\                                                      |
+|                    |                                                        |                                                                                     | method = "gbm",\                                                            |
+|                    |                                                        |                                                                                     | verbose = FALSE,\                                                           |
+|                    |                                                        |                                                                                     | trControl = *gb_fitcontrol()*,\                                             |
+|                    |                                                        |                                                                                     | tuneLength = *input\$rf_tunelength*,\                                       |
+|                    |                                                        |                                                                                     | tuneGrid = *gb_tgrid()*)\                                                   |
+|                    |                                                        |                                                                                     | })                                                                          |
++--------------------+--------------------------------------------------------+-------------------------------------------------------------------------------------+-----------------------------------------------------------------------------+
+
+: {tbl-colwidths="\[10,20,35,35\]"}
 
 ## 7.2 Visual Model Diagnostic
 
@@ -800,5 +906,11 @@ gb_mae
 ## 7.4 Variable Importance
 
 ```{r}
-plot(varImp(gbmodel))
+vip::vip(gbmodel, num_features = 40, bar = FALSE)
 ```
+
+# 8 Final Thoughts
+
+The three predictive models offer users different methods for regression analysis to explore the factors influencing subject scores. The customisability of our app allows users to visualise the impact of each parameter on the model's performance and enables them to fine-tune it to arrive at the best predictive model.
+
+Additionally, if time and capability permit, I would consider the addition of a summary page to this module. This summary page could provide a side-by-side comparison of performance metrics, showcasing the strengths and weaknesses of each model. Such a comparison would empower users to make informed decisions about which model best suits their needs for predicting student scores. This feature would enhance the user experience and provide a comprehensive overview, ensuring users can confidently select the most effective model.

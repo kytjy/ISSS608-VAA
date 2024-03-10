@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2024-02-01">
+<meta name="dcterms.date" content="2024-03-09">
 
 <title>Visual Analytics and Application - Take-home Exercise 4: Prototyping Modules for Shiny Application</title>
 <style>
@@ -288,15 +288,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">2.1 Packages</a></li>
   <li><a href="#the-pisa-survey-students-questionnaire" id="toc-the-pisa-survey-students-questionnaire" class="nav-link" data-scroll-target="#the-pisa-survey-students-questionnaire">2.2 The PISA Survey Students Questionnaire</a></li>
   </ul></li>
-  <li><a href="#storyboard" id="toc-storyboard" class="nav-link" data-scroll-target="#storyboard">3 Storyboard</a>
+  <li><a href="#outline" id="toc-outline" class="nav-link" data-scroll-target="#outline">3 Outline</a>
   <ul>
-  <li><a href="#draft-designs" id="toc-draft-designs" class="nav-link" data-scroll-target="#draft-designs">3.1 Draft Designs</a></li>
+  <li><a href="#storyboard" id="toc-storyboard" class="nav-link" data-scroll-target="#storyboard">3.1 Storyboard</a></li>
   <li><a href="#visual-model-diagnostic" id="toc-visual-model-diagnostic" class="nav-link" data-scroll-target="#visual-model-diagnostic">3.2 Visual Model Diagnostic</a></li>
   <li><a href="#statistical-model-evaluation" id="toc-statistical-model-evaluation" class="nav-link" data-scroll-target="#statistical-model-evaluation">3.3 Statistical Model Evaluation</a></li>
   </ul></li>
-  <li><a href="#prelude" id="toc-prelude" class="nav-link" data-scroll-target="#prelude">4 Prelude</a>
+  <li><a href="#model-building" id="toc-model-building" class="nav-link" data-scroll-target="#model-building">4 Model Building</a>
   <ul>
-  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">4.1 Data Preparation</a></li>
+  <li><a href="#data-preparation-for-regression" id="toc-data-preparation-for-regression" class="nav-link" data-scroll-target="#data-preparation-for-regression">4.1 Data Preparation for Regression</a></li>
   </ul></li>
   <li><a href="#decision-tree" id="toc-decision-tree" class="nav-link" data-scroll-target="#decision-tree">5 Decision Tree</a>
   <ul>
@@ -323,6 +323,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#statistical-model-evaluation-3" id="toc-statistical-model-evaluation-3" class="nav-link" data-scroll-target="#statistical-model-evaluation-3">7.3 Statistical Model Evaluation</a></li>
   <li><a href="#variable-importance-1" id="toc-variable-importance-1" class="nav-link" data-scroll-target="#variable-importance-1">7.4 Variable Importance</a></li>
   </ul></li>
+  <li><a href="#final-thoughts" id="toc-final-thoughts" class="nav-link" data-scroll-target="#final-thoughts">8 Final Thoughts</a></li>
   </ul>
 </nav>
     </div>
@@ -342,7 +343,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 1, 2024</p>
+      <p class="date">March 9, 2024</p>
     </div>
   </div>
   
@@ -358,6 +359,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/prototype.gif" class="img-fluid figure-img"></p>
+</figure>
+</div>
 <section id="overview" class="level1">
 <h1>1 Overview</h1>
 <p>International large-scale assessments, such as PISA, provide structured and static data. With the goal of exploring which factors have a higher relevance in predicting student performance, this post proposes the use of multiple linear regression and random forest approach to detect and analyse factors linked to academic performance.</p>
@@ -381,22 +387,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>For data wrangling</td>
 </tr>
 <tr class="even">
-<td><a href="https://ggplot2.tidyverse.org/"><strong>ggplot2</strong></a><strong>, <a href="https://patchwork.data-imaginist.com/">patchwork</a>, urbnthemes</strong></td>
-<td>For plots and setting a consistent theme throughout this exercise.</td>
+<td><a href="https://ggplot2.tidyverse.org/"><strong>ggplot2</strong></a><strong>, <a href="https://patchwork.data-imaginist.com/">patchwork</a>, <a href="https://urbaninstitute.github.io/urbnthemes/articles/introducing-urbnthemes.html">urbnthemes</a></strong></td>
+<td>For creating plots</td>
 </tr>
 <tr class="odd">
-<td><a href="https://rstudio.github.io/htmltools/"><strong>htmltools</strong></a><strong>, <a href="https://glin.github.io/reactable/">reactable</a>, <a href="https://www.danieldsjoberg.com/gtsummary/">gtsummary</a></strong></td>
-<td>For dynamic and static data tables</td>
+<td><a href="https://glin.github.io/reactable/"><strong>reactable</strong></a></td>
+<td>For dynamic data tables</td>
 </tr>
 <tr class="even">
-<td><a href="https://github.com/taiyun/corrplot"><strong>corrplot</strong></a></td>
-<td>For correlation matrix</td>
-</tr>
-<tr class="odd">
-<td><a href="https://topepo.github.io/caret/"><strong>caret</strong></a><strong>, <a href="https://www.tidymodels.org/">tidymodels</a></strong></td>
+<td><a href="https://cran.r-project.org/web/packages/ranger/index.html"><strong>ranger</strong></a>, <a href="https://koalaverse.github.io/vip/articles/vip.html"><strong>vip</strong></a>, <a href="https://cran.r-project.org/web/packages/rpart.plot/rpart.plot.pdf"><strong>rpart.plot</strong></a>, <a href="https://topepo.github.io/caret/"><strong>caret</strong></a><strong>, <a href="https://www.tidymodels.org/">tidymodels</a></strong>, <a href="https://cran.r-project.org/web/packages/gbm/gbm.pdf"><strong>gbm</strong></a></td>
 <td>For packages relating to modeling, regression, and machine learning</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a href="https://easystats.github.io/performance/"><strong>performance</strong></a></td>
 <td>For assessment of regression models performance</td>
 </tr>
@@ -405,8 +407,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               ggplot2, patchwork, urbnthemes, </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               gtsummary,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               ranger, rpart.plot, caret, tidymodels, gbm, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>               reactable,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               ranger, vip, rpart.plot, caret, tidymodels, gbm, </span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               performance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -449,8 +451,8 @@ $ Science            &lt;dbl&gt; 639.7873, 672.0703, 660.0384, 343.6425, 479.239
 </div>
 </section>
 </section>
-<section id="storyboard" class="level1">
-<h1>3 Storyboard</h1>
+<section id="outline" class="level1">
+<h1>3 Outline</h1>
 <p>The flowchart below details the features for this model building module.</p>
 <div class="cell" data-fig-width="8">
 <div class="cell-output-display">
@@ -462,6 +464,7 @@ $ Science            &lt;dbl&gt; 639.7873, 672.0703, 660.0384, 343.6425, 479.239
     C-.-&gt; C3[Gradient Boosting]
     C1-.-&gt;F[3. Visual Model Diagnostics]
     C2-.-&gt;F
+    C3-.-&gt;F
     F --&gt;E[4. Statistical Model Evaluation]
     E--&gt;D[5. Variable Importance]
 </pre>
@@ -469,10 +472,29 @@ $ Science            &lt;dbl&gt; 639.7873, 672.0703, 660.0384, 343.6425, 479.239
 </div>
 </div>
 </div>
-<section id="draft-designs" class="level2">
-<h2 class="anchored" data-anchor-id="draft-designs">3.1 Draft Designs</h2>
-<p>At the initial stage of the model building module, users would be able customise various options for building 3 predictive models. We perform a detailed walkthrough of the interactivity and customisation features, including descriptions of the SHINY UI and Server in Sections 5-7.</p>
-<p>In the subsequent parts of this section, we briefly outline the rationale behind visualisations and measurements.</p>
+<section id="storyboard" class="level2">
+<h2 class="anchored" data-anchor-id="storyboard">3.1 Storyboard</h2>
+<p>At the initial stage of the model building module, users would be able customise various options for each of the 3 predictive models offered.</p>
+<p><u><strong>Decision Tree</strong></u></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/dt.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<p><u><strong>Random Forest</strong></u></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/rf.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<p><u><strong>Gradient Boosting</strong></u></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/gb.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<p>Options for customisations are available on the left side of the app, these options are used to train the model. The right displays the performance of the model including model fit and variable importance, as well as the performance evaluation metrics using the model on the test data. We perform a detailed walkthrough of the interactivity and customisation features for each model, including descriptions of the SHINY UI and Server in Sections 5-7.</p>
+<p>But first, in the subsequent parts of this section, we briefly outline the rationale behind visualisations and measurements.</p>
 </section>
 <section id="visual-model-diagnostic" class="level2">
 <h2 class="anchored" data-anchor-id="visual-model-diagnostic">3.2 Visual Model Diagnostic</h2>
@@ -487,20 +509,13 @@ $ Science            &lt;dbl&gt; 639.7873, 672.0703, 660.0384, 343.6425, 479.239
 <p>We can quantify the residuals by calculating a number of commonly used evaluation metrics, with a focus on the following:</p>
 <ul>
 <li><p>Root Mean Square Error (RMSE): The square root of the MSE. This yields an absolute metric in the same unit as the response variable (in this case, scores). The smaller the value, the better the model (in a simplistic sense, it represents the average scores by which the predictions are wrong).</p></li>
-<li><p><span class="math inline">\(R^2\)</span>: describes the strength of a model fit. In essence, this metric represents how much of the variance between predicted and actual label values the model is able to explain. The regular <span class="math inline">\(R^2\)</span> is a biased estimate of the amount of variability explained by the model when applied to model with more than one predictor. To get a better estimate, we use the <span class="math inline">\(adjusted\ R^2\)</span>. The best fit is the one that maximises <span class="math inline">\(R^2\)</span> or <span class="math inline">\(adjusted\ R^2\)</span>.</p></li>
+<li><p><span class="math inline">\(R^2\)</span>: describes the strength of a model fit. In essence, this metric represents how much of the variance between predicted and actual label values the model is able to explain.</p></li>
 <li><p>Mean Absolute Error (MAE): It is measured as the average absolute difference between the predicted values and the actual values and is used to assess the effectiveness of a regression model.</p></li>
 </ul>
-<p><code>formals()</code> function returns the argument list of the function specified. This can be used in the sidebar to display the options for user selection.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eval</span>(<span class="fu">formals</span>(cor)<span class="sc">$</span>method)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "pearson"  "kendall"  "spearman"</code></pre>
-</div>
-</div>
 </section>
 </section>
-<section id="prelude" class="level1">
-<h1>4 Prelude</h1>
+<section id="model-building" class="level1">
+<h1>4 Model Building</h1>
 <p>The general outline of a predictive analysis is as follows:</p>
 <ul>
 <li>Test-train split the available data using <code>createDataPartition()</code></li>
@@ -523,36 +538,35 @@ $ Science            &lt;dbl&gt; 639.7873, 672.0703, 660.0384, 343.6425, 479.239
 </ul></li>
 <li>Use chosen model to make predictions using <code>predict()</code></li>
 </ul>
-<section id="data-preparation" class="level2">
-<h2 class="anchored" data-anchor-id="data-preparation">4.1 Data Preparation</h2>
-<p>The goal of training the model is to find a function that performs some kind of calculation to the <span class="math inline">\(x\)</span> values (i.e.&nbsp;independent variables) that produces the result <span class="math inline">\(y\)</span> (i.e.&nbsp;dependent variable). We do this by applying a machine learning algorithm that tries to fit the <span class="math inline">\(x\)</span> values to a calculation that produces <span class="math inline">\(y\)</span> reasonably accurately for all of the cases in the training dataset.</p>
+<section id="data-preparation-for-regression" class="level2">
+<h2 class="anchored" data-anchor-id="data-preparation-for-regression">4.1 Data Preparation for Regression</h2>
 <p>To train the model, we start with a data sample containing the independent/explanatory variables as well as known values for the subject scores. We’ll then split this data sample into two subsets:</p>
 <ul>
 <li><p>A <em>training</em> dataset to which we’ll apply an algorithm that determines a function encapsulating the relationship between the independent variables and the known <span class="math inline">\(y\)</span> values.</p></li>
 <li><p>A <em>test</em> dataset that we can use to evaluate the model by using it to generate predictions for the label and comparing them to the actual known <span class="math inline">\(y\)</span> values.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Data for Model Building ##</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove missing cases &amp; convert variables to factor datatype our dataset</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>stu <span class="ot">&lt;-</span> stu <span class="sc">%&gt;%</span> </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>, as.factor))</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> stu <span class="sc">%&gt;%</span> </span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>, <span class="st">"Math"</span>)) <span class="co">#&lt;&lt; input$var, input$bm_target to change according to user selection</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Data for Model Building ##</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove missing cases &amp; convert variables to factor datatype our dataset</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>stu <span class="ot">&lt;-</span> stu <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>, as.factor))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> stu <span class="sc">%&gt;%</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>, <span class="st">"Math"</span>)) <span class="co">#&lt;&lt; input$var, input$mb_target to change according to user selection</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the seed before splitting the data</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into training and test</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(data<span class="sc">$</span>Math, <span class="co">#&lt;&lt; input$bm_target</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">p =</span> <span class="fl">0.8</span>, <span class="co">#&lt;&lt; input$rf_partition</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">list =</span> <span class="cn">FALSE</span>) </span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>traindata <span class="ot">&lt;-</span> data[index, ]</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>testdata  <span class="ot">&lt;-</span> data[<span class="sc">-</span>index, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the seed before splitting the data</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the data into training and test</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(data<span class="sc">$</span>Math, <span class="co">#&lt;&lt; input$mb_target</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">p =</span> <span class="fl">0.8</span>, <span class="co">#&lt;&lt; input$rf_partition</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">list =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>traindata <span class="ot">&lt;-</span> data[index, ]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>testdata  <span class="ot">&lt;-</span> data[<span class="sc">-</span>index, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <table class="table">
 <thead>
@@ -624,12 +638,12 @@ mb_dataset()[-mb_index(),]<br>
 <section id="the-models-first-run" class="level2">
 <h2 class="anchored" data-anchor-id="the-models-first-run">5.1 The Model’s First Run</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Specifying training choices ##</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Resampling Options</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>dt_fitcontrol <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="co"># input$dt_resamplingmethod</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">10</span>, <span class="co"># input$dt_resamplecnt</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="cn">NA</span>) <span class="co"># input$dt_repeats</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Specifying training choices ##</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Resampling Options</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>dt_fitcontrol <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="co"># input$dt_resamplingmethod</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">10</span>, <span class="co"># input$dt_resamplecnt</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="cn">NA</span>) <span class="co"># input$dt_repeats</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><code>method</code>: Refers to the resampling method, such as <code>boot</code>, <code>cv</code> (cross validation), <code>repeatedcv</code></li>
@@ -638,16 +652,16 @@ mb_dataset()[-mb_index(),]<br>
 </ul>
 <p>The decision tree has two adjustable parameters: complexity parameter (<em>CP</em>) and tune length (<em>TL</em>). CP tells the algorithm to stop when the measure does not improve by this factor. TL tells how many instances to use for training. I’ll let the model look for the best CP tuning parameter with <code>tuneLength</code> to get close using the initial model, then fine-tune with <code>tuneGrid</code> at a later stage.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>dtmodel <span class="ot">&lt;-</span> <span class="fu">train</span>(Math <span class="sc">~</span> ., </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> traindata,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">tuneLength =</span> <span class="dv">4</span>, <span class="co">#input$dt_tunelength</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">trControl =</span> dt_fitcontrol</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>dtmodel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dtmodel <span class="ot">&lt;-</span> <span class="fu">train</span>(Math <span class="sc">~</span> ., </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> traindata,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">tuneLength =</span> <span class="dv">4</span>, <span class="co">#input$dt_tunelength</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">trControl =</span> dt_fitcontrol</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>dtmodel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>CART 
 
@@ -670,13 +684,13 @@ The final value used for the model was cp = 0.01850079.</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(dtmodel<span class="sc">$</span>finalModel,</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">box.palette=</span><span class="st">"GnBu"</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">branch.lty=</span><span class="dv">3</span>, </span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">shadow.col=</span><span class="st">"gray"</span>, </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">nn=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(dtmodel<span class="sc">$</span>finalModel,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">box.palette=</span><span class="st">"GnBu"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">branch.lty=</span><span class="dv">3</span>, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">shadow.col=</span><span class="st">"gray"</span>, </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">nn=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>The boxes show the node predicted value (mean) and the proportion of observations that are in the node (or child nodes).</p>
@@ -703,16 +717,16 @@ The final value used for the model was cp = 0.01850079.</code></pre>
 label = “K-fold:”,<br>
 min = 3,<br>
 max = 50,<br>
-value = 10))),</p>
+value = 10)</p>
 <p>numericInput(inputId = “dt_repeatkfold_number”,<br>
 label = “K-fold:”,<br>
 min = 3,<br>
 max = 50,<br>
-value = 10))),</p>
+value = 10)</p>
 <p>numericInput(inputId = “dt_repeatkfold_repeat”, label = “Number of Repeats:”,<br>
 min = 3,<br>
 max = 10,<br>
-value = 3))),</p></td>
+value = 3)</p></td>
 <td><p>Within <strong><em>mainPanel</em></strong>() &gt; tabsetPanel() &gt;<br>
 </p>
 <p><u>For Cross Validation</u><br>
@@ -741,7 +755,7 @@ repeats = input$dt_repeatkfold_repeat)<br>
 <td>numericInput(inputId = “dt_tunelength”, label = “Set Initial Tune Length:”,<br>
 min = 2,<br>
 max = 10,<br>
-value = 4))),</td>
+value = 4)</td>
 <td>dtmodel &lt;- eventReactive(<br>
 train(Math ~ .,<br>
 data = mb_traindata,<br>
@@ -770,38 +784,38 @@ dt_rpartplot<br>
 <section id="visual-model-diagnostics" class="level2">
 <h2 class="anchored" data-anchor-id="visual-model-diagnostics">5.2 Visual Model Diagnostics</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>predict_dt <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">Actual =</span> testdata<span class="sc">$</span>Math, </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">Predicted =</span> <span class="fu">predict</span>(dtmodel, <span class="at">newdata =</span> testdata),</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">Residuals =</span> <span class="fu">predict</span>(dtmodel, <span class="at">newdata =</span> testdata) <span class="sc">-</span> testdata<span class="sc">$</span>Math</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>predict_dt <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">Actual =</span> testdata<span class="sc">$</span>Math, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">Predicted =</span> <span class="fu">predict</span>(dtmodel, <span class="at">newdata =</span> testdata),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">Residuals =</span> <span class="fu">predict</span>(dtmodel, <span class="at">newdata =</span> testdata) <span class="sc">-</span> testdata<span class="sc">$</span>Math</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dt_predvsactual <span class="ot">&lt;-</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_dt,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Predicted)) <span class="sc">+</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Predicted vs Actual"</span>) <span class="sc">+</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>dt_residvsactual <span class="ot">&lt;-</span> </span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_dt,</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Residuals)) <span class="sc">+</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Residuals vs Predicted"</span>) <span class="sc">+</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>dt_predvsactual <span class="sc">+</span> dt_residvsactual <span class="sc">+</span> </span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">widths=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dt_predvsactual <span class="ot">&lt;-</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_dt,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Predicted)) <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Predicted vs Actual"</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>dt_residvsactual <span class="ot">&lt;-</span> </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_dt,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Residuals)) <span class="sc">+</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Residuals vs Predicted"</span>) <span class="sc">+</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>dt_predvsactual <span class="sc">+</span> dt_residvsactual <span class="sc">+</span> </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">widths=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <table class="table">
@@ -858,7 +872,7 @@ tabPanel() &gt;<br>
 plotOutput(“dt_residvsactual_”)</td>
 <td><p><u>Plot Predicted vs Actual<br>
 </u>dt_predvsactual &lt;- eventReactive(<br>
-input$bm_action, {<br>
+input$mb_action, {<br>
 <em>ggplot(…)<br>
 </em>})<br>
 <br>
@@ -882,29 +896,29 @@ dt_residvsactual})</p></td>
 <section id="statistical-model-evaluation-1" class="level2">
 <h2 class="anchored" data-anchor-id="statistical-model-evaluation-1">5.3 Statistical Model Evaluation</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dt_rmse <span class="ot">&lt;-</span> <span class="fu">RMSE</span>(<span class="at">pred =</span> predict_dt<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dt<span class="sc">$</span>Actual)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>dt_rsq <span class="ot">&lt;-</span> <span class="fu">R2</span>(<span class="at">pred =</span> predict_dt<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dt<span class="sc">$</span>Actual)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>dt_mae <span class="ot">&lt;-</span> <span class="fu">MAE</span>(<span class="at">pred =</span> predict_dt<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dt<span class="sc">$</span>Actual)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>dt_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dt_rmse <span class="ot">&lt;-</span> <span class="fu">RMSE</span>(<span class="at">pred =</span> predict_dt<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dt<span class="sc">$</span>Actual)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dt_rsq <span class="ot">&lt;-</span> <span class="fu">R2</span>(<span class="at">pred =</span> predict_dt<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dt<span class="sc">$</span>Actual)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>dt_mae <span class="ot">&lt;-</span> <span class="fu">MAE</span>(<span class="at">pred =</span> predict_dt<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dt<span class="sc">$</span>Actual)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>dt_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 90.52466</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dt_rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dt_rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1319645</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dt_mae</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dt_mae</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 73.3128</code></pre>
 </div>
 </div>
 <table class="table">
 <colgroup>
-<col style="width: 6%">
-<col style="width: 47%">
-<col style="width: 18%">
-<col style="width: 26%">
+<col style="width: 10%">
+<col style="width: 20%">
+<col style="width: 35%">
+<col style="width: 35%">
 </colgroup>
 <tbody>
 <tr class="odd">
@@ -919,12 +933,12 @@ dt_residvsactual})</p></td>
 <td></td>
 <td><p><u>Calculate RMSE</u></p>
 <p>predict_dt &lt;- eventReactive(<br>
-input$bm_action, {<br>
+input$mb_action, {<br>
 bind_cols(<br>
-Actual = stu_test_rf<em>()$input$bm_target</em>,<br>
+Actual = stu_test_rf<em>()$input$mb_target</em>,<br>
 Predicted = predict(<em>stu_rf()</em>,<br>
 newdata = <em>stu_test_rf()</em>), Residuals = predict(<em>stu_rf()</em>,<br>
-newdata = <em>stu_test_rf()</em> - <em>stu_test_rf()$input$bm_target</em>)<br>
+newdata = <em>stu_test_rf()</em> - <em>stu_test_rf()$input$mb_target</em>)<br>
 })</p>
 <p>predict_rf_rmse &lt;- eventReactive(<br>
 input$mb_action, { caret::RMSE(<br>
@@ -956,25 +970,27 @@ value = <em>predict_dt_rmse()</em>)<br>
 <p>Upon receiving the results of our initial decision tree model, user can further refine the model based on the complexity parameter plot. Diagnosis plots, tree visualisation, statistical results should be updated based on the revised model.</p>
 <p>To prune a tree, we want the cp value (with a simpler tree) that minimises the xerror.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dtmodel<span class="sc">$</span>bestTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>dtmodel<span class="sc">$</span>bestTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          cp
 1 0.01850079</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dt_cp_plot <span class="ot">&lt;-</span> <span class="fu">plot</span>(dtmodel)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>dt_cp_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">bg =</span> <span class="st">"#f5f5f5"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>dt_cp_plot <span class="ot">&lt;-</span> <span class="fu">plot</span>(dtmodel)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>dt_cp_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <table class="table">
 <colgroup>
-<col style="width: 11%">
-<col style="width: 50%">
-<col style="width: 17%">
-<col style="width: 19%">
+<col style="width: 10%">
+<col style="width: 20%">
+<col style="width: 35%">
+<col style="width: 35%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -999,51 +1015,70 @@ renderPlot({<br>
 dt_cp_plot()<br>
 })</td>
 </tr>
+<tr class="even">
+<td><strong>dtmodel$bestTune</strong></td>
+<td>Display the best CP value</td>
+<td>fluidRow(<br>
+div(<br>
+<strong><em>valueBoxOutput</em></strong>(“dt_display_bestTune”, width = 3))</td>
+<td><p><u>Calculate bestTune</u><br>
+dt_bestTune &lt;- eventReactive(input$mb_action, {<em>dtmode()$bestTune<br>
+</em>})<br>
+<br>
+<u>Display bestTune</u><br>
+rf_display_bestTune = function(){<br>
+output$dt_bestTune_ = <strong><em>renderValueBox</em></strong>(<br>
+valueBox(<br>
+value = <em>dt_bestTune()</em>)<br>
+)}</p>
+<p>observeEvent(input$mb_action, <em>dt_display_bestTune()</em>)</p></td>
+</tr>
 </tbody>
 </table>
 </section>
 <section id="refreshing-results" class="level3">
 <h3 class="anchored" data-anchor-id="refreshing-results">5.4.2 Refreshing Results</h3>
+<p>Rather than overwriting the previous results using the same set of codes, the pruned model uses a separate set of codes as the model below uses <code>tuneGrid</code> instead of the initial <code>tuneLength</code> for calibration.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>dtmodel_pruned <span class="ot">&lt;-</span> <span class="fu">train</span>(Math <span class="sc">~</span> ., </span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> traindata,</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">tuneGrid =</span> <span class="fu">expand.grid</span>(<span class="at">cp =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fl">0.01</span>, <span class="at">to =</span> <span class="fl">0.02</span>, <span class="at">by =</span> <span class="fl">0.001</span>)), <span class="co">#input$dt_cp</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">trControl =</span> dt_fitcontrol</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>dtmodel_pruned <span class="ot">&lt;-</span> <span class="fu">train</span>(Math <span class="sc">~</span> ., </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> traindata,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">"rpart"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">tuneGrid =</span> <span class="fu">expand.grid</span>(<span class="at">cp =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fl">0.01</span>, <span class="at">to =</span> <span class="fl">0.02</span>, <span class="at">by =</span> <span class="fl">0.001</span>)), <span class="co">#input$dt_cp</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">trControl =</span> dt_fitcontrol</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(dtmodel_pruned<span class="sc">$</span>finalModel,</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">box.palette=</span><span class="st">"GnBu"</span>,</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">branch.lty=</span><span class="dv">3</span>, </span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">shadow.col=</span><span class="st">"gray"</span>, </span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">nn=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rpart.plot</span>(dtmodel_pruned<span class="sc">$</span>finalModel,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">box.palette=</span><span class="st">"GnBu"</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">branch.lty=</span><span class="dv">3</span>, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">shadow.col=</span><span class="st">"gray"</span>, </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">nn=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>predict_dtpruned <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">Actual =</span> testdata<span class="sc">$</span>Math, </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">Predicted =</span> <span class="fu">predict</span>(dtmodel_pruned, <span class="at">newdata =</span> testdata),</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">Residuals =</span> <span class="fu">predict</span>(dtmodel_pruned, <span class="at">newdata =</span> testdata) <span class="sc">-</span> testdata<span class="sc">$</span>Math</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>dtpruned_rmse <span class="ot">&lt;-</span> <span class="fu">RMSE</span>(<span class="at">pred =</span> predict_dtpruned<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dtpruned<span class="sc">$</span>Actual)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>dtpruned_rsq <span class="ot">&lt;-</span> <span class="fu">R2</span>(<span class="at">pred =</span> predict_dtpruned<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dtpruned<span class="sc">$</span>Actual)</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>dtpruned_mae <span class="ot">&lt;-</span> <span class="fu">MAE</span>(<span class="at">pred =</span> predict_dtpruned<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dtpruned<span class="sc">$</span>Actual)</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>dtpruned_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>predict_dtpruned <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">Actual =</span> testdata<span class="sc">$</span>Math, </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">Predicted =</span> <span class="fu">predict</span>(dtmodel_pruned, <span class="at">newdata =</span> testdata),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">Residuals =</span> <span class="fu">predict</span>(dtmodel_pruned, <span class="at">newdata =</span> testdata) <span class="sc">-</span> testdata<span class="sc">$</span>Math</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>dtpruned_rmse <span class="ot">&lt;-</span> <span class="fu">RMSE</span>(<span class="at">pred =</span> predict_dtpruned<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dtpruned<span class="sc">$</span>Actual)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>dtpruned_rsq <span class="ot">&lt;-</span> <span class="fu">R2</span>(<span class="at">pred =</span> predict_dtpruned<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dtpruned<span class="sc">$</span>Actual)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>dtpruned_mae <span class="ot">&lt;-</span> <span class="fu">MAE</span>(<span class="at">pred =</span> predict_dtpruned<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_dtpruned<span class="sc">$</span>Actual)</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>dtpruned_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 88.95871</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>dtpruned_rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>dtpruned_rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.1620932</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>dtpruned_mae</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>dtpruned_mae</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 72.37935</code></pre>
 </div>
@@ -1056,44 +1091,45 @@ dt_cp_plot()<br>
 <section id="the-model" class="level2">
 <h2 class="anchored" data-anchor-id="the-model">6.1 The Model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Specifying training choices ##</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Resampling Options</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>rf_fitcontrol <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="co"># input$rf_resamplingmethod</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">5</span>, <span class="co"># input$rf_resamplecnt</span></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="cn">NA</span>)  <span class="co"># input$rf_repeats</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Specifying training choices ##</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set seed</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Resampling Options</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>rf_fitcontrol <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="co"># input$rf_resamplingmethod</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">5</span>, <span class="co"># input$rf_resamplecnt</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="cn">NA</span>)  <span class="co"># input$rf_repeats</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This model has 3 tuning parameters:</p>
 <ul>
-<li><code>mtry</code>: Randomly Selected Predictors (type: integer)</li>
-<li><code>trees</code>: Trees (type: integer, default: 500L)</li>
-<li><code>min_n</code>: Minimal Node Size (type: integer)</li>
+<li><code>mtry</code>: gives the number of variables randomly sampled at each split, defaulted as the (rounded-down) value of the square-root of the number of predictors</li>
+<li><code>splitrule</code>: Splitting rule.</li>
+<li><code>min_n</code>: Minimum node size. Controls the complexity of the trees. Smaller node size allows for deeper, more complex trees and smaller node results in shallower trees. This is another bias-vairnace tradeoff where deeper trees introduce more vairance (risk of overfitting) and shallower trees introduce more bias (risk of not fully capturing unique patterns and relationsips in the data).</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Model Parameters ##</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>tgrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mtry =</span> <span class="fu">sqrt</span>(<span class="fu">ncol</span>(traindata)),</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">splitrule =</span> <span class="st">"variance"</span>, <span class="co"># input$rf_splitrule: "variance", "extratrees", "maxstat" or "beta" with default "variance" for regression</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">min.node.size =</span> <span class="dv">5</span> <span class="co"># Default 5 for regression</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Tuning Parameters ##</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>tgrid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mtry =</span> <span class="fu">sqrt</span>(<span class="fu">ncol</span>(traindata)),</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">splitrule =</span> <span class="st">"variance"</span>, <span class="co"># input$rf_splitrule: "variance", "extratrees", "maxstat" or "beta" with default "variance" for regression</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">min.node.size =</span> <span class="dv">10</span> <span class="co"># input$rf_minnodesize: Default 5 for regression</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>rfmodel <span class="ot">&lt;-</span> <span class="fu">train</span>(<span class="at">form =</span> Math <span class="sc">~</span> .,</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> traindata,</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">"ranger"</span>,</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">trControl =</span> rf_fitcontrol,</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">num.trees =</span> <span class="dv">50</span>, <span class="co"># input$treenum</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">importance =</span> <span class="st">"permutation"</span>, <span class="co"># input$rf_varimpmode: none, impurity, permutation</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">tuneGrid =</span> tgrid</span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>                 )</span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>rfmodel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>rfmodel <span class="ot">&lt;-</span> <span class="fu">train</span>(<span class="at">form =</span> Math <span class="sc">~</span> .,</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> traindata,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">"ranger"</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">trControl =</span> rf_fitcontrol,</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">num.trees =</span> <span class="dv">50</span>, <span class="co"># input$treenum</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">importance =</span> <span class="st">"permutation"</span>, <span class="co"># input$rf_varimpmode: none, impurity, permutation</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">local.importance =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">tuneGrid =</span> tgrid</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>rfmodel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Random Forest 
 
@@ -1105,22 +1141,22 @@ Resampling: Cross-Validated (5 fold)
 Summary of sample sizes: 3302, 3302, 3302, 3303, 3303 
 Resampling results:
 
-  RMSE     Rsquared  MAE     
-  81.4222  0.363924  65.59421
+  RMSE      Rsquared   MAE     
+  81.51302  0.3702309  65.88471
 
 Tuning parameter 'mtry' was held constant at a value of 4.795832
 
 Tuning parameter 'splitrule' was held constant at a value of variance
 
-Tuning parameter 'min.node.size' was held constant at a value of 5</code></pre>
+Tuning parameter 'min.node.size' was held constant at a value of 10</code></pre>
 </div>
 </div>
 <table class="table">
 <colgroup>
-<col style="width: 8%">
-<col style="width: 23%">
-<col style="width: 33%">
-<col style="width: 32%">
+<col style="width: 10%">
+<col style="width: 20%">
+<col style="width: 35%">
+<col style="width: 35%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -1138,16 +1174,16 @@ Tuning parameter 'min.node.size' was held constant at a value of 5</code></pre>
 label = “K-fold:”,<br>
 min = 3,<br>
 max = 50,<br>
-value = 10))),</p>
+value = 10)</p>
 <p>numericInput(inputId = “rf_repeatkfold_number”,<br>
 label = “K-fold:”,<br>
 min = 3,<br>
 max = 50,<br>
-value = 10))),</p>
+value = 10)</p>
 <p>numericInput(inputId = “rf_repeatkfold_repeat”, label = “Number of Repeats:”,<br>
 min = 3,<br>
 max = 10,<br>
-value = 3))),</p></td>
+value = 3)</p></td>
 <td><p>Within <strong><em>mainPanel</em></strong>() &gt; tabsetPanel() &gt;</p>
 <p><u>For Cross Validation</u><br>
 rf_resamplecv_kfoldnum &lt;- eventReactive(input$mb_action, {<br>
@@ -1172,27 +1208,31 @@ repeats = input$dt_repeatkfold_repeat)<br>
 <tr class="even">
 <td><strong>expand.grid()</strong></td>
 <td>Select split rule</td>
-<td>selectInput(inputId = “rf_splitrule_”,<br>
+<td><p>selectInput(inputId = “rf_splitrule_”,<br>
 label = “Select Split Rule:”,<br>
 choices = c(“Variance” = “variance”,<br>
 “Extra Trees” = “extratrees”,<br>
-“Max Stat” = “maxstat”)</td>
+“Max Stat” = “maxstat”)</p>
+<p>sliderInput(inputId = “rf_minnodesize”, label = “Minimum Node Size:”,<br>
+min = 2,<br>
+max = 50,<br>
+value = 5),</p></td>
 <td>tgrid &lt;- eventReaction(input$mb_action, {<br>
 expand.grid(<br>
 mtry = sqrt(ncol(traindata)),<br>
-splitrule = “variance”.<br>
-min.node.size = 5)}</td>
+splitrule = <em>input$rf_splitrule</em>.<br>
+min.node.size = <em>input$rf_minnodesize</em>)}</td>
 </tr>
 <tr class="odd">
 <td><strong>train()</strong></td>
 <td>Select number of trees and variable importance</td>
-<td><p>sliderInput(inputId = “rf_tree_range_”,<br>
-label = “Range of Trees (keep range within 20):”,<br>
+<td><p>sliderInput(inputId = “rf_tree_num_”,<br>
+label = “Number of Trees:”,<br>
 min = 5,<br>
-max = 100,<br>
-value = c(5,25)))</p>
+max = 500,<br>
+value = 50)</p>
 <p>radioButtons(inputId = “rf_varimpmode_”,<br>
-label = “Feature Importance:”,<br>
+label = “Variable Importance Measure:”,<br>
 choices = c(“Gini Importance” = “impurity”,<br>
 “Permutation Importance” = “permutation”),selected = “impurity”))</p></td>
 <td>rfmodel &lt;- eventReactive(<br>
@@ -1201,7 +1241,7 @@ train(form = Math ~ .,<br>
 data = traindata(),<br>
 method = “ranger”,<br>
 trControl = fitcontrol(),<br>
-num.trees = <em>input$rf_tree_range,</em><br>
+num.trees = <em>input$rf_tree_num,</em><br>
 importance =<br>
 <em>input$rf_varimpmode</em>,<br>
 tuneGrid = <em>tgrid()</em>)<br>
@@ -1213,109 +1253,74 @@ tuneGrid = <em>tgrid()</em>)<br>
 <section id="visual-model-diagnostic-1" class="level2">
 <h2 class="anchored" data-anchor-id="visual-model-diagnostic-1">6.2 Visual Model Diagnostic</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>rfmodel<span class="sc">$</span>bestTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>rfmodel<span class="sc">$</span>bestTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      mtry splitrule min.node.size
-1 4.795832  variance             5</code></pre>
+1 4.795832  variance            10</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>predict_rf <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">Actual =</span> testdata<span class="sc">$</span>Math, </span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">Predicted =</span> <span class="fu">predict</span>(rfmodel, <span class="at">newdata =</span> testdata),</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">Residuals =</span> <span class="fu">predict</span>(rfmodel, <span class="at">newdata =</span> testdata) <span class="sc">-</span> testdata<span class="sc">$</span>Math</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>predict_rf <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>   <span class="at">Actual =</span> testdata<span class="sc">$</span>Math, </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>   <span class="at">Predicted =</span> <span class="fu">predict</span>(rfmodel, <span class="at">newdata =</span> testdata),</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>   <span class="at">Residuals =</span> <span class="fu">predict</span>(rfmodel, <span class="at">newdata =</span> testdata) <span class="sc">-</span> testdata<span class="sc">$</span>Math</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>rf_predvsactual <span class="ot">&lt;-</span> </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_rf,</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Predicted)) <span class="sc">+</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Predicted vs Actual"</span>) <span class="sc">+</span></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>rf_residvsactual <span class="ot">&lt;-</span> </span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_rf,</span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Residuals)) <span class="sc">+</span></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
-<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
-<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Residuals vs Predicted"</span>) <span class="sc">+</span></span>
-<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
-<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>rf_predvsactual <span class="sc">+</span> rf_residvsactual <span class="sc">+</span></span>
-<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span></span>
-<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">widths=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>rf_predvsactual <span class="ot">&lt;-</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_rf,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Predicted)) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Predicted vs Actual"</span>) <span class="sc">+</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>rf_residvsactual <span class="ot">&lt;-</span> </span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_rf,</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Residuals)) <span class="sc">+</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Residuals vs Predicted"</span>) <span class="sc">+</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>rf_predvsactual <span class="sc">+</span> rf_residvsactual <span class="sc">+</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">widths=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
 <section id="statistical-model-evaluation-2" class="level2">
 <h2 class="anchored" data-anchor-id="statistical-model-evaluation-2">6.3 Statistical Model Evaluation</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>rf_rmse <span class="ot">&lt;-</span> <span class="fu">RMSE</span>(<span class="at">pred =</span> predict_rf<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_rf<span class="sc">$</span>Actual)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>rf_rsq <span class="ot">&lt;-</span> <span class="fu">R2</span>(<span class="at">pred =</span> predict_rf<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_rf<span class="sc">$</span>Actual)</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>rf_mae <span class="ot">&lt;-</span> <span class="fu">MAE</span>(<span class="at">pred =</span> predict_rf<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_rf<span class="sc">$</span>Actual)</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>rf_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>rf_rmse <span class="ot">&lt;-</span> <span class="fu">RMSE</span>(<span class="at">pred =</span> predict_rf<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_rf<span class="sc">$</span>Actual)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>rf_rsq <span class="ot">&lt;-</span> <span class="fu">R2</span>(<span class="at">pred =</span> predict_rf<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_rf<span class="sc">$</span>Actual)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>rf_mae <span class="ot">&lt;-</span> <span class="fu">MAE</span>(<span class="at">pred =</span> predict_rf<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_rf<span class="sc">$</span>Actual)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>rf_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 80.13941</code></pre>
+<pre><code>[1] 79.73068</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>rf_rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>rf_rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.3483527</code></pre>
+<pre><code>[1] 0.3649717</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>rf_mae</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>rf_mae</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 64.93847</code></pre>
+<pre><code>[1] 64.68923</code></pre>
 </div>
 </div>
 </section>
 <section id="variable-importance" class="level2">
 <h2 class="anchored" data-anchor-id="variable-importance">6.4 Variable Importance</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">varImp</span>(rfmodel))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>vip<span class="sc">::</span><span class="fu">vip</span>(rfmodel, <span class="at">num_features =</span> <span class="dv">40</span>, <span class="at">bar =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
 </div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rf_varimp &lt;- importance(rfmodel) %&gt;% </span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  as.data.frame() %&gt;% </span></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  rownames_to_column() %&gt;% </span></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  rename("Variable" = rowname) </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#bar_chart &lt;- function(label, width = "100%", height = "1rem", fill = "#73b2c4", background = "#f5f5f5") {</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  bar &lt;- div(style = list(background = fill, width = width, height = height))</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  chart &lt;- div(style = list(flexGrow = 1, marginLeft = "0.5rem", background = "#f5f5f5"), bar)</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  div(style = list(display = "flex", alignItems = "center"), label, chart)</span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co">#}</span></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="co">#tab_varimp &lt;- </span></span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  reactable(data = rf_varimp,</span></span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="co">#         </span></span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="co">#          columns = list(</span></span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="co">#            `%IncMSE` = colDef(</span></span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a><span class="co">#              name = "% Increase in Mean Square Error",</span></span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a><span class="co">#              align = 'left',</span></span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a><span class="co">#              cell = function (value) {</span></span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a><span class="co">#                width &lt;- paste0(value, "%")</span></span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a><span class="co">#                bar_chart(round(value,2), width = width)</span></span>
-<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a><span class="co">#              }),</span></span>
-<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a><span class="co">#            IncNodePurity = colDef(</span></span>
-<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a><span class="co">#              name = "Increase in Node Purity",</span></span>
-<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a><span class="co">#              align = 'left',</span></span>
-<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a><span class="co">#              cell = function (value) {</span></span>
-<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a><span class="co">#                width &lt;- paste0(value/ max(rf_varimp$IncNodePurity) *100, "%")</span></span>
-<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a><span class="co">#                bar_chart(format(as.numeric(value), nsmall = 0, big.mark=","), width = width, fill = "#f27279", background = "#f5f5f5")</span></span>
-<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a><span class="co">#              })            </span></span>
-<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a><span class="co">#          ))</span></span>
-<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a><span class="co">#tab_varimp</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <table class="table">
 <colgroup>
@@ -1334,19 +1339,18 @@ tuneGrid = <em>tgrid()</em>)<br>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>rf_varimp &amp; <a href="https://glin.github.io/reactable/">reactable</a></strong></td>
-<td>Plots to be updated when response and explanatory variables are selected and ‘Build Model’ is clicked.</td>
-<td><p>Within <strong><em>sidebarPanel</em></strong>():</p>
-<p>reactableOutput(“tab_varimp”)</p></td>
-<td><p>rf_varimp &lt;- eventReactive(<br>
-input$rf_action_, {<br>
-importance(stu_rf) %&gt;% as.data.frame() %&gt;%<br>
-rownames_to_column() %&gt;%<br>
-rename(“Variable” = rowname)<br>
-})</p>
-<p>output$tab_varimp &lt;- renderReactable({<br>
-reactable(…)<br>
-})</p></td>
+<td><strong>plot(vip(rfmodel))</strong></td>
+<td>Show variable importance plot when selections are completed and ‘Build Model’ option is triggered.</td>
+<td>plotOutput(“rf_varimp_plot_”)</td>
+<td>rf_varimp_plot&lt;- eventReactive(<br>
+input$mb_action, {<br>
+<em>plot(vip(rfmodel()))<br>
+</em>})<br>
+<br>
+output$rf_varimp_plot_&lt;-<br>
+renderPlot({<br>
+rf_varimp_plot_()<br>
+})</td>
 </tr>
 </tbody>
 </table>
@@ -1357,37 +1361,38 @@ reactable(…)<br>
 <section id="the-model-1" class="level2">
 <h2 class="anchored" data-anchor-id="the-model-1">7.1 The Model</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Specifying training choices ##</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Resampling Options</span></span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>gb_fitcontrol <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="co"># input$gb_resamplingmethod - </span></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">5</span>, <span class="co"># input$gb_resamplecnt</span></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="cn">NA</span>) <span class="co"># input$gb_repeats</span></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Tuning Grid</span></span>
-<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>gbm_grid <span class="ot">=</span> <span class="fu">expand.grid</span>(<span class="at">interaction.depth =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
-<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.trees =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>) <span class="sc">*</span> <span class="dv">10</span>,</span>
-<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">shrinkage =</span> <span class="fu">c</span>(<span class="fl">0.01</span>,<span class="fl">0.05</span>,<span class="fl">0.1</span>),</span>
-<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.minobsinnode =</span> <span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Specifying training choices ##</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Resampling Options</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>gb_fitcontrol <span class="ot">&lt;-</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="co"># input$gb_resamplingmethod - </span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>                           <span class="at">number =</span> <span class="dv">5</span>, <span class="co"># input$gb_resamplecnt</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>                           <span class="at">repeats =</span> <span class="cn">NA</span>) <span class="co"># input$gb_repeats</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Tuning Grid</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>gbm_grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">interaction.depth =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>), </span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.trees =</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>) <span class="sc">*</span> <span class="dv">10</span>, <span class="co">#input$gb_treenumrange</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">shrinkage =</span> <span class="fu">c</span>(<span class="fl">0.01</span>,<span class="fl">0.05</span>,<span class="fl">0.1</span>), <span class="co">#input$gb_shrinkage</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>                       <span class="at">n.minobsinnode =</span> <span class="dv">20</span>) <span class="co">#input$gb_minnodesize</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><code>gbm</code> has the following tuneable hyperparameters:</p>
 <ul>
 <li><p><code>n.trees</code>: number of boosting iterations</p></li>
-<li><p><code>nteraction.depth</code>: maximum tree depth</p></li>
-<li><p><code>shrinkage</code>: the learning rate or shrinkage parameter - <code>n.minobsinnode</code>: minimum terminal node size</p></li>
+<li><p><code>interaction.depth</code>: maximum tree depth</p></li>
+<li><p><code>shrinkage</code>: the learning rate or shrinkage parameter</p></li>
+<li><p><code>n.minobsinnode</code>: minimum terminal node size</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>gbmodel <span class="ot">&lt;-</span> <span class="fu">train</span>(Math <span class="sc">~</span> .,</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> traindata,</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">trControl =</span> gb_fitcontrol,</span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">"gbm"</span>,</span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">tuneLength =</span> <span class="dv">5</span>,</span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">tuneGrid =</span> gbm_grid)</span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>gbmodel                 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>gbmodel <span class="ot">&lt;-</span> <span class="fu">train</span>(Math <span class="sc">~</span> .,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> traindata,</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">trControl =</span> gb_fitcontrol,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">"gbm"</span>,</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>                 <span class="co">#tuneLength = 5,</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">tuneGrid =</span> gbm_grid)</span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>gbmodel                 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Stochastic Gradient Boosting 
 
@@ -1677,71 +1682,177 @@ The final values used for the model were n.trees = 300, interaction.depth =
  2, shrinkage = 0.1 and n.minobsinnode = 20.</code></pre>
 </div>
 </div>
+<table class="table">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 20%">
+<col style="width: 35%">
+<col style="width: 35%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Feature</th>
+<th>UI</th>
+<th>Server</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>trainControl()</strong></td>
+<td>Select resampling method, resampling count and repeat.</td>
+<td><p>numericInput(inputId = “gb_cvkfold_number”,<br>
+label = “K-fold:”,<br>
+min = 3,<br>
+max = 50,<br>
+value = 10),</p>
+<p>numericInput(inputId = “gb_repeatkfold_number”,<br>
+label = “K-fold:”,<br>
+min = 3,<br>
+max = 50,<br>
+value = 10),</p>
+<p>numericInput(inputId = “gb_repeatkfold_repeat”, label = “Number of Trees:”,<br>
+min = 1,<br>
+max = 300,<br>
+value = c(10, 30))</p></td>
+<td><p>Within <strong><em>mainPanel</em></strong>() &gt; tabsetPanel() &gt;</p>
+<p><u>For Cross Validation</u><br>
+gb_resamplecv_kfoldnum &lt;- eventReactive(input$mb_action, {<br>
+trainControl(<br>
+method = “cv”,<br>
+number = input$gb_cvkfold_number)<br>
+})</p>
+<p><u>For Repeated Cross Validation<br>
+</u>gb_resamplercv_kfoldnum &lt;- eventReactive(input$mb_action, {<br>
+trainControl(<br>
+method = “cv”,<br>
+number = input$gb_repeatkfold_number)<br>
+})</p>
+<p>gb_repeatnum &lt;- eventReactive(<br>
+input$mb_action, {<br>
+trainControl(<br>
+method = “repeatedcv”,<br>
+number = input$gb_repeatkfold_number,<br>
+repeats = input$gb_repeatkfold_repeat)<br>
+})</p></td>
+</tr>
+<tr class="even">
+<td><strong>expand.grid()</strong></td>
+<td>Select tuning parameters</td>
+<td><p><u>Slider with Range</u><br>
+sliderInput(inputId = “<em>gb_interactiondepth_</em>”,<br>
+label = “Number of Boosting Iterations:”,<br>
+min = 1,<br>
+max = 5,<br>
+value = c(1:3)))</p>
+<p>sliderInput(inputId = “<em>gb_treenumrange_</em>”,<br>
+label = “Number of Trees:”,<br>
+min = 10,<br>
+max = 500,<br>
+value = c(10:30)))</p>
+<p><u>Slider with 1 Input<br>
+</u>sliderInput(inputId = “gb_minnodesize”, label = “Minimum Node Size:”,<br>
+min = 2,<br>
+max = 50,<br>
+value = 5),</p>
+<p><u>Numeric Input</u><br>
+numericInput(inputId = “<em>gb_shrinkage_</em>”,<br>
+label = “Learning Rate:”,<br>
+min = 0,<br>
+max = 1.0,<br>
+value = 0.01)</p></td>
+<td>gb_tgrid &lt;- eventReaction(input$mb_action, {<br>
+expand.grid(<br>
+interaction.depth = <em>input$gb_interactiondepth</em>,<br>
+n.trees = <em>input$gb_treenumrange</em>,<br>
+shrinkage = <em>input$gb_shrinkage</em>,<br>
+min.node.size = i<em>nput$gb_minnodesize</em>)}</td>
+</tr>
+<tr class="odd">
+<td><strong>train()</strong></td>
+<td>Select initial tune length</td>
+<td>numericInput(inputId = “<em>rf_tunelength</em>”, label = “Set Initial Tune Length:”,<br>
+min = 2,<br>
+max = 10,<br>
+value = 4)</td>
+<td>rfmodel &lt;- eventReactive(<br>
+input$mb_action, {<br>
+train(form = <em>input$target</em>~ .,<br>
+data = <em>traindata()</em>,<br>
+method = “gbm”,<br>
+verbose = FALSE,<br>
+trControl = <em>gb_fitcontrol()</em>,<br>
+tuneLength = <em>input$rf_tunelength</em>,<br>
+tuneGrid = <em>gb_tgrid()</em>)<br>
+})</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="visual-model-diagnostic-2" class="level2">
 <h2 class="anchored" data-anchor-id="visual-model-diagnostic-2">7.2 Visual Model Diagnostic</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>gbmodel<span class="sc">$</span>bestTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>gbmodel<span class="sc">$</span>bestTune</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    n.trees interaction.depth shrinkage n.minobsinnode
 240     300                 2       0.1             20</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gbmodel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(gbmodel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>predict_gb <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Actual =</span> testdata<span class="sc">$</span>Math,</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Predicted =</span> <span class="fu">predict</span>(gbmodel, <span class="at">newdata =</span> testdata),</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Residuals =</span> <span class="fu">predict</span>(gbmodel, <span class="at">newdata =</span> testdata) <span class="sc">-</span> testdata<span class="sc">$</span>Math)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>gb_predvsactual <span class="ot">&lt;-</span> </span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_gb,</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Predicted)) <span class="sc">+</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Predicted vs Actual"</span>) <span class="sc">+</span></span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>gb_residvsactual <span class="ot">&lt;-</span> </span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_gb,</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Residuals)) <span class="sc">+</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Residuals vs Predicted"</span>) <span class="sc">+</span></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>gb_predvsactual <span class="sc">+</span> gb_residvsactual <span class="sc">+</span> </span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span></span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">widths=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>predict_gb <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Actual =</span> testdata<span class="sc">$</span>Math,</span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Predicted =</span> <span class="fu">predict</span>(gbmodel, <span class="at">newdata =</span> testdata),</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Residuals =</span> <span class="fu">predict</span>(gbmodel, <span class="at">newdata =</span> testdata) <span class="sc">-</span> testdata<span class="sc">$</span>Math)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>gb_predvsactual <span class="ot">&lt;-</span> </span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_gb,</span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Predicted)) <span class="sc">+</span></span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Predicted vs Actual"</span>) <span class="sc">+</span></span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
-<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>gb_residvsactual <span class="ot">&lt;-</span> </span>
-<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="at">data =</span> predict_gb,</span>
-<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">x =</span> Actual, <span class="at">y =</span> Residuals)) <span class="sc">+</span></span>
-<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
-<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"loess"</span>, <span class="at">formula =</span> <span class="st">"y ~ x"</span>, <span class="at">color=</span><span class="st">"#dfb2e9"</span>) <span class="sc">+</span></span>
-<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">"#20948b"</span>, <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Residuals vs Predicted"</span>) <span class="sc">+</span></span>
-<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">"#f5f5f5"</span>,<span class="at">colour=</span><span class="st">"#f5f5f5"</span>))</span>
-<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-19"><a href="#cb55-19" aria-hidden="true" tabindex="-1"></a>gb_predvsactual <span class="sc">+</span> gb_residvsactual <span class="sc">+</span> </span>
-<span id="cb55-20"><a href="#cb55-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">"collect"</span>) <span class="sc">+</span></span>
-<span id="cb55-21"><a href="#cb55-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">widths=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
 <section id="statistical-model-evaluation-3" class="level2">
 <h2 class="anchored" data-anchor-id="statistical-model-evaluation-3">7.3 Statistical Model Evaluation</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>gb_rmse <span class="ot">&lt;-</span> <span class="fu">RMSE</span>(<span class="at">pred =</span> predict_gb<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_gb<span class="sc">$</span>Actual)</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>gb_rsq <span class="ot">&lt;-</span> <span class="fu">R2</span>(<span class="at">pred =</span> predict_gb<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_gb<span class="sc">$</span>Actual)</span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>gb_mae <span class="ot">&lt;-</span> <span class="fu">MAE</span>(<span class="at">pred =</span> predict_gb<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_gb<span class="sc">$</span>Actual)</span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>gb_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>gb_rmse <span class="ot">&lt;-</span> <span class="fu">RMSE</span>(<span class="at">pred =</span> predict_gb<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_gb<span class="sc">$</span>Actual)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>gb_rsq <span class="ot">&lt;-</span> <span class="fu">R2</span>(<span class="at">pred =</span> predict_gb<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_gb<span class="sc">$</span>Actual)</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>gb_mae <span class="ot">&lt;-</span> <span class="fu">MAE</span>(<span class="at">pred =</span> predict_gb<span class="sc">$</span>Predicted, <span class="at">obs =</span> predict_gb<span class="sc">$</span>Actual)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>gb_rmse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 75.59326</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>gb_rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>gb_rsq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.3951649</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>gb_mae</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>gb_mae</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 60.85604</code></pre>
 </div>
@@ -1750,14 +1861,19 @@ The final values used for the model were n.trees = 300, interaction.depth =
 <section id="variable-importance-1" class="level2">
 <h2 class="anchored" data-anchor-id="variable-importance-1">7.4 Variable Importance</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">varImp</span>(gbmodel))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>vip<span class="sc">::</span><span class="fu">vip</span>(gbmodel, <span class="at">num_features =</span> <span class="dv">40</span>, <span class="at">bar =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex04_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="final-thoughts" class="level1">
+<h1>8 Final Thoughts</h1>
+<p>The three predictive models offer users different methods for regression analysis to explore the factors influencing subject scores. The customisability of our app allows users to visualise the impact of each parameter on the model’s performance and enables them to fine-tune it to arrive at the best predictive model.</p>
+<p>Additionally, if time and capability permit, I would consider the addition of a summary page to this module. This summary page could provide a side-by-side comparison of performance metrics, showcasing the strengths and weaknesses of each model. Such a comparison would empower users to make informed decisions about which model best suits their needs for predicting student scores. This feature would enhance the user experience and provide a comprehensive overview, ensuring users can confidently select the most effective model.</p>
+
+
 </section>
 
 </main> <!-- /main -->
