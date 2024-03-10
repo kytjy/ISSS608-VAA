@@ -366,7 +366,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="overview" class="level1">
 <h1>1 Overview</h1>
-<p>International large-scale assessments, such as PISA, provide structured and static data. With the goal of exploring which factors have a higher relevance in predicting student performance, this post proposes the use of multiple linear regression and random forest approach to detect and analyse factors linked to academic performance.</p>
+<p>International large-scale assessments, such as PISA, provide structured and static data. With the goal of exploring which factors have a higher relevance in predicting student performance, this post proposes the use of decision tree, random forest, and gradient boosting approaches to detect and analyse factors linked to academic performance.</p>
 <p>Specifically, this post details the steps, packages, prototypes, including the detailed breakdown of codes used for UI and Server in R Shiny as part of the model building module in preparation for the final Shiny app.</p>
 </section>
 <section id="loading-data-and-packages" class="level1">
@@ -493,7 +493,7 @@ $ Science            &lt;dbl&gt; 639.7873, 672.0703, 660.0384, 343.6425, 479.239
 <p><img src="images/gb.png" class="img-fluid figure-img"></p>
 </figure>
 </div>
-<p>Options for customisations are available on the left side of the app, these options are used to train the model. The right displays the performance of the model including model fit and variable importance, as well as the performance evaluation metrics using the model on the test data. We perform a detailed walkthrough of the interactivity and customisation features for each model, including descriptions of the SHINY UI and Server in Sections 5-7.</p>
+<p>Options for customisations are available on the left side of the app, these options are used to train the model. The right displays the performance of the model including model fit and variable importance, as well as the performance evaluation metrics using the model on the test data. We perform a detailed walkthrough of the interactivity and customisation features for each model, including descriptions of the Shiny UI and Server in Sections 5-7.</p>
 <p>But first, in the subsequent parts of this section, we briefly outline the rationale behind visualisations and measurements.</p>
 </section>
 <section id="visual-model-diagnostic" class="level2">

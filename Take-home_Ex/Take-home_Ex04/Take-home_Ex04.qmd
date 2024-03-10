@@ -21,7 +21,7 @@ format:
 
 # 1 Overview
 
-International large-scale assessments, such as PISA, provide structured and static data. With the goal of exploring which factors have a higher relevance in predicting student performance, this post proposes the use of multiple linear regression and random forest approach to detect and analyse factors linked to academic performance.
+International large-scale assessments, such as PISA, provide structured and static data. With the goal of exploring which factors have a higher relevance in predicting student performance, this post proposes the use of decision tree, random forest, and gradient boosting approaches to detect and analyse factors linked to academic performance.
 
 Specifically, this post details the steps, packages, prototypes, including the detailed breakdown of codes used for UI and Server in R Shiny as part of the model building module in preparation for the final Shiny app.
 
@@ -101,7 +101,7 @@ At the initial stage of the model building module, users would be able customise
 
 ![](images/gb.png){fig-align="center"}
 
-Options for customisations are available on the left side of the app, these options are used to train the model. The right displays the performance of the model including model fit and variable importance, as well as the performance evaluation metrics using the model on the test data. We perform a detailed walkthrough of the interactivity and customisation features for each model, including descriptions of the SHINY UI and Server in Sections 5-7.
+Options for customisations are available on the left side of the app, these options are used to train the model. The right displays the performance of the model including model fit and variable importance, as well as the performance evaluation metrics using the model on the test data. We perform a detailed walkthrough of the interactivity and customisation features for each model, including descriptions of the Shiny UI and Server in Sections 5-7.
 
 But first, in the subsequent parts of this section, we briefly outline the rationale behind visualisations and measurements.
 

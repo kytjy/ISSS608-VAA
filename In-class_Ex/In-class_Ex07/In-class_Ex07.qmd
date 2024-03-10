@@ -22,7 +22,7 @@ format:
 # 1 Packages
 
 | Package                                              | Description                                                                                    |
-|----------------|--------------------------------------------------------|
+|------------------------------------------------------|------------------------------------------------------------------------------------------------|
 | [**sf**](https://r-spatial.github.io/sf/)            | For spatial manipulation                                                                       |
 | [**terra**](https://github.com/rspatial/terra)       | Methods for spatial data analysis with vector (points, lines, polygons) and raster (grid) data |
 | [**gstat**](https://github.com/r-spatial/gstat)      | For spatial and spatio-temporal geostatistical modelling, prediction and simulation            |
