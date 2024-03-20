@@ -31,13 +31,19 @@ Specifically, this post details the steps, packages, prototypes, including the d
 
 The packages used as part of this exercise includes:
 
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
 | Package                                                                                                                                                                                                                                                                                                                                                                                  | Description                                                         |
-|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
++==========================================================================================================================================================================================================================================================================================================================================================================================+=====================================================================+
 | [**tidyverse**](https://www.tidyverse.org/)                                                                                                                                                                                                                                                                                                                                              | For data wrangling                                                  |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
 | [**ggplot2**](https://ggplot2.tidyverse.org/)**, [patchwork](https://patchwork.data-imaginist.com/), [urbnthemes](https://urbaninstitute.github.io/urbnthemes/articles/introducing-urbnthemes.html)**                                                                                                                                                                                    | For creating plots                                                  |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
 | [**reactable**](https://glin.github.io/reactable/)                                                                                                                                                                                                                                                                                                                                       | For dynamic data tables                                             |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
 | [**ranger**](https://cran.r-project.org/web/packages/ranger/index.html), [**vip**](https://koalaverse.github.io/vip/articles/vip.html), [**rpart.plot**](https://cran.r-project.org/web/packages/rpart.plot/rpart.plot.pdf), [**caret**](https://topepo.github.io/caret/)**, [tidymodels](https://www.tidymodels.org/)**, [**gbm**](https://cran.r-project.org/web/packages/gbm/gbm.pdf) | For packages relating to modeling, regression, and machine learning |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
 | [**performance**](https://easystats.github.io/performance/)                                                                                                                                                                                                                                                                                                                              | For assessment of regression models performance                     |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------+
 
 ```{r}
 pacman::p_load(tidyverse, 
@@ -52,7 +58,8 @@ pacman::p_load(tidyverse,
 The code chunk below loads our dataset into R environment, in the form of a csv file created following minor data cleaning and wrangling documented [here](https://projectpisa.netlify.app/phase1/dataprep).
 
 ```{r}
-stu <- read_csv("data/stu_SG_rcd.csv")
+#stu <- read_csv("data/stu_SG_rcd.csv")
+stu <- read_rds("data/stu_SG_rcd.rds")
 ```
 
 ```{r}
@@ -152,12 +159,15 @@ To train the model, we start with a data sample containing the independent/expla
 ## Data for Model Building ##
 
 # Remove missing cases & convert variables to factor datatype our dataset
+#stu <- stu %>% 
+#  na.omit() %>% 
+#  mutate(across(1:22, as.factor))
+
 stu <- stu %>% 
-  na.omit() %>% 
-  mutate(across(1:22, as.factor))
+  select(2:26)
 
 data <- stu %>% 
-  dplyr::select(c(1:22, "Math")) #<< input$var, input$mb_target to change according to user selection
+  dplyr::select(c("Math",1:23)) #<< input$var, input$mb_target to change according to user selection
 ```
 
 ```{r}
@@ -165,7 +175,7 @@ data <- stu %>%
 set.seed(1234)
 
 # Split the data into training and test
-index <- createDataPartition(data$Math, #<< input$mb_target
+index <- createDataPartition(data[[1]], #<< input$mb_target
                              p = 0.8, #<< input$rf_partition
                              list = FALSE) 
 
@@ -220,9 +230,10 @@ testdata  <- data[-index, ]
 ## Specifying training choices ##
 
 # Resampling Options
-dt_fitcontrol <- trainControl(method = "cv", # input$dt_resamplingmethod
-                           number = 10, # input$dt_resamplecnt
-                           repeats = NA) # input$dt_repeats
+dt_fitcontrol <- trainControl(method = "none", # input$dt_resamplingmethod
+                           #number = 10, # input$dt_resamplecnt
+                           #repeats = NA
+                           ) # input$dt_repeats
 ```
 
 -   `method`: Refers to the resampling method, such as `boot`, `cv` (cross validation), `repeatedcv`
@@ -237,8 +248,9 @@ set.seed(1234)
 dtmodel <- train(Math ~ ., 
                  data = traindata,
                  method = "rpart",
-                 tuneLength = 4, #input$dt_tunelength
-                 trControl = dt_fitcontrol
+                 #na.action = "na.omit",
+                 #tuneLength = 4, #input$dt_tunelength
+                 #trControl = dt_fitcontrol
 )
 
 dtmodel
@@ -842,6 +854,35 @@ gbmodel
 +--------------------+--------------------------------------------------------+-------------------------------------------------------------------------------------+-----------------------------------------------------------------------------+
 
 : {tbl-colwidths="\[10,20,35,35\]"}
+
+### 7.1.1 tidymodels
+
+```{r}
+xg_rec <- recipe(Math ~ ., data = traindata)
+```
+
+```{r}
+xg_model <-
+  boost_tree(
+    mode = "regression",
+    engine = "xgboost",
+    mtry = ,
+    trees = ,
+    min_n = 20,
+    tree_depth = 3,
+    learn_rate = 0.01,
+    loss_reduction = ,
+    sample_size = ,
+    stop_iter = 
+  )
+```
+
+```{r}
+xg_wf <-
+  workflow() %>% 
+  add_model(xg_model) %>% 
+  add_recipe(xg_rec)
+```
 
 ## 7.2 Visual Model Diagnostic
 
