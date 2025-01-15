@@ -84,6 +84,8 @@ website:
         text: "{{< fa house size=lg >}}"
       - href: about.qmd
         text: "{{< fa paw size=lg >}}"
+      - href: "https://kylietjy.netlify.app/"
+        text: "{{< fa cat size=lg >}}"        
   
   page-footer: 
     right: "Blog made with 💜, [Pusheen](https://pusheen.com/), and [Quarto](https://quarto.org/)"
