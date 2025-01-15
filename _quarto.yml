@@ -77,8 +77,8 @@ website:
             href: Take-Home_Ex/Take-Home_Ex04/Take-Home_Ex04.html              
       - text: "Projects"
         menu: 
-          - text: Coming soon!
-            href: "" 
+          - text: Project PISA (Probing Influences on Singaporean Academia)
+            href: "https://projectpisa.netlify.app/" 
     right:
       - href: index.qmd
         text: "{{< fa house size=lg >}}"

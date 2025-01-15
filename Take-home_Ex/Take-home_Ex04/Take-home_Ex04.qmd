@@ -49,8 +49,8 @@ The packages used as part of this exercise includes:
 pacman::p_load(tidyverse, 
                ggplot2, patchwork, urbnthemes, 
                reactable,
-               ranger, vip, rpart.plot, caret, tidymodels, gbm, 
-               performance)
+               ranger, vip, rpart, rpart.plot, caret, tidymodels, gbm, 
+               performance, visNetwork)
 ```
 
 ## 2.2 The PISA Survey Students Questionnaire
@@ -264,6 +264,53 @@ rpart.plot(dtmodel$finalModel,
            nn=TRUE)
 ```
 
+```{r}
+dtmodel_ranger <- 
+  rand_forest(mode = "regression") %>% 
+  set_engine("ranger") %>% 
+  fit(Math ~ .,
+      data = traindata)
+
+dtmodel_ranger
+
+```
+
+```{r}
+dtmodel_rpart <- rpart(formula = Math ~.,
+                       data = traindata,
+                       method = "anova",
+                       control = rpart.control(minsplit = 5, cp = 0.001, maxdepth = 10))
+```
+
+```{r}
+rpart_cp <- dtmodel_rpart$cptable[which.min(dtmodel_rpart$cptable[,"xerror"]),"CP"]
+```
+
+```{r}
+
+dtmodel_rpart_tuned <- rpart(formula = Math ~.,
+                       data = traindata,
+                       method = "anova",
+                       control = rpart.control(minsplit = 5, maxdepth = 10))
+
+dtmodel_rpart_pruned <- rpart::prune(dtmodel_rpart_tuned, cp = rpart_cp)
+```
+
+```{r}
+vip::vip(dtmodel)
+```
+
+```{r}
+plotcp(dtmodel_rpart_pruned)
+```
+
+```{r}
+visTree(dtmodel_rpart_pruned,
+        edgesFontSize = 12,
+        nodesFontSize = 14,
+        legendWidth = 0.3)
+```
+
 The boxes show the node predicted value (mean) and the proportion of observations that are in the node (or child nodes).
 
 +--------------------+---------------------------------------------------------------------------------+--------------------------------------------------------------------------------+-----------------------------------------------------------------------------+
@@ -348,6 +395,48 @@ dt_residvsactual <-
 dt_predvsactual + dt_residvsactual + 
   plot_layout(guides = "collect") +
   plot_layout(widths=c(1,1))
+```
+
+```{r}
+predict_dt_rpartpruned <- bind_cols(
+   Actual = testdata$Math, 
+   Predicted = predict(dtmodel_rpart, newdata = testdata),
+   Residuals = predict(dtmodel_rpart, newdata = testdata) - testdata$Math
+)
+```
+
+```{r}
+dt_predvsactual_rpartpruned <- 
+   ggplot(data = predict_dt_rpartpruned,
+          aes(x = Actual, y = Predicted)) +
+   geom_point(alpha = 0.2, color = "grey40") +
+   geom_smooth(method = "loess", formula = "y ~ x", color="#dfb2e9") +
+   geom_abline(intercept = 0, slope = 1, linetype = 2, color = "#20948b", size = 0.8) +
+   labs(title = "Predicted vs Actual") +
+   theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+
+
+
+dt_residvsactual_rpartpruned <- 
+   ggplot(data = predict_dt_rpartpruned,
+          aes(x = Actual, y = Residuals)) +
+   geom_point(alpha = 0.2, color = "grey40") +
+   geom_smooth(method = "loess", formula = "y ~ x", color="#dfb2e9") +
+   geom_hline(yintercept = 0, linetype = 2, color = "#20948b", size = 0.8) +
+   labs(title = "Residuals vs Predicted") +
+   theme(plot.background=element_rect(fill="#f5f5f5",colour="#f5f5f5"))
+
+dt_predvsactual_rpartpruned + dt_residvsactual_rpartpruned + 
+  plot_layout(guides = "collect") +
+  plot_layout(widths=c(1,1))
+```
+
+```{r}
+predict_dt <- bind_cols(
+   Actual = testdata$Math, 
+   Predicted = predict(dtmodel_rpart, newdata = testdata),
+   Residuals = predict(dtmodel_rpart, newdata = testdata) - testdata$Math
+)
 ```
 
 +----------------------+----------------------------------------------------------------------------------------------+------------------------------------+--------------------------------------------------------------------+
@@ -456,6 +545,18 @@ dt_cp_plot <- plot(dtmodel)
 dt_cp_plot
 ```
 
+```{r}
+ggplot(dtmodel) +
+  geom_point(alpha = 0.2, color = "grey40")+
+  theme_minimal()+
+        theme(axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid"),
+              axis.line.y = element_blank(),
+              axis.ticks.x = element_line(colour = "black", size = 0.5, linetype = "solid"),
+              plot.title = element_text(size=12, face="bold"),
+              axis.title = element_text(face="bold"),
+              axis.text = element_text(face="bold")) 
+```
+
 +-----------------------+---------------------------------------------------------------------------------+---------------------------------------------------------+-----------------------------------------------------------------------+
 | Function              | Feature                                                                         | UI                                                      | Server                                                                |
 +=======================+=================================================================================+=========================================================+=======================================================================+
@@ -484,6 +585,24 @@ dt_cp_plot
 +-----------------------+---------------------------------------------------------------------------------+---------------------------------------------------------+-----------------------------------------------------------------------+
 
 : {tbl-colwidths="\[10,20,35,35\]"}
+
+```{r}
+dtmodel$cptable %>%
+   data.frame() %>%
+   mutate(min_xerror_idx = which.min(dtmodel$cptable[, "xerror"]),
+          rownum = row_number(),
+          xerror_cap = dtmodel$cptable[min_xerror_idx, "xerror"] + 
+             dtmodel$cptable[min_xerror_idx, "xstd"],
+          eval = case_when(rownum == min_xerror_idx ~ "min xerror",
+                           xerror < xerror_cap ~ "under cap",
+                           TRUE ~ "")) %>%
+   select(-rownum, -min_xerror_idx) 
+```
+
+```{r}
+dtmodel$cptable[which.min(initialdtmodel()$cptable[,"xerror"]),"CP"]
+
+```
 
 ### 5.4.2 Refreshing Results
 
@@ -685,8 +804,12 @@ rf_mae
 vip::vip(rfmodel, num_features = 40, bar = FALSE)
 ```
 
+```{r}
+dtmodel$finalModel
+```
+
 +------------------------+----------------------------------------------------------------------------------------------------+--------------------------------+-----------------------------------+
-| Function               | Feature                                                                                            | UI                             | Server                            |
+| dtFunction             | Feature                                                                                            | UI                             | Server                            |
 +========================+====================================================================================================+================================+===================================+
 | **plot(vip(rfmodel))** | Show variable importance plot when selections are completed and 'Build Model' option is triggered. | plotOutput("rf_varimp_plot\_") | rf_varimp_plot\<- eventReactive(\ |
 |                        |                                                                                                    |                                | input\$mb_action, {\              |
@@ -949,3 +1072,44 @@ vip::vip(gbmodel, num_features = 40, bar = FALSE)
 The three predictive models offer users different methods for regression analysis to explore the factors influencing subject scores. The customisability of our app allows users to visualise the impact of each parameter on the model's performance and enables them to fine-tune it to arrive at the best predictive model.
 
 Additionally, if time and capability permit, I would consider the addition of a summary page to this module. This summary page could provide a side-by-side comparison of performance metrics, showcasing the strengths and weaknesses of each model. Such a comparison would empower users to make informed decisions about which model best suits their needs for predicting student scores. This feature would enhance the user experience and provide a comprehensive overview, ensuring users can confidently select the most effective model.
+
+```{r}
+write.csv(lcalabels, "data/lcalabels.csv", row.names = FALSE)
+```
+
+```{r}
+db_hist <- stu %>%  
+  select(Math:Science) %>% 
+  pivot_longer(cols = Math:Science,
+                                 names_to = "Subject",
+                                 values_to = "Score")
+```
+
+```{r}
+pacman::p_load(ggridges)
+
+ggplot(db_hist, 
+       aes(x = Score, 
+           y = Subject)) +
+  geom_density_ridges(
+    scale = 1.5,
+    rel_min_height = 0.01,
+    #bandwidth = 10,
+    fill = "#7097BB",
+    color = "white"
+  ) +
+  scale_x_continuous(
+    name = "Scores",
+    expand = c(0, 0)
+    ) +
+  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +
+  theme_ridges() +
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+    axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid"),
+        axis.line.y = element_blank(),
+        axis.ticks.x = element_line(colour = "black", size = 0.5, linetype = "solid"),
+        plot.title = element_text(size=12, face="bold"),
+        axis.title = element_text(face="bold"),
+        axis.text = element_text(face="bold")) 
+```
